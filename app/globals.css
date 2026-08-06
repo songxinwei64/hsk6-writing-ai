@@ -510,6 +510,12 @@ a {
   font-weight: 700;
 }
 
+a.primary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .hero-actions a {
   font-size: 12px;
   font-weight: 700;
@@ -747,7 +753,8 @@ a {
   font-size: 10px;
 }
 
-.entry-card button {
+.entry-card button,
+.entry-card .entry-action {
   width: 100%;
   margin-top: auto;
   padding: 18px 0 0;
@@ -767,8 +774,113 @@ a {
   box-shadow: 0 14px 30px rgba(34, 54, 44, 0.07);
 }
 
-.entry-card:hover button {
+.entry-card:hover button,
+.entry-card:hover .entry-action {
   color: var(--green);
+}
+
+.practice-shell {
+  width: min(1120px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 66px 0 100px;
+}
+
+.practice-intro {
+  max-width: 620px;
+  margin-bottom: 45px;
+}
+
+.back-link {
+  margin-bottom: 32px;
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.back-link:hover {
+  color: var(--green);
+}
+
+.practice-intro h1 {
+  margin: 13px 0 12px;
+  font-family: Georgia, "Noto Serif SC", serif;
+  font-size: clamp(38px, 4.5vw, 55px);
+  letter-spacing: -0.045em;
+}
+
+.practice-intro p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.writing-level-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.writing-level-card {
+  min-height: 280px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  background: #f1f6f3;
+  border: 1px solid #dfe8e2;
+  border-radius: 12px;
+}
+
+.writing-level-card:nth-child(2),
+.writing-level-card:nth-child(4) {
+  background: #f8f3e8;
+  border-color: #ebe1cc;
+}
+
+.writing-level-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--green);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.writing-level-top small {
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 400;
+}
+
+.writing-level-card h2 {
+  margin: 45px 0 10px;
+  font-size: 25px;
+}
+
+.writing-level-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.choice-action {
+  margin-top: auto;
+  padding-top: 18px;
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid rgba(64, 82, 72, 0.14);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.choice-action:hover {
+  color: var(--green);
+}
+
+.choice-action.disabled {
+  color: #8b918d;
+  cursor: default;
 }
 
 .footer {
@@ -800,6 +912,10 @@ a {
   .hero-wrap {
     grid-template-columns: 1fr;
     gap: 45px;
+  }
+
+  .writing-level-grid {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -873,5 +989,15 @@ a {
 
   .footer {
     grid-template-columns: 1fr;
+  }
+
+  .practice-shell {
+    width: min(100% - 28px, 1120px);
+    padding: 45px 0 70px;
+  }
+
+  .writing-level-card {
+    min-height: 260px;
+    padding: 26px;
   }
 }

@@ -1,21 +1,24 @@
 import AuthEntry from "../components/auth-entry";
+import Link from "next/link";
 
 const mainEntries = [
   {
     number: "01",
     icon: "practice",
     title: "分项练习",
-    description: "先把写作拆开练：读懂原文、找出重点，再练句子和段落的缩写。",
-    links: ["阅读理解", "缩写练习"],
+    description: "先练短段缩写，再完成接近HSK 6写作流程的完整模拟。",
+    links: ["短段缩写", "HSK 6 写作模拟"],
     tone: "sage",
+    href: "/practice",
   },
   {
     number: "02",
     icon: "library",
-    title: "写作题库",
-    description: "想完整练一篇时，可以从历年题目或原创模拟题开始。",
-    links: ["历年题目", "模拟练习"],
+    title: "历年真题",
+    description: "按年份查看HSK 6写作题目，了解真实考试中的文章类型和写作要求。",
+    links: ["HSK 6 写作", "按年份查看"],
     tone: "sand",
+    href: "#library",
   },
   {
     number: "03",
@@ -24,6 +27,7 @@ const mainEntries = [
     description: "收藏过、做过的题，还有每次作文的修改记录，都放在这里。",
     links: ["我的收藏", "练习记录"],
     tone: "blue",
+    href: "#mine",
   },
   {
     number: "04",
@@ -32,6 +36,7 @@ const mainEntries = [
     description: "看看别人怎样缩写同一篇文章，也可以交流写作和备考经验。",
     links: ["作文交流", "备考讨论"],
     tone: "rose",
+    href: "#community",
   },
 ];
 
@@ -84,7 +89,7 @@ export default function Home() {
 
         <nav className="nav" aria-label="主菜单">
           <a href="#practice">分项练习</a>
-          <a href="#library">写作题库</a>
+          <a href="#library">历年真题</a>
           <a href="#mine">我的题库</a>
           <a href="#community">学习社区</a>
         </nav>
@@ -100,9 +105,9 @@ export default function Home() {
           <h1>HSK 6 写作练习</h1>
           <p>读懂原文，抓住重点，完成缩写。</p>
           <div className="hero-actions">
-            <button className="primary-button" type="button">
+            <Link className="primary-button" href="/practice">
               开始练习
-            </button>
+            </Link>
             <a href="#entries">
               看看有哪些练习 <span>→</span>
             </a>
@@ -148,7 +153,7 @@ export default function Home() {
           <span className="eyebrow">开始学习</span>
           <h2>你想先练哪一项？</h2>
         </div>
-        <p>第一次来，可以先从阅读理解开始。</p>
+        <p>第一次来，可以先从短段缩写开始。</p>
       </div>
 
       <section className="entry-grid" id="entries" aria-label="主要功能">
@@ -171,9 +176,9 @@ export default function Home() {
                 <span key={link}>{link}</span>
               ))}
             </div>
-            <button type="button" aria-label={`进入${entry.title}`}>
+            <Link className="entry-action" href={entry.href} aria-label={`进入${entry.title}`}>
               进入 <span>→</span>
-            </button>
+            </Link>
           </article>
         ))}
       </section>
