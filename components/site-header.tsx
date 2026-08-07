@@ -10,7 +10,7 @@ export default function SiteHeader() {
       </Link>
 
       <nav className="nav" aria-label="主菜单">
-        <Link href="/practice">分项练习</Link>
+        <Link href="/practice">缩写练习</Link>
         <Link href="/#library">历年真题</Link>
         <Link href="/#mine">我的题库</Link>
         <Link href="/#community">学习社区</Link>

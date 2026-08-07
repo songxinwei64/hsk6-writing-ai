@@ -5,9 +5,9 @@ const mainEntries = [
   {
     number: "01",
     icon: "practice",
-    title: "分项练习",
-    description: "先练短段缩写，再完成接近HSK 6写作流程的完整模拟。",
-    links: ["短段缩写", "HSK 6 写作模拟"],
+    title: "缩写练习",
+    description: "从句子缩写开始，逐步完成短文缩写和接近HSK 6写作流程的完整模拟。",
+    links: ["句子缩写", "短文缩写", "HSK 6 写作模拟"],
     tone: "sage",
     href: "/practice",
   },
@@ -88,7 +88,7 @@ export default function Home() {
         </a>
 
         <nav className="nav" aria-label="主菜单">
-          <a href="#practice">分项练习</a>
+          <a href="#practice">缩写练习</a>
           <a href="#library">历年真题</a>
           <a href="#mine">我的题库</a>
           <a href="#community">学习社区</a>
@@ -101,17 +101,9 @@ export default function Home() {
 
       <section className="hero-wrap">
         <div className="hero">
-          <span className="eyebrow">阅读 · 提取 · 缩写</span>
-          <h1>HSK 6 写作练习</h1>
-          <p>读懂原文，抓住重点，完成缩写。</p>
-          <div className="hero-actions">
-            <Link className="primary-button" href="/practice">
-              开始练习
-            </Link>
-            <a href="#entries">
-              看看有哪些练习 <span>→</span>
-            </a>
-          </div>
+          <span className="eyebrow">HSK 6 · AI 写作练习</span>
+          <h1>HSK 6级写作练习</h1>
+          <p>完成缩写后，获得AI反馈。</p>
         </div>
 
         <div className="hero-visual" aria-hidden="true">
@@ -125,36 +117,32 @@ export default function Home() {
               <mark>一次偶然的相遇</mark>
               ，让他重新考虑了这个决定。
             </p>
-            <div className="thinking-line">
-              <span className="thinking-step">
-                <span>理解</span>
-                <i>→</i>
-              </span>
-              <span className="thinking-step">
-                <span>提取</span>
-                <i>→</i>
-              </span>
-              <span className="thinking-step">
-                <span>缩写</span>
-              </span>
-            </div>
             <div className="summary-box">
-              <small>主要信息</small>
-              <p>一次相遇改变了年轻人离开城市的决定。</p>
+              <small>我的缩写</small>
+              <p>年轻人遇到一个人后，决定留在这座城市。</p>
+            </div>
+            <div className="ai-feedback-card">
+              <div className="ai-feedback-head">
+                <span className="ai-avatar">W</span>
+                <span className="ai-identity">
+                  <b>Write HSK AI 助教</b>
+                  <small>内容准确性</small>
+                </span>
+                <span className="ai-spark" aria-hidden="true">✦</span>
+              </div>
+              <p>
+                原文只说他“重新考虑”离开的决定，没有说明他最终决定留下。
+              </p>
+              <div className="ai-suggestion">
+                <small>建议修改</small>
+                <span>一次偶然的相遇，让年轻人重新考虑离开城市的决定。</span>
+              </div>
             </div>
           </div>
-          <span className="visual-note note-one">找出变化</span>
-          <span className="visual-note note-two">删去细节</span>
+          <span className="visual-note note-one">发现原意偏差</span>
+          <span className="visual-note note-two">给出修改方向</span>
         </div>
       </section>
-
-      <div className="entry-heading">
-        <div>
-          <span className="eyebrow">开始学习</span>
-          <h2>你想先练哪一项？</h2>
-        </div>
-        <p>第一次来，可以先从短段缩写开始。</p>
-      </div>
 
       <section className="entry-grid" id="entries" aria-label="主要功能">
         {mainEntries.map((entry, index) => (
