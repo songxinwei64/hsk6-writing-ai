@@ -12,16 +12,16 @@ const writingLevels = [
   {
     number: "02",
     title: "短文缩写",
-    description: "阅读一篇短文，提取人物、事件和结果，删除次要内容并完成指定字数的缩写。",
+    description: "阅读一篇短文，提取人物、事件和结果，删除次要内容，写成更精炼、连贯的短文。",
     status: "进阶训练",
-    href: null,
+    href: "/practice/paragraph",
   },
   {
     number: "03",
     title: "HSK 6 写作模拟",
     description: "按照接近HSK 6写作的流程，阅读完整文章、隐藏原文、计时并完成整篇缩写。",
     status: "完整训练",
-    href: null,
+    href: "/practice/mock",
   },
 ];
 
@@ -39,8 +39,9 @@ export default function PracticePage() {
         </div>
 
         <div className="writing-level-grid">
-          {writingLevels.map((level) => (
-            <article className="writing-level-card" key={level.number}>
+          {writingLevels.map((level) => {
+            const cardContent = (
+              <>
               <div className="writing-level-top">
                 <span>{level.number}</span>
                 <small>{level.status}</small>
@@ -48,14 +49,30 @@ export default function PracticePage() {
               <h2>{level.title}</h2>
               <p>{level.description}</p>
               {level.href ? (
-                <Link className="choice-action" href={level.href}>
+                <span className="choice-action">
                   开始练习 <span>→</span>
-                </Link>
+                </span>
               ) : (
                 <span className="choice-action disabled" aria-disabled="true">即将开放</span>
               )}
-            </article>
-          ))}
+              </>
+            );
+
+            return level.href ? (
+              <Link
+                className="writing-level-card writing-level-card-link"
+                href={level.href}
+                key={level.number}
+                aria-label={`开始${level.title}`}
+              >
+                {cardContent}
+              </Link>
+            ) : (
+              <article className="writing-level-card" key={level.number}>
+                {cardContent}
+              </article>
+            );
+          })}
         </div>
       </section>
     </main>

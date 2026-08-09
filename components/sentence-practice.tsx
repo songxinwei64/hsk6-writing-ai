@@ -1,21 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { sentencePracticeItems } from "../data/sentence-practice";
+import type { SentencePracticeItem } from "../lib/practice-items";
 
-export default function SentencePractice() {
+export default function SentencePractice({ items }: { items: SentencePracticeItem[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [submitted, setSubmitted] = useState<Record<number, boolean>>({});
   const [error, setError] = useState("");
 
-  const item = sentencePracticeItems[currentIndex];
+  const item = items[currentIndex];
   const answer = answers[item.id] || "";
   const isSubmitted = Boolean(submitted[item.id]);
   const completedCount = Object.keys(submitted).length;
 
   function moveTo(index: number) {
-    setCurrentIndex(Math.min(Math.max(index, 0), sentencePracticeItems.length - 1));
+    setCurrentIndex(Math.min(Math.max(index, 0), items.length - 1));
     setError("");
   }
 
@@ -35,12 +35,20 @@ export default function SentencePractice() {
   return (
     <div className="sentence-workspace">
       <div className="sentence-progress-head">
-        <span>练习 {currentIndex + 1} / {sentencePracticeItems.length}</span>
-        <span>已完成 {completedCount} / {sentencePracticeItems.length}</span>
+        <span>练习 {currentIndex + 1} / {items.length}</span>
+        <span>已完成 {completedCount} / {items.length}</span>
       </div>
       <div className="sentence-progress-track">
-        <span style={{ width: `${((currentIndex + 1) / sentencePracticeItems.length) * 100}%` }} />
+        <span style={{ width: `${((currentIndex + 1) / items.length) * 100}%` }} />
       </div>
+
+      <section className="sentence-tip" aria-labelledby={`sentence-skill-${item.id}`}>
+        <span>本题技巧</span>
+        <div>
+          <h2 id={`sentence-skill-${item.id}`}>{item.skill}</h2>
+          <p>{item.tip}</p>
+        </div>
+      </section>
 
       <section className="sentence-original">
         <span className="sentence-kicker">原句</span>
@@ -79,7 +87,7 @@ export default function SentencePractice() {
             </div>
             <p>{item.reference}</p>
             <aside>
-              <small>简要解析</small>
+              <small>技巧解析 · {item.skill}</small>
               <span>{item.explanation}</span>
             </aside>
             <button type="button" onClick={editAnswer}>修改我的答案</button>
@@ -92,7 +100,7 @@ export default function SentencePractice() {
           ← 上一题
         </button>
         <div>
-          {sentencePracticeItems.map((question, index) => (
+          {items.map((question, index) => (
             <button
               className={`${index === currentIndex ? "current" : ""}${submitted[question.id] ? " completed" : ""}`}
               type="button"
@@ -107,7 +115,7 @@ export default function SentencePractice() {
         <button
           type="button"
           onClick={() => moveTo(currentIndex + 1)}
-          disabled={currentIndex === sentencePracticeItems.length - 1}
+          disabled={currentIndex === items.length - 1}
         >
           下一题 →
         </button>

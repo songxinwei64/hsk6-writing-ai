@@ -146,10 +146,12 @@ export default function Home() {
 
       <section className="entry-grid" id="entries" aria-label="主要功能">
         {mainEntries.map((entry, index) => (
-          <article
+          <Link
             className={`entry-card ${entry.tone}`}
             id={sectionIds[index]}
             key={entry.number}
+            href={entry.href}
+            aria-label={`进入${entry.title}`}
           >
             <div className="entry-top">
               <span className="entry-icon">
@@ -164,10 +166,10 @@ export default function Home() {
                 <span key={link}>{link}</span>
               ))}
             </div>
-            <Link className="entry-action" href={entry.href} aria-label={`进入${entry.title}`}>
+            <span className="entry-action">
               进入 <span>→</span>
-            </Link>
-          </article>
+            </span>
+          </Link>
         ))}
       </section>
 

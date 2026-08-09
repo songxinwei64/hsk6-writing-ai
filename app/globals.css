@@ -708,6 +708,8 @@ a.primary-button {
   border: 1px solid #dfe7e1;
   border-radius: 12px;
   transition: transform 160ms ease, box-shadow 160ms ease;
+  color: inherit;
+  text-decoration: none;
 }
 
 .entry-card.sand {
@@ -807,6 +809,12 @@ a.primary-button {
   box-shadow: 0 14px 30px rgba(34, 54, 44, 0.07);
 }
 
+.entry-card:focus-visible,
+.writing-level-card-link:focus-visible {
+  outline: 3px solid rgba(31, 111, 82, 0.28);
+  outline-offset: 3px;
+}
+
 .entry-card:hover button,
 .entry-card:hover .entry-action {
   color: var(--green);
@@ -862,6 +870,22 @@ a.primary-button {
   background: #f1f6f3;
   border: 1px solid #dfe8e2;
   border-radius: 12px;
+}
+
+.writing-level-card-link {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.writing-level-card-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(34, 54, 44, 0.07);
+}
+
+.writing-level-card-link:hover .choice-action {
+  color: var(--green);
 }
 
 .writing-level-card:nth-child(2) {
@@ -954,6 +978,37 @@ a.primary-button {
   display: block;
   background: var(--green);
   transition: width 180ms ease;
+}
+
+.sentence-tip {
+  margin-bottom: 16px;
+  padding: 18px 20px;
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 16px;
+  background: #faf8f1;
+  border: 1px solid #e9e2cf;
+  border-radius: 10px;
+}
+
+.sentence-tip > span {
+  padding-top: 3px;
+  color: #8a6d2f;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.sentence-tip h2 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.sentence-tip p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
 }
 
 .sentence-original {
@@ -1082,14 +1137,14 @@ a.primary-button {
 
 .sentence-reference aside small {
   color: var(--green);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
 }
 
 .sentence-reference aside span {
   color: var(--muted);
-  font-size: 12px;
-  line-height: 1.7;
+  font-size: 13px;
+  line-height: 1.8;
 }
 
 .sentence-reference > button {
@@ -1129,6 +1184,444 @@ a.primary-button {
 .sentence-navigation > button:last-child {
   color: var(--green-dark);
   text-align: right;
+}
+
+.paragraph-workspace {
+  padding: 30px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+}
+
+.paragraph-workspace .sentence-progress-head {
+  font-size: 11px;
+}
+
+.paragraph-workspace .sentence-tip > span,
+.paragraph-workspace .sentence-kicker {
+  font-size: 11px;
+}
+
+.paragraph-workspace .sentence-tip h2 {
+  font-size: 18px;
+}
+
+.paragraph-workspace .sentence-tip p {
+  font-size: 14px;
+}
+
+.paragraph-workspace .sentence-writing-head h2 {
+  font-size: 21px;
+}
+
+.paragraph-workspace .sentence-writing textarea {
+  font-size: 15px;
+}
+
+.paragraph-workspace .sentence-reference strong {
+  font-size: 15px;
+}
+
+.paragraph-workspace .sentence-reference > p {
+  font-size: 15px;
+}
+
+.paragraph-workspace .sentence-reference aside small {
+  font-size: 13px;
+}
+
+.paragraph-workspace .sentence-reference aside span {
+  font-size: 14px;
+}
+
+.paragraph-workspace .sentence-navigation > button {
+  font-size: 11px;
+}
+
+.paragraph-start-panel {
+  padding: 38px 24px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  background: #f1f6f3;
+  border: 1px solid #dfe8e2;
+  border-radius: 10px;
+}
+
+.paragraph-start-panel > span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.paragraph-start-panel p {
+  max-width: 500px;
+  margin: 12px 0 22px;
+  color: #626d67;
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.paragraph-start-panel button {
+  min-width: 150px;
+  height: 42px;
+  color: #fff;
+  background: var(--green);
+  border: 0;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.paragraph-timer {
+  margin-bottom: 12px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--green-dark);
+  background: #f1f6f3;
+  border-radius: 8px;
+}
+
+.paragraph-timer span {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.paragraph-timer strong {
+  font-size: 18px;
+  letter-spacing: 0.04em;
+}
+
+.paragraph-timer.urgent {
+  color: #9e342d;
+  background: #fff1ef;
+}
+
+.paragraph-original {
+  padding: 25px;
+  background: #f8f6f0;
+  border: 1px solid #e8e2d6;
+  border-radius: 10px;
+}
+
+.paragraph-original p {
+  margin: 14px 0 0;
+  font-size: 16px;
+  line-height: 2;
+}
+
+.paragraph-reading-note {
+  margin-top: 12px;
+  padding: 16px 18px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+}
+
+.paragraph-reading-note strong {
+  font-size: 14px;
+}
+
+.paragraph-reading-note p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.paragraph-writing textarea {
+  min-height: 210px;
+}
+
+.paragraph-expired-note {
+  color: #9e342d !important;
+  background: #fff1ef !important;
+}
+
+.mock-page-shell {
+  width: min(1020px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 48px 0 90px;
+}
+
+.mock-page-heading {
+  margin-bottom: 32px;
+}
+
+.mock-page-heading h1 {
+  margin: 13px 0 10px;
+  font-family: Georgia, "Noto Serif SC", serif;
+  font-size: clamp(34px, 4vw, 48px);
+}
+
+.mock-page-heading p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.mock-workspace {
+  padding: 30px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+}
+
+.mock-progress {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.mock-start-panel {
+  padding: 48px 30px;
+  text-align: center;
+  background: #f1f6f3;
+  border: 1px solid #dfe8e2;
+  border-radius: 11px;
+}
+
+.mock-start-panel > span {
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.mock-start-panel h2 {
+  margin: 12px 0;
+  font: 700 27px/1.4 Georgia, "Noto Serif SC", serif;
+}
+
+.mock-start-panel p {
+  max-width: 650px;
+  margin: 0 auto 24px;
+  color: #626d67;
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+.mock-start-panel button,
+.mock-writing > button {
+  min-width: 160px;
+  height: 44px;
+  color: #fff;
+  background: var(--green);
+  border: 0;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.mock-stage-bar {
+  margin-bottom: 14px;
+  padding: 14px 17px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--green-dark);
+  background: #f1f6f3;
+  border-radius: 9px;
+}
+
+.mock-stage-bar div {
+  display: grid;
+  gap: 3px;
+}
+
+.mock-stage-bar small {
+  font-size: 10px;
+}
+
+.mock-stage-bar strong {
+  font-size: 15px;
+}
+
+.mock-stage-bar time {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.mock-stage-bar.urgent {
+  color: #9e342d;
+  background: #fff1ef;
+}
+
+.mock-original {
+  padding: 28px;
+  background: #f8f6f0;
+  border: 1px solid #e8e2d6;
+  border-radius: 10px;
+}
+
+.mock-original > span,
+.mock-writing label > span,
+.mock-writing-label > span,
+.mock-reference > span {
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.mock-original > p {
+  margin: 16px 0 0;
+  white-space: pre-line;
+  font-size: 16px;
+  line-height: 2.05;
+}
+
+.mock-reading-rule {
+  margin-top: 12px;
+  padding: 15px;
+  color: #626d67;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 13px;
+  text-align: center;
+}
+
+.mock-writing {
+  padding: 25px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.mock-writing label {
+  display: block;
+}
+
+.mock-writing label + label {
+  margin-top: 20px;
+}
+
+.mock-writing input,
+.mock-writing textarea {
+  width: 100%;
+  margin-top: 9px;
+  color: var(--ink);
+  background: #fcfcfb;
+  border: 1px solid #d9ddda;
+  border-radius: 8px;
+  outline: none;
+  font: 15px/1.8 Arial, "Noto Sans SC", "Microsoft YaHei", sans-serif;
+}
+
+.mock-writing input {
+  height: 45px;
+  padding: 0 14px;
+}
+
+.mock-writing textarea {
+  min-height: 360px;
+  padding: 15px;
+  resize: vertical;
+}
+
+.mock-writing input:focus,
+.mock-writing textarea:focus {
+  border-color: #8ab5a1;
+  box-shadow: 0 0 0 3px rgba(36, 107, 82, 0.09);
+}
+
+.mock-writing-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mock-writing-label small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.mock-writing-label small.near-target {
+  color: var(--green);
+  font-weight: 800;
+}
+
+.mock-writing > button {
+  width: 100%;
+  margin-top: 15px;
+}
+
+.mock-reference {
+  margin-top: 20px;
+  padding: 22px;
+  background: #fafbf9;
+  border: 1px solid #dfe6e1;
+  border-radius: 9px;
+}
+
+.mock-reference h3 {
+  margin: 7px 0 20px;
+  font-size: 20px;
+}
+
+.mock-reference > p {
+  margin: 9px 0 20px;
+  padding: 16px;
+  color: var(--green-dark);
+  background: var(--green-soft);
+  border-radius: 8px;
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+.mock-reference aside {
+  padding-top: 17px;
+  border-top: 1px solid var(--line);
+}
+
+.mock-reference aside strong {
+  font-size: 14px;
+}
+
+.mock-reference aside p {
+  margin: 7px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.mock-expired {
+  color: #9e342d !important;
+  background: #fff1ef !important;
+}
+
+.mock-navigation {
+  margin-top: 18px;
+  padding-top: 17px;
+  display: flex;
+  gap: 8px;
+  border-top: 1px solid var(--line);
+}
+
+.mock-navigation button {
+  padding: 9px 13px;
+  color: var(--muted);
+  background: #f6f7f6;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.mock-navigation button.current {
+  color: #fff;
+  background: var(--green);
+  border-color: var(--green);
+}
+
+.mock-navigation button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
 }
 
 .sentence-navigation > button:disabled {
