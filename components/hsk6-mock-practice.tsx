@@ -16,10 +16,12 @@ function formatTime(seconds: number) {
 export default function Hsk6MockPractice({
   items,
   totalItems,
+  isAuthenticated,
   isPaidMember,
 }: {
   items: Hsk6MockPracticeItem[];
   totalItems: number;
+  isAuthenticated: boolean;
   isPaidMember: boolean;
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -199,6 +201,7 @@ export default function Hsk6MockPractice({
                       practiceItemId={item.databaseId}
                       answerTitle={title}
                       answerText={answer}
+                      isAuthenticated={isAuthenticated}
                       isPaidMember={isPaidMember}
                     />
                   )}

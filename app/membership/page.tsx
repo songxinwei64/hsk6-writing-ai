@@ -30,8 +30,8 @@ export default async function MembershipPage() {
       <section className="membership-shell">
         <div className="membership-heading">
           <span className="eyebrow">Write HSK · 会员权益</span>
-          <h1>先免费练习，再决定是否解锁全部题目</h1>
-          <p>登录不会增加可练题目数量。登录后可以保存进度；付费会员可以使用全部练习题。</p>
+          <h1>免费完成基础训练，需要时再解锁完整模拟</h1>
+          <p>注册后可以保存进度、参与社区并体验AI反馈；付费会员可以使用全部HSK 6模拟题和更多AI反馈。</p>
         </div>
 
         <div className="membership-plans">
@@ -40,7 +40,7 @@ export default async function MembershipPage() {
               <span>免费版</span>
               <strong>¥0</strong>
             </div>
-            <p>游客和已登录的免费账户拥有相同的题目范围。</p>
+            <p>基础训练全部开放。登录后还可以保存记录并参与社区。</p>
             <ul>
               {benefits.map((benefit) => (
                 <li key={benefit.label}>
@@ -49,6 +49,8 @@ export default async function MembershipPage() {
                 </li>
               ))}
               <li><span>保存做题进度</span><b>{access.isAuthenticated ? "可使用" : "登录后可用"}</b></li>
+              <li><span>参与学习社区</span><b>{access.isAuthenticated ? "可使用" : "登录后可用"}</b></li>
+              <li><span>AI个性化反馈</span><b>登录后免费体验3次</b></li>
             </ul>
             {!access.isAuthenticated ? (
               <Link className="membership-secondary-action" href="/?auth=login&next=/membership">登录并保存进度</Link>
@@ -63,7 +65,7 @@ export default async function MembershipPage() {
               <span>付费会员</span>
               <strong>全部开放</strong>
             </div>
-            <p>适合需要系统完成全部缩写训练和模拟练习的学习者。</p>
+            <p>适合需要完成全部HSK 6模拟训练并持续获得AI反馈的学习者。</p>
             <ul>
               {benefits.map((benefit) => (
                 <li key={benefit.label}>
@@ -72,6 +74,8 @@ export default async function MembershipPage() {
                 </li>
               ))}
               <li><span>保存做题进度</span><b>可使用</b></li>
+              <li><span>参与学习社区</span><b>可使用</b></li>
+              <li><span>AI个性化反馈</span><b>最近24小时5次</b></li>
             </ul>
             {access.isPaidMember ? (
               <Link className="membership-primary-action" href="/practice">会员已生效，开始练习</Link>

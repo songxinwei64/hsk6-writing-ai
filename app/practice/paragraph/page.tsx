@@ -1,14 +1,12 @@
 import Link from "next/link";
 import ParagraphPractice from "../../../components/paragraph-practice";
 import { getParagraphPracticeItems, PRACTICE_ACCESS } from "../../../lib/practice-items";
-import { getMembershipAccess } from "../../../lib/membership";
 
 export const dynamic = "force-dynamic";
 
 export default async function ParagraphPracticePage() {
-  const access = await getMembershipAccess();
   const limits = PRACTICE_ACCESS.paragraph;
-  const items = await getParagraphPracticeItems(access.isPaidMember ? undefined : limits.free);
+  const items = await getParagraphPracticeItems();
   const totalItems = limits.total;
 
   return (
@@ -20,7 +18,7 @@ export default async function ParagraphPracticePage() {
           <h1>梳理主线，写出完整短文</h1>
           <p>先阅读3分钟，再限时缩写7分钟。写作时不能重新查看原文。</p>
         </div>
-        <ParagraphPractice items={items} totalItems={totalItems} isPaidMember={access.isPaidMember} />
+        <ParagraphPractice items={items} totalItems={totalItems} />
       </section>
     </main>
   );

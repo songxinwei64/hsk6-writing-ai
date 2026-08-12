@@ -7,11 +7,9 @@ import { saveCompletedAttempt } from "../lib/save-practice-attempt";
 export default function SentencePractice({
   items,
   totalItems,
-  isPaidMember,
 }: {
   items: SentencePracticeItem[];
   totalItems: number;
-  isPaidMember: boolean;
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
@@ -57,15 +55,6 @@ export default function SentencePractice({
         <span>已完成 {completedCount} / {totalItems}</span>
       </div>
 
-      {!isPaidMember && items.length < totalItems && (
-        <div className="mock-guest-notice">
-          <div>
-            <strong>免费版开放 {items.length} / {totalItems} 题</strong>
-            <span>升级会员后可以练习全部句子缩写题。</span>
-          </div>
-          <a href="/membership">查看会员权益</a>
-        </div>
-      )}
       <div className="sentence-progress-track">
         <span style={{ width: `${((currentIndex + 1) / items.length) * 100}%` }} />
       </div>

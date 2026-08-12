@@ -4,7 +4,8 @@ import { aiFeedbackSchema, type AiWritingFeedback } from "../../../lib/ai-feedba
 import { createClient } from "../../../utils/supabase/server";
 
 const MODEL = "gpt-5.4-mini";
-const DAILY_LIMIT = 5;
+const MEMBER_DAILY_LIMIT = 5;
+const FREE_TRIAL_LIMIT = 3;
 
 function extractOutputText(response: {
   output?: Array<{ content?: Array<{ type?: string; text?: string }> }>;
@@ -44,7 +45,7 @@ export async function POST(request: Request) {
   }
 
   const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-  const [{ data: membership, error: membershipError }, { data: item, error: itemError }, usageResult] = await Promise.all([
+  const [{ data: membership, error: membershipError }, { data: item, error: itemError }, dailyUsageResult, totalUsageResult] = await Promise.all([
     supabase
       .from("user_memberships")
       .select("status,expires_at")
@@ -62,21 +63,28 @@ export async function POST(request: Request) {
       .select("id", { count: "exact", head: true })
       .eq("user_id", user.id)
       .gte("created_at", since),
+    supabase
+      .from("ai_writing_feedback")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", user.id),
   ]);
 
-  if (membershipError || itemError || usageResult.error) {
+  if (membershipError || itemError || dailyUsageResult.error || totalUsageResult.error) {
     return NextResponse.json({ error: "暂时无法验证AI使用权限。" }, { status: 500 });
   }
   const isActiveMember = membership?.status === "active"
     && (!membership.expires_at || new Date(membership.expires_at).getTime() > Date.now());
-  if (!isActiveMember) {
-    return NextResponse.json({ error: "AI反馈目前仅对会员开放。" }, { status: 403 });
-  }
   if (!item) {
     return NextResponse.json({ error: "没有找到对应的HSK 6模拟题。" }, { status: 404 });
   }
-  if ((usageResult.count ?? 0) >= DAILY_LIMIT) {
-    return NextResponse.json({ error: `今天的${DAILY_LIMIT}次AI反馈已用完，请明天再试。` }, { status: 429 });
+  const usedCount = isActiveMember ? (dailyUsageResult.count ?? 0) : (totalUsageResult.count ?? 0);
+  const usageLimit = isActiveMember ? MEMBER_DAILY_LIMIT : FREE_TRIAL_LIMIT;
+  if (usedCount >= usageLimit) {
+    return NextResponse.json({
+      error: isActiveMember
+        ? `最近24小时的${MEMBER_DAILY_LIMIT}次AI反馈已用完，请稍后再试。`
+        : `免费账户的${FREE_TRIAL_LIMIT}次AI反馈体验已用完，升级会员后可以继续使用。`,
+    }, { status: 429 });
   }
 
   const targetCharCount = item.target_char_count ?? 400;
@@ -195,5 +203,9 @@ ${answerText}`;
     return NextResponse.json({ error: "反馈已生成，但保存失败，请重试。" }, { status: 500 });
   }
 
-  return NextResponse.json({ feedback, remaining: Math.max(0, DAILY_LIMIT - (usageResult.count ?? 0) - 1) });
+  return NextResponse.json({
+    feedback,
+    remaining: Math.max(0, usageLimit - usedCount - 1),
+    quotaType: isActiveMember ? "daily" : "trial",
+  });
 }

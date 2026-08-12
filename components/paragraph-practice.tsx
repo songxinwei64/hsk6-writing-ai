@@ -15,11 +15,9 @@ function formatTime(seconds: number) {
 export default function ParagraphPractice({
   items,
   totalItems,
-  isPaidMember,
 }: {
   items: ParagraphPracticeItem[];
   totalItems: number;
-  isPaidMember: boolean;
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
@@ -101,15 +99,6 @@ export default function ParagraphPractice({
         <span>已完成 {completedCount} / {totalItems}</span>
       </div>
 
-      {!isPaidMember && items.length < totalItems && (
-        <div className="mock-guest-notice">
-          <div>
-            <strong>免费版开放 {items.length} / {totalItems} 篇</strong>
-            <span>升级会员后可以练习全部短文缩写题。</span>
-          </div>
-          <a href="/membership">查看会员权益</a>
-        </div>
-      )}
       <div className="sentence-progress-track">
         <span style={{ width: `${((currentIndex + 1) / items.length) * 100}%` }} />
       </div>

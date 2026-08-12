@@ -20,7 +20,7 @@ export default async function Hsk6MockPracticePage() {
           <h1>按照真实流程完成缩写</h1>
           <p>阅读10分钟，写作35分钟。原文隐藏后不能重新查看。</p>
         </div>
-        <Hsk6MockPractice items={items} totalItems={totalItems} isPaidMember={access.isPaidMember} />
+        <Hsk6MockPractice items={items} totalItems={totalItems} isAuthenticated={access.isAuthenticated} isPaidMember={access.isPaidMember} />
       </section>
     </main>
   );
