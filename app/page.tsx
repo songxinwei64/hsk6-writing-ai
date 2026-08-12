@@ -1,4 +1,3 @@
-import AuthEntry from "../components/auth-entry";
 import Link from "next/link";
 
 const mainEntries = [
@@ -6,19 +5,19 @@ const mainEntries = [
     number: "01",
     icon: "practice",
     title: "缩写练习",
-    description: "从句子缩写开始，逐步完成短文缩写和接近HSK 6写作流程的完整模拟。",
-    links: ["句子缩写", "短文缩写", "HSK 6 写作模拟"],
+    description: "先从句子和短文开始，练习提取重点、删除次要信息，把内容写得准确、简洁。",
+    links: ["句子缩写", "短文缩写"],
     tone: "sage",
     href: "/practice",
   },
   {
     number: "02",
     icon: "library",
-    title: "历年真题",
-    description: "按年份查看HSK 6写作题目，了解真实考试中的文章类型和写作要求。",
-    links: ["HSK 6 写作", "按年份查看"],
+    title: "HSK写作模拟题库",
+    description: "完成基础练习后，按照HSK 6考试流程阅读原文、隐藏原文并完成约400字的缩写。",
+    links: ["阅读10分钟", "写作35分钟", "AI反馈"],
     tone: "sand",
-    href: "#library",
+    href: "/practice/mock",
   },
   {
     number: "03",
@@ -27,7 +26,7 @@ const mainEntries = [
     description: "收藏过、做过的题，还有每次作文的修改记录，都放在这里。",
     links: ["我的收藏", "练习记录"],
     tone: "blue",
-    href: "#mine",
+    href: "/my-library",
   },
   {
     number: "04",
@@ -36,7 +35,7 @@ const mainEntries = [
     description: "看看别人怎样缩写同一篇文章，也可以交流写作和备考经验。",
     links: ["作文交流", "备考讨论"],
     tone: "rose",
-    href: "#community",
+    href: "/community",
   },
 ];
 
@@ -81,45 +80,26 @@ function EntryIcon({ name }: { name: string }) {
 export default function Home() {
   return (
     <main className="page">
-      <header className="header">
-        <a className="brand" href="#" aria-label="Write HSK 首页">
-          <span className="brand-mark">W</span>
-          <span>Write HSK</span>
-        </a>
-
-        <nav className="nav" aria-label="主菜单">
-          <a href="#practice">缩写练习</a>
-          <a href="#library">历年真题</a>
-          <a href="#mine">我的题库</a>
-          <a href="#community">学习社区</a>
-        </nav>
-
-        <div className="header-actions">
-          <AuthEntry />
-        </div>
-      </header>
-
       <section className="hero-wrap">
         <div className="hero">
           <span className="eyebrow">HSK 6 · AI 写作练习</span>
           <h1>HSK 6级写作练习</h1>
-          <p>完成缩写后，获得AI反馈。</p>
+          <p>先用句子和短文练习提取重点，再按照HSK 6考试流程完成整篇缩写。</p>
         </div>
 
         <div className="hero-visual" aria-hidden="true">
           <div className="paper">
             <div className="paper-top">
-              <span>缩写练习</span>
-              <small>先找出文章里的变化</small>
+              <span>完整写作 · AI反馈</span>
+              <small>原文约1000字</small>
             </div>
             <p className="paper-text">
-              年轻人原本打算离开这座城市。
-              <mark>一次偶然的相遇</mark>
-              ，让他重新考虑了这个决定。
+              大雪封路后，老周仍步行四小时，把急需的药送到山村。
+              <mark>这件事也让邮局重新认识了山区邮路的价值。</mark>
             </p>
             <div className="summary-box">
-              <small>我的缩写</small>
-              <p>年轻人遇到一个人后，决定留在这座城市。</p>
+              <small>我的缩写 · 约400字</small>
+              <p>老周冒雪为老人送药，邮局因此决定保留这条邮路。</p>
             </div>
             <div className="ai-feedback-card">
               <div className="ai-feedback-head">
@@ -131,11 +111,11 @@ export default function Home() {
                 <span className="ai-spark" aria-hidden="true">✦</span>
               </div>
               <p>
-                原文只说他“重新考虑”离开的决定，没有说明他最终决定留下。
+                你保留了送药和邮路被保留的结果，但遗漏了村民清雪开路，以及邮路长期承担便民服务的原因。
               </p>
               <div className="ai-suggestion">
                 <small>建议修改</small>
-                <span>一次偶然的相遇，让年轻人重新考虑离开城市的决定。</span>
+                <span>补充村民的行动和邮路的实际作用，让事件发展与最终结果衔接完整。</span>
               </div>
             </div>
           </div>

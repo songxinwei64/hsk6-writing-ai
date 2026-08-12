@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import type { Hsk6MockPracticeItem } from "../lib/practice-items";
+import { saveCompletedAttempt } from "../lib/save-practice-attempt";
+import AiFeedbackPanel from "./ai-feedback-panel";
 
 type MockStatus = "idle" | "reading" | "writing" | "submitted" | "expired";
 
@@ -11,7 +13,15 @@ function formatTime(seconds: number) {
   return `${minutes}:${remainder}`;
 }
 
-export default function Hsk6MockPractice({ items }: { items: Hsk6MockPracticeItem[] }) {
+export default function Hsk6MockPractice({
+  items,
+  totalItems,
+  isPaidMember,
+}: {
+  items: Hsk6MockPracticeItem[];
+  totalItems: number;
+  isPaidMember: boolean;
+}) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [titles, setTitles] = useState<Record<number, string>>({});
   const [answers, setAnswers] = useState<Record<number, string>>({});
@@ -53,6 +63,13 @@ export default function Hsk6MockPractice({ items }: { items: Hsk6MockPracticeIte
     setStatuses((current) => ({ ...current, [item.id]: "reading" }));
   }
 
+  function finishReadingEarly() {
+    const confirmed = window.confirm("进入缩写后将无法再次查看原文，确定现在开始缩写吗？");
+    if (!confirmed) return;
+    setRemainingTimes((current) => ({ ...current, [item.id]: item.writingSeconds }));
+    setStatuses((current) => ({ ...current, [item.id]: "writing" }));
+  }
+
   function submitMock() {
     if (!title.trim()) {
       setError("请先填写标题。");
@@ -64,6 +81,11 @@ export default function Hsk6MockPractice({ items }: { items: Hsk6MockPracticeIte
     }
     setStatuses((current) => ({ ...current, [item.id]: "submitted" }));
     setError("");
+    void saveCompletedAttempt({
+      practiceItemId: item.databaseId,
+      answerTitle: title,
+      answerText: answer,
+    });
   }
 
   function moveTo(index: number) {
@@ -71,12 +93,30 @@ export default function Hsk6MockPractice({ items }: { items: Hsk6MockPracticeIte
     setError("");
   }
 
+  function chooseQuestion(index: number) {
+    if (index >= items.length) {
+      window.location.href = "/membership";
+      return;
+    }
+    moveTo(index);
+  }
+
   return (
     <div className="mock-workspace">
       <div className="mock-progress">
-        <span>模拟题 {currentIndex + 1} / {items.length}</span>
+        <span>模拟题 {currentIndex + 1} / {totalItems}</span>
         <span>写作要求：自拟标题 · {item.targetCharCount}字左右</span>
       </div>
+
+      {!isPaidMember && (
+        <div className="mock-guest-notice">
+          <div>
+            <strong>免费版开放 {items.length} / {totalItems} 篇</strong>
+            <span>升级会员后解锁全部HSK写作模拟题。登录只用于保存进度，不会改变免费题目数量。</span>
+          </div>
+          <a href="/membership">查看会员权益</a>
+        </div>
+      )}
 
       {status === "idle" ? (
         <section className="mock-start-panel">
@@ -103,7 +143,12 @@ export default function Hsk6MockPractice({ items }: { items: Hsk6MockPracticeIte
           )}
 
           {status === "reading" && (
-            <div className="mock-reading-rule">阅读时不能抄写或记录。请记住人物、事件发展和结果。</div>
+            <div className="mock-reading-rule">
+              <span>阅读时不能抄写或记录。请记住人物、事件发展和结果。</span>
+              <button className="finish-reading-button" type="button" onClick={finishReadingEarly}>
+                提前结束阅读，开始缩写
+              </button>
+            </div>
           )}
 
           {(status === "writing" || hasFinished) && (
@@ -149,6 +194,15 @@ export default function Hsk6MockPractice({ items }: { items: Hsk6MockPracticeIte
                     <strong>缩写思路</strong>
                     <p>{item.analysis}</p>
                   </aside>
+                  {status === "submitted" && (
+                    <AiFeedbackPanel
+                      practiceItemId={item.databaseId}
+                      answerTitle={title}
+                      answerText={answer}
+                      isPaidMember={isPaidMember}
+                    />
+                  )}
+                  <a className="practice-discussion-link" href={`/community/practice/${item.databaseId}`}>讨论这道题 →</a>
                 </div>
               )}
             </section>
@@ -157,17 +211,22 @@ export default function Hsk6MockPractice({ items }: { items: Hsk6MockPracticeIte
       )}
 
       <nav className="mock-navigation" aria-label="HSK 6模拟题导航">
-          {items.map((question, index) => (
+          {Array.from({ length: totalItems }, (_, index) => {
+          const question = items[index];
+          const locked = !question;
+          return (
           <button
             type="button"
-            className={index === currentIndex ? "current" : ""}
-            onClick={() => moveTo(index)}
+            className={`${index === currentIndex ? "current" : ""}${locked ? " locked" : ""}`}
+            onClick={() => chooseQuestion(index)}
             disabled={isActive && index !== currentIndex}
-            key={question.id}
+            aria-label={locked ? `模拟题 ${index + 1}，会员专享` : `模拟题 ${index + 1}`}
+            key={question?.id ?? `locked-${index}`}
           >
-            模拟题 {index + 1}
+            模拟题 {index + 1}{locked && <span aria-hidden="true"> · 锁定</span>}
           </button>
-        ))}
+          );
+        })}
       </nav>
     </div>
   );

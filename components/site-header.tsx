@@ -11,9 +11,9 @@ export default function SiteHeader() {
 
       <nav className="nav" aria-label="主菜单">
         <Link href="/practice">缩写练习</Link>
-        <Link href="/#library">历年真题</Link>
-        <Link href="/#mine">我的题库</Link>
-        <Link href="/#community">学习社区</Link>
+        <Link href="/practice/mock">HSK写作模拟题库</Link>
+        <Link href="/my-library">我的题库</Link>
+        <Link href="/community">学习社区</Link>
       </nav>
 
       <div className="header-actions">

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import "./globals.css";
+import SiteSidebar from "../components/site-sidebar";
 
 export const metadata: Metadata = {
   title: "Write HSK",
@@ -11,7 +13,12 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="zh-CN">
-      <body>{children}</body>
+      <body>
+        <Suspense fallback={<div className="site-sidebar-loading" aria-hidden="true"><span>W</span></div>}>
+          <SiteSidebar />
+        </Suspense>
+        <div className="site-shell-main">{children}</div>
+      </body>
     </html>
   );
 }

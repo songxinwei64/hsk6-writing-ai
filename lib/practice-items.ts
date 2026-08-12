@@ -2,6 +2,7 @@ import { createClient } from "../utils/supabase/server";
 
 export type SentencePracticeItem = {
   id: number;
+  databaseId: string;
   skill: string;
   tip: string;
   original: string;
@@ -16,6 +17,7 @@ export type ParagraphPracticeItem = SentencePracticeItem & {
 
 export type Hsk6MockPracticeItem = {
   id: number;
+  databaseId: string;
   title: string;
   original: string;
   referenceTitle: string;
@@ -26,14 +28,27 @@ export type Hsk6MockPracticeItem = {
   targetCharCount: number;
 };
 
-async function getPublishedItems(practiceType: "sentence" | "paragraph" | "mock") {
+export const PRACTICE_ACCESS = {
+  sentence: { free: 10, total: 10 },
+  paragraph: { free: 5, total: 5 },
+  mock: { free: 2, total: 10 },
+} as const;
+
+async function getPublishedItems(
+  practiceType: "sentence" | "paragraph" | "mock",
+  limit?: number,
+) {
   const supabase = await createClient();
-  const { data, error } = await supabase
+  let query = supabase
     .from("practice_items")
-    .select("order_no,title,skill,tip,original_text,reference_title,reference_text,explanation,reading_seconds,writing_seconds,target_char_count")
+    .select("id,order_no,title,skill,tip,original_text,reference_title,reference_text,explanation,reading_seconds,writing_seconds,target_char_count")
     .eq("practice_type", practiceType)
     .eq("is_published", true)
     .order("order_no", { ascending: true });
+
+  if (limit) query = query.limit(limit);
+
+  const { data, error } = await query;
 
   if (error) {
     throw new Error(`Unable to load ${practiceType} practice items: ${error.message}`);
@@ -42,10 +57,11 @@ async function getPublishedItems(practiceType: "sentence" | "paragraph" | "mock"
   return data;
 }
 
-export async function getSentencePracticeItems(): Promise<SentencePracticeItem[]> {
-  const data = await getPublishedItems("sentence");
+export async function getSentencePracticeItems(limit?: number): Promise<SentencePracticeItem[]> {
+  const data = await getPublishedItems("sentence", limit);
   return data.map((row) => ({
     id: row.order_no,
+    databaseId: row.id,
     skill: row.skill ?? "缩写练习",
     tip: row.tip ?? "保留主要意思，删除次要细节。",
     original: row.original_text,
@@ -54,10 +70,11 @@ export async function getSentencePracticeItems(): Promise<SentencePracticeItem[]
   }));
 }
 
-export async function getParagraphPracticeItems(): Promise<ParagraphPracticeItem[]> {
-  const data = await getPublishedItems("paragraph");
+export async function getParagraphPracticeItems(limit?: number): Promise<ParagraphPracticeItem[]> {
+  const data = await getPublishedItems("paragraph", limit);
   return data.map((row) => ({
     id: row.order_no,
+    databaseId: row.id,
     skill: row.skill ?? "短文缩写",
     tip: row.tip ?? "梳理人物、事件和结果后再进行缩写。",
     original: row.original_text,
@@ -68,10 +85,11 @@ export async function getParagraphPracticeItems(): Promise<ParagraphPracticeItem
   }));
 }
 
-export async function getHsk6MockPracticeItems(): Promise<Hsk6MockPracticeItem[]> {
-  const data = await getPublishedItems("mock");
+export async function getHsk6MockPracticeItems(limit?: number): Promise<Hsk6MockPracticeItem[]> {
+  const data = await getPublishedItems("mock", limit);
   return data.map((row) => ({
     id: row.order_no,
+    databaseId: row.id,
     title: row.title ?? `模拟题 ${row.order_no}`,
     original: row.original_text,
     referenceTitle: row.reference_title ?? "参考标题",

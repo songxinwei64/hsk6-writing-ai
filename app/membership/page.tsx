@@ -1,0 +1,88 @@
+import Link from "next/link";
+import { getMembershipAccess } from "../../lib/membership";
+import { PRACTICE_ACCESS } from "../../lib/practice-items";
+
+export const dynamic = "force-dynamic";
+
+const benefits = [
+  {
+    label: "句子缩写",
+    free: PRACTICE_ACCESS.sentence.free,
+    total: PRACTICE_ACCESS.sentence.total,
+  },
+  {
+    label: "短文缩写",
+    free: PRACTICE_ACCESS.paragraph.free,
+    total: PRACTICE_ACCESS.paragraph.total,
+  },
+  {
+    label: "HSK写作模拟",
+    free: PRACTICE_ACCESS.mock.free,
+    total: PRACTICE_ACCESS.mock.total,
+  },
+] as const;
+
+export default async function MembershipPage() {
+  const access = await getMembershipAccess();
+
+  return (
+    <main className="page">
+      <section className="membership-shell">
+        <div className="membership-heading">
+          <span className="eyebrow">Write HSK · 会员权益</span>
+          <h1>先免费练习，再决定是否解锁全部题目</h1>
+          <p>登录不会增加可练题目数量。登录后可以保存进度；付费会员可以使用全部练习题。</p>
+        </div>
+
+        <div className="membership-plans">
+          <article className="membership-plan">
+            <div className="membership-plan-title">
+              <span>免费版</span>
+              <strong>¥0</strong>
+            </div>
+            <p>游客和已登录的免费账户拥有相同的题目范围。</p>
+            <ul>
+              {benefits.map((benefit) => (
+                <li key={benefit.label}>
+                  <span>{benefit.label}</span>
+                  <b>{benefit.free} / {benefit.total} 题</b>
+                </li>
+              ))}
+              <li><span>保存做题进度</span><b>{access.isAuthenticated ? "可使用" : "登录后可用"}</b></li>
+            </ul>
+            {!access.isAuthenticated ? (
+              <Link className="membership-secondary-action" href="/?auth=login&next=/membership">登录并保存进度</Link>
+            ) : (
+              <span className="membership-current">当前为免费账户</span>
+            )}
+          </article>
+
+          <article className="membership-plan membership-plan-paid">
+            <div className="membership-plan-badge">完整题库</div>
+            <div className="membership-plan-title">
+              <span>付费会员</span>
+              <strong>全部开放</strong>
+            </div>
+            <p>适合需要系统完成全部缩写训练和模拟练习的学习者。</p>
+            <ul>
+              {benefits.map((benefit) => (
+                <li key={benefit.label}>
+                  <span>{benefit.label}</span>
+                  <b>{benefit.total} / {benefit.total} 题</b>
+                </li>
+              ))}
+              <li><span>保存做题进度</span><b>可使用</b></li>
+            </ul>
+            {access.isPaidMember ? (
+              <Link className="membership-primary-action" href="/practice">会员已生效，开始练习</Link>
+            ) : (
+              <span className="membership-coming-soon">支付功能尚未接入，暂时不能购买</span>
+            )}
+          </article>
+        </div>
+
+        <p className="membership-note">目前只建立会员识别和题目权限，尚未连接支付。以后接入支付后，不需要改变现有免费范围。</p>
+      </section>
+    </main>
+  );
+}

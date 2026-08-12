@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { ParagraphPracticeItem } from "../lib/practice-items";
+import { saveCompletedAttempt } from "../lib/save-practice-attempt";
 
 type PracticeStatus = "idle" | "reading" | "writing" | "submitted" | "expired";
 
@@ -11,7 +12,15 @@ function formatTime(seconds: number) {
   return `${minutes}:${remainder}`;
 }
 
-export default function ParagraphPractice({ items }: { items: ParagraphPracticeItem[] }) {
+export default function ParagraphPractice({
+  items,
+  totalItems,
+  isPaidMember,
+}: {
+  items: ParagraphPracticeItem[];
+  totalItems: number;
+  isPaidMember: boolean;
+}) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [statuses, setStatuses] = useState<Record<number, PracticeStatus>>({});
@@ -55,9 +64,24 @@ export default function ParagraphPractice({ items }: { items: ParagraphPracticeI
     setError("");
   }
 
+  function chooseQuestion(index: number) {
+    if (index >= items.length) {
+      window.location.href = "/membership";
+      return;
+    }
+    moveTo(index);
+  }
+
   function startPractice() {
     setRemainingTimes((current) => ({ ...current, [item.id]: item.readingSeconds }));
     setStatuses((current) => ({ ...current, [item.id]: "reading" }));
+  }
+
+  function finishReadingEarly() {
+    const confirmed = window.confirm("进入缩写后将无法再次查看原文，确定现在开始缩写吗？");
+    if (!confirmed) return;
+    setRemainingTimes((current) => ({ ...current, [item.id]: item.writingSeconds }));
+    setStatuses((current) => ({ ...current, [item.id]: "writing" }));
   }
 
   function submitAnswer() {
@@ -67,14 +91,25 @@ export default function ParagraphPractice({ items }: { items: ParagraphPracticeI
     }
     setStatuses((current) => ({ ...current, [item.id]: "submitted" }));
     setError("");
+    void saveCompletedAttempt({ practiceItemId: item.databaseId, answerText: answer });
   }
 
   return (
     <div className="paragraph-workspace">
       <div className="sentence-progress-head">
-        <span>练习 {currentIndex + 1} / {items.length}</span>
-        <span>已完成 {completedCount} / {items.length}</span>
+        <span>练习 {currentIndex + 1} / {totalItems}</span>
+        <span>已完成 {completedCount} / {totalItems}</span>
       </div>
+
+      {!isPaidMember && items.length < totalItems && (
+        <div className="mock-guest-notice">
+          <div>
+            <strong>免费版开放 {items.length} / {totalItems} 篇</strong>
+            <span>升级会员后可以练习全部短文缩写题。</span>
+          </div>
+          <a href="/membership">查看会员权益</a>
+        </div>
+      )}
       <div className="sentence-progress-track">
         <span style={{ width: `${((currentIndex + 1) / items.length) * 100}%` }} />
       </div>
@@ -119,6 +154,9 @@ export default function ParagraphPractice({ items }: { items: ParagraphPracticeI
             <section className="paragraph-reading-note">
               <strong>阅读阶段</strong>
               <p>阅读时不能记录。请记住主要人物、核心事件、原因和结果，倒计时结束后原文将自动隐藏。</p>
+              <button className="finish-reading-button" type="button" onClick={finishReadingEarly}>
+                提前结束阅读，开始缩写
+              </button>
             </section>
           ) : (
           <section className="sentence-writing paragraph-writing">
@@ -152,6 +190,7 @@ export default function ParagraphPractice({ items }: { items: ParagraphPracticeI
                   <small>技巧解析 · {item.skill}</small>
                   <span>{item.explanation}</span>
                 </aside>
+                <a className="practice-discussion-link" href={`/community/practice/${item.databaseId}`}>讨论这道题 →</a>
               </div>
             )}
           </section>
@@ -162,20 +201,24 @@ export default function ParagraphPractice({ items }: { items: ParagraphPracticeI
       <nav className="sentence-navigation" aria-label="短文练习题目导航">
         <button type="button" onClick={() => moveTo(currentIndex - 1)} disabled={currentIndex === 0 || isActive}>← 上一题</button>
         <div>
-          {items.map((question, index) => (
+          {Array.from({ length: totalItems }, (_, index) => {
+            const question = items[index];
+            const locked = !question;
+            return (
             <button
-              className={`${index === currentIndex ? "current" : ""}${statuses[question.id] === "submitted" || statuses[question.id] === "expired" ? " completed" : ""}`}
+              className={`${index === currentIndex ? "current" : ""}${question && (statuses[question.id] === "submitted" || statuses[question.id] === "expired") ? " completed" : ""}${locked ? " locked" : ""}`}
               type="button"
-              onClick={() => moveTo(index)}
+              onClick={() => chooseQuestion(index)}
               disabled={isActive && index !== currentIndex}
-              aria-label={`第 ${index + 1} 篇短文`}
-              key={question.id}
+              aria-label={locked ? `第 ${index + 1} 篇短文，会员专享` : `第 ${index + 1} 篇短文`}
+              key={question?.id ?? `locked-${index}`}
             >
-              {index + 1}
+              {index + 1}{locked && <span aria-hidden="true"> · 锁定</span>}
             </button>
-          ))}
+            );
+          })}
         </div>
-        <button type="button" onClick={() => moveTo(currentIndex + 1)} disabled={currentIndex === items.length - 1 || isActive}>下一题 →</button>
+        <button type="button" onClick={() => chooseQuestion(currentIndex + 1)} disabled={currentIndex === totalItems - 1 || isActive}>下一题 →</button>
       </nav>
     </div>
   );

@@ -1,8 +1,10 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import type { User } from "@supabase/supabase-js";
 import { createClient } from "../utils/supabase/client";
+import { useRouter } from "next/navigation";
 
 type AuthMode = "sign-in" | "sign-up";
 
@@ -41,7 +43,18 @@ function getUserInitial(user: User) {
   return String(name || user.email || "U").trim().charAt(0).toUpperCase();
 }
 
-export default function AuthEntry() {
+export default function AuthEntry({
+  autoOpen = false,
+  nextPath = "/",
+  prominent = false,
+  topbar = false,
+}: {
+  autoOpen?: boolean;
+  nextPath?: string;
+  prominent?: boolean;
+  topbar?: boolean;
+}) {
+  const router = useRouter();
   const supabase = useMemo(() => createClient(), []);
   const accountRef = useRef<HTMLDivElement>(null);
   const [user, setUser] = useState<User | null>(null);
@@ -60,6 +73,12 @@ export default function AuthEntry() {
     });
     return () => data.subscription.unsubscribe();
   }, [supabase]);
+
+  useEffect(() => {
+    if (autoOpen) openModal();
+  // `openModal` only resets local modal state and is intentionally run once per flag change.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoOpen]);
 
   useEffect(() => {
     function closeAccountMenu(event: MouseEvent) {
@@ -103,7 +122,9 @@ export default function AuthEntry() {
     setIsSubmitting(true);
     const { error: authError } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath)}`,
+      },
     });
     if (authError) {
       setError(authError.message);
@@ -130,7 +151,11 @@ export default function AuthEntry() {
     if (mode === "sign-in") {
       const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
       if (authError) setError(authError.message);
-      else setIsOpen(false);
+      else {
+        setIsOpen(false);
+        router.push(nextPath);
+        router.refresh();
+      }
     } else {
       const firstName = String(form.get("firstName") || "").trim();
       const lastName = String(form.get("lastName") || "").trim();
@@ -140,11 +165,15 @@ export default function AuthEntry() {
         password,
         options: {
           data: { first_name: firstName, last_name: lastName, full_name: fullName },
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath)}`,
         },
       });
       if (authError) setError(authError.message);
-      else if (data.session) setIsOpen(false);
+      else if (data.session) {
+        setIsOpen(false);
+        router.push(nextPath);
+        router.refresh();
+      }
       else setMessage("Check your email and click the confirmation link to finish signing up.");
     }
     setIsSubmitting(false);
@@ -157,15 +186,21 @@ export default function AuthEntry() {
 
   return (
     <div className="account-entry" ref={accountRef}>
-      <button
-        className={`account-button${user ? " signed-in" : ""}`}
+      {!user && topbar ? (
+        <div className="topbar-auth-actions">
+          <button type="button" onClick={openModal}>Sign in</button>
+          <button className="signup" type="button" onClick={() => { openModal(); setMode("sign-up"); }}>Sign up</button>
+        </div>
+      ) : <button
+        className={`account-button${user ? " signed-in" : ""}${prominent ? " prominent" : ""}`}
         type="button"
         onClick={() => user ? setIsAccountOpen((open) => !open) : openModal()}
         aria-label={user ? "Open account menu" : "Open sign in"}
         aria-expanded={user ? isAccountOpen : undefined}
       >
-        {user ? <span>{getUserInitial(user)}</span> : <UserIcon />}
-      </button>
+        {user ? <span className="account-avatar-letter">{getUserInitial(user)}</span> : <UserIcon />}
+        {prominent && <span className="account-button-label">{user ? "My account" : "Sign in / Sign up"}</span>}
+      </button>}
 
       {user && isAccountOpen && (
         <div className="account-menu">
@@ -175,7 +210,7 @@ export default function AuthEntry() {
         </div>
       )}
 
-      {isOpen && (
+      {isOpen && typeof document !== "undefined" && createPortal(
         <div className="auth-overlay" role="presentation" onMouseDown={(event) => {
           if (event.target === event.currentTarget) setIsOpen(false);
         }}>
@@ -237,7 +272,8 @@ export default function AuthEntry() {
               )}
             </div>
           </section>
-        </div>
+        </div>,
+        document.body,
       )}
     </div>
   );

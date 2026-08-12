@@ -2,8 +2,17 @@
 
 import { useState } from "react";
 import type { SentencePracticeItem } from "../lib/practice-items";
+import { saveCompletedAttempt } from "../lib/save-practice-attempt";
 
-export default function SentencePractice({ items }: { items: SentencePracticeItem[] }) {
+export default function SentencePractice({
+  items,
+  totalItems,
+  isPaidMember,
+}: {
+  items: SentencePracticeItem[];
+  totalItems: number;
+  isPaidMember: boolean;
+}) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [submitted, setSubmitted] = useState<Record<number, boolean>>({});
@@ -19,6 +28,14 @@ export default function SentencePractice({ items }: { items: SentencePracticeIte
     setError("");
   }
 
+  function chooseQuestion(index: number) {
+    if (index >= items.length) {
+      window.location.href = "/membership";
+      return;
+    }
+    moveTo(index);
+  }
+
   function submitAnswer() {
     if (!answer.trim()) {
       setError("请先写下你的缩写。");
@@ -26,6 +43,7 @@ export default function SentencePractice({ items }: { items: SentencePracticeIte
     }
     setSubmitted((current) => ({ ...current, [item.id]: true }));
     setError("");
+    void saveCompletedAttempt({ practiceItemId: item.databaseId, answerText: answer });
   }
 
   function editAnswer() {
@@ -35,9 +53,19 @@ export default function SentencePractice({ items }: { items: SentencePracticeIte
   return (
     <div className="sentence-workspace">
       <div className="sentence-progress-head">
-        <span>练习 {currentIndex + 1} / {items.length}</span>
-        <span>已完成 {completedCount} / {items.length}</span>
+        <span>练习 {currentIndex + 1} / {totalItems}</span>
+        <span>已完成 {completedCount} / {totalItems}</span>
       </div>
+
+      {!isPaidMember && items.length < totalItems && (
+        <div className="mock-guest-notice">
+          <div>
+            <strong>免费版开放 {items.length} / {totalItems} 题</strong>
+            <span>升级会员后可以练习全部句子缩写题。</span>
+          </div>
+          <a href="/membership">查看会员权益</a>
+        </div>
+      )}
       <div className="sentence-progress-track">
         <span style={{ width: `${((currentIndex + 1) / items.length) * 100}%` }} />
       </div>
@@ -90,7 +118,10 @@ export default function SentencePractice({ items }: { items: SentencePracticeIte
               <small>技巧解析 · {item.skill}</small>
               <span>{item.explanation}</span>
             </aside>
-            <button type="button" onClick={editAnswer}>修改我的答案</button>
+            <div className="practice-result-actions">
+              <button type="button" onClick={editAnswer}>修改我的答案</button>
+              <a href={`/community/practice/${item.databaseId}`}>讨论这道题 →</a>
+            </div>
           </div>
         )}
       </section>
@@ -100,22 +131,26 @@ export default function SentencePractice({ items }: { items: SentencePracticeIte
           ← 上一题
         </button>
         <div>
-          {items.map((question, index) => (
+          {Array.from({ length: totalItems }, (_, index) => {
+            const question = items[index];
+            const locked = !question;
+            return (
             <button
-              className={`${index === currentIndex ? "current" : ""}${submitted[question.id] ? " completed" : ""}`}
+              className={`${index === currentIndex ? "current" : ""}${question && submitted[question.id] ? " completed" : ""}${locked ? " locked" : ""}`}
               type="button"
-              onClick={() => moveTo(index)}
-              aria-label={`第 ${index + 1} 题`}
-              key={question.id}
+              onClick={() => chooseQuestion(index)}
+              aria-label={locked ? `第 ${index + 1} 题，会员专享` : `第 ${index + 1} 题`}
+              key={question?.id ?? `locked-${index}`}
             >
-              {index + 1}
+              {index + 1}{locked && <span aria-hidden="true"> · 锁定</span>}
             </button>
-          ))}
+            );
+          })}
         </div>
         <button
           type="button"
-          onClick={() => moveTo(currentIndex + 1)}
-          disabled={currentIndex === items.length - 1}
+          onClick={() => chooseQuestion(currentIndex + 1)}
+          disabled={currentIndex === totalItems - 1}
         >
           下一题 →
         </button>

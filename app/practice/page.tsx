@@ -1,5 +1,4 @@
 import Link from "next/link";
-import SiteHeader from "../../components/site-header";
 
 const writingLevels = [
   {
@@ -16,26 +15,18 @@ const writingLevels = [
     status: "进阶训练",
     href: "/practice/paragraph",
   },
-  {
-    number: "03",
-    title: "HSK 6 写作模拟",
-    description: "按照接近HSK 6写作的流程，阅读完整文章、隐藏原文、计时并完成整篇缩写。",
-    status: "完整训练",
-    href: "/practice/mock",
-  },
 ];
 
 export default function PracticePage() {
   return (
     <main className="page">
-      <SiteHeader />
 
       <section className="practice-shell">
         <div className="practice-intro">
           <Link className="back-link" href="/">← 返回首页</Link>
           <span className="eyebrow">HSK 6 写作 · 缩写练习</span>
-          <h1>从一句话到完整模拟</h1>
-          <p>先练句子缩写，再完成短文缩写，最后进入接近HSK 6写作流程的完整训练。</p>
+          <h1>练会提取重点与压缩表达</h1>
+          <p>先从句子开始，再练习短文缩写。准备好以后，可以进入HSK写作模拟题库完成整篇训练。</p>
         </div>
 
         <div className="writing-level-grid">
