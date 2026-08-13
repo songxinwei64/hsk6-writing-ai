@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getMembershipAccess } from "../../lib/membership";
 import { PRACTICE_ACCESS } from "../../lib/practice-items";
+import CheckoutButton from "../../components/checkout-button";
 
 export const dynamic = "force-dynamic";
 
@@ -79,13 +80,15 @@ export default async function MembershipPage() {
             </ul>
             {access.isPaidMember ? (
               <Link className="membership-primary-action" href="/practice">会员已生效，开始练习</Link>
+            ) : access.isAuthenticated ? (
+              <CheckoutButton />
             ) : (
-              <span className="membership-coming-soon">支付功能尚未接入，暂时不能购买</span>
+              <Link className="membership-primary-action" href="/?auth=login&next=/membership">登录后升级会员</Link>
             )}
           </article>
         </div>
 
-        <p className="membership-note">目前只建立会员识别和题目权限，尚未连接支付。以后接入支付后，不需要改变现有免费范围。</p>
+        <p className="membership-note">会员按月自动续费，可随时取消；取消后仍可使用到当前付费周期结束。</p>
       </section>
     </main>
   );

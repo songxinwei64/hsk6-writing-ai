@@ -114,7 +114,7 @@ export default function Hsk6MockPractice({
         <div className="mock-guest-notice">
           <div>
             <strong>免费版开放 {items.length} / {totalItems} 篇</strong>
-            <span>升级会员后解锁全部HSK写作模拟题。登录只用于保存进度，不会改变免费题目数量。</span>
+            <span>升级会员后解锁全部HSK写作模拟题。</span>
           </div>
           <a href="/membership">查看会员权益</a>
         </div>

@@ -2526,6 +2526,26 @@ a.primary-button {
 .membership-primary-action {
   color: #fff;
   background: var(--green);
+  border: 0;
+  width: 100%;
+  cursor: pointer;
+  font: inherit;
+}
+
+.membership-primary-action:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.checkout-action {
+  width: 100%;
+}
+
+.checkout-error {
+  margin: 10px 0 0;
+  color: #a33b32;
+  font-size: 13px;
+  text-align: center;
 }
 
 .membership-secondary-action {
