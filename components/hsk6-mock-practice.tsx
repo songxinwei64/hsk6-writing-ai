@@ -7,6 +7,7 @@ import { saveCompletedAttempt } from "../lib/save-practice-attempt";
 import AiFeedbackPanel from "./ai-feedback-panel";
 import AttemptBadge from "./attempt-badge";
 import PracticeLockOverlay from "./practice-lock-overlay";
+import QuestionLockIcon from "./question-lock-icon";
 
 const QUESTIONS_PER_PAGE = 10;
 
@@ -261,7 +262,7 @@ export default function Hsk6MockPractice({
             aria-label={locked ? `模拟题 ${index + 1}，会员专享` : `模拟题 ${index + 1}`}
             key={question?.id ?? `locked-${index}`}
           >
-            {index + 1}{locked && <span aria-hidden="true"> · 锁定</span>}
+            {index + 1}{locked && <QuestionLockIcon />}
           </button>
           );
         })}
@@ -271,8 +272,8 @@ export default function Hsk6MockPractice({
       <p className="practice-pagination-status">第 {questionPage + 1} / {totalPages} 页</p>
       {!isPaidMember && lockedTarget !== null && (
         <PracticeLockOverlay
-          title={`你已完成 ${items.length} 篇免费 HSK 写作模拟`}
-          description={`第 ${lockedTarget} 篇起为会员模拟题。解锁剩余 ${totalItems - items.length} 篇，按照真实 HSK 6 考试流程继续训练。`}
+          title="继续解锁 HSK 写作模拟"
+          description={`当前免费范围开放前 ${items.length} 篇。第 ${lockedTarget} 篇起为会员模拟题，解锁后可按照真实 HSK 6 考试流程继续训练。`}
           onClose={closePaywall}
         />
       )}

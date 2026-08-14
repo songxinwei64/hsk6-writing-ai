@@ -6,6 +6,7 @@ import type { PracticeAttemptSummary } from "../lib/practice-attempt-summary";
 import { saveCompletedAttempt } from "../lib/save-practice-attempt";
 import AttemptBadge from "./attempt-badge";
 import PracticeLockOverlay from "./practice-lock-overlay";
+import QuestionLockIcon from "./question-lock-icon";
 
 const QUESTIONS_PER_PAGE = 10;
 
@@ -248,10 +249,10 @@ export default function ParagraphPractice({
               type="button"
               onClick={() => chooseQuestion(index)}
               disabled={isActive && index !== currentIndex}
-              aria-label={locked ? `第 ${index + 1} 篇短文，会员专享` : `第 ${index + 1} 篇短文`}
+              aria-label={locked ? `第 ${index + 1} 篇短文，${isAuthenticated ? "会员专享" : "登录后解锁"}` : `第 ${index + 1} 篇短文`}
               key={question?.id ?? `locked-${index}`}
             >
-              {index + 1}{locked && <span aria-hidden="true"> · 锁定</span>}
+              {index + 1}{locked && <QuestionLockIcon />}
             </button>
             );
           })}
@@ -262,9 +263,9 @@ export default function ParagraphPractice({
       {!isPaidMember && lockedTarget !== null && (
         <PracticeLockOverlay
           variant={isAuthenticated ? "membership" : "login"}
-          title={isAuthenticated ? `你已完成 ${items.length} 篇免费短文缩写` : `登录后继续短文缩写`}
+          title={isAuthenticated ? `继续解锁短文缩写练习` : `登录后继续短文缩写`}
           description={isAuthenticated
-            ? `第 ${lockedTarget} 篇起为会员练习。解锁剩余 ${totalItems - items.length} 篇短文，继续训练完整主线与连贯表达。`
+            ? `当前免费范围开放前 ${items.length} 篇。第 ${lockedTarget} 篇起为会员练习，解锁后可继续训练完整主线与连贯表达。`
             : `游客可以体验 ${items.length} 篇。登录后可免费练习前 ${loggedInFreeItems} 篇，并保存每次练习记录。`}
           loginNext="/practice/paragraph"
           onClose={closePaywall}

@@ -1898,6 +1898,7 @@ a.primary-button {
 }
 
 .sentence-navigation > div button {
+  position: relative;
   width: 32px;
   height: 32px;
   padding: 0;
@@ -1907,6 +1908,31 @@ a.primary-button {
   border-radius: 50%;
   cursor: pointer;
   font-size: 12px;
+}
+
+.question-lock-icon {
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  width: 14px;
+  height: 14px;
+  display: grid;
+  place-items: center;
+  color: #78807c;
+  background: #fff;
+  border: 1px solid #d9ddda;
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(20, 35, 28, 0.08);
+}
+
+.question-lock-icon svg {
+  width: 9px;
+  height: 9px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.35;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .sentence-navigation > div button.completed {
@@ -2587,14 +2613,14 @@ a.primary-button {
 
 .mock-navigation button.locked {
   color: #8a918d;
-  border-style: dashed;
-  background: #f5f6f5;
+  border-color: #e3e6e4;
+  background: #f7f8f7;
 }
 
 .sentence-navigation button.locked {
   color: #8a918d;
-  border-style: dashed;
-  background: #f5f6f5;
+  border-color: #e3e6e4;
+  background: #f7f8f7;
 }
 
 .membership-shell {
@@ -3456,7 +3482,13 @@ a.primary-button {
   white-space: nowrap;
   cursor: default;
   transform: translate(-50%, -50%);
+  animation: wall-piece-arrive .55s cubic-bezier(.2,.75,.25,1) both;
   transition: color .15s ease, font-size .15s ease, text-shadow .15s ease;
+}
+
+@keyframes wall-piece-arrive {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(.35) rotate(-4deg); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0); }
 }
 
 .word-mosaic > span:nth-child(5n) { color: #987737; }
@@ -3553,7 +3585,8 @@ a.primary-button {
 }
 
 .wall-next-themes > div,
-.wall-next-themes article {
+.wall-next-themes article,
+.wall-theme-card {
   min-height: 122px;
   padding: 20px;
   border: 1px solid var(--line);
@@ -3563,10 +3596,19 @@ a.primary-button {
 
 .wall-next-themes > div span { font-weight: 800; }
 .wall-next-themes > div p { margin: 8px 0 0; color: var(--muted); font-size: 12px; line-height: 1.55; }
-.wall-next-themes article { display: flex; flex-direction: column; }
-.wall-next-themes article strong { color: var(--green-dark); font-size: 20px; }
-.wall-next-themes article span { margin-top: 7px; color: var(--muted); font-size: 11px; line-height: 1.5; }
-.wall-next-themes article small { margin-top: auto; color: #a0a5a1; font-size: 10px; }
+.wall-theme-card { display: flex; border: 1px solid var(--line); text-align: left; font: inherit; cursor: pointer; flex-direction: column; transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease; }
+.wall-theme-card:hover { border-color: #8dbba9; box-shadow: 0 8px 24px rgba(28, 82, 62, .08); transform: translateY(-2px); }
+.wall-theme-card:disabled { cursor: wait; opacity: .72; }
+.wall-theme-card.selected { border-color: var(--green); background: #f3f9f6; }
+.wall-theme-card.winner { box-shadow: inset 0 0 0 2px rgba(36, 107, 82, .13); }
+.wall-theme-card-top { display: flex; align-items: center; justify-content: space-between; margin: 0 !important; }
+.wall-theme-card strong { color: var(--green-dark); font-size: 20px; }
+.wall-theme-card b { color: var(--green-dark); font-size: 12px; }
+.wall-theme-card > span { margin-top: 7px; color: var(--muted); font-size: 11px; line-height: 1.5; }
+.wall-theme-card small { margin-top: auto; color: #747b77; font-size: 10px; font-weight: 700; }
+.wall-vote-progress { display: block; width: 100%; height: 4px; overflow: hidden; border-radius: 99px; background: #edf0ed; }
+.wall-vote-progress i { display: block; height: 100%; border-radius: inherit; background: var(--green); transition: width .35s ease; }
+.wall-vote-error { display: block; margin-top: 12px; color: #b34333; }
 
 /* Dedicated discussion index */
 .discussions-index {
