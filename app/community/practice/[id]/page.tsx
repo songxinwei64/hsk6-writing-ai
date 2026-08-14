@@ -2,6 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import PracticeDiscussion from "../../../../components/practice-discussion";
 import type { CommunityPost } from "../../../../lib/community";
+import { getMembershipAccess } from "../../../../lib/membership";
+import { PRACTICE_ACCESS } from "../../../../lib/practice-items";
 import { createClient } from "../../../../utils/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -33,6 +35,13 @@ export default async function CommunityPracticePage({ params }: { params: Promis
 
   if (itemError || postsError) throw new Error(itemError?.message ?? postsError?.message ?? "Unable to load discussion.");
   if (!item) notFound();
+
+  const practiceType = item.practice_type as keyof typeof PRACTICE_ACCESS;
+  if (!(practiceType in PRACTICE_ACCESS)) notFound();
+  const access = await getMembershipAccess();
+  const limits = PRACTICE_ACCESS[practiceType];
+  const allowedItems = access.isPaidMember ? limits.total : access.isAuthenticated ? limits.free : limits.guest;
+  if (item.order_no > allowedItems) notFound();
 
   const label = labels[item.practice_type as keyof typeof labels] ?? "缩写练习";
 
