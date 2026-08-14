@@ -2045,6 +2045,14 @@ a.primary-button {
   font-size: 12px;
 }
 
+.practice-lock-renewal {
+  margin: -10px 0 18px !important;
+  color: var(--green-dark) !important;
+  font-size: 14px !important;
+  font-weight: 800;
+  text-align: center;
+}
+
 .practice-lock-primary,
 .practice-lock-secondary {
   width: 100%;
@@ -2818,6 +2826,40 @@ a.primary-button {
 
 .checkout-action {
   width: 100%;
+}
+
+.membership-billing-summary {
+  margin: 20px 0 14px;
+  padding: 16px 18px;
+  border: 1px solid #c9ddd4;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .72);
+  text-align: center;
+}
+
+.membership-billing-summary strong,
+.membership-billing-summary span,
+.membership-billing-summary small {
+  display: block;
+}
+
+.membership-billing-summary strong {
+  color: var(--ink);
+  font-size: 24px;
+}
+
+.membership-billing-summary span {
+  margin-top: 6px;
+  color: var(--green-dark);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.membership-billing-summary small {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
 }
 
 .checkout-error {

@@ -38,8 +38,9 @@ export default function PracticeLockOverlay({
             </ul>
             <div className="practice-lock-price">
               <strong>₩12,900</strong>
-              <span>/ 月 · 随时取消</span>
+              <span>/ 月</span>
             </div>
+            <p className="practice-lock-renewal">每月自动续费，可随时取消</p>
           </>
         )}
 
@@ -47,7 +48,7 @@ export default function PracticeLockOverlay({
           className="practice-lock-primary"
           href={isLoginPrompt ? `/?auth=login&next=${encodeURIComponent(loginNext)}` : "/membership"}
         >
-          {isLoginPrompt ? "登录后继续" : "解锁完整题库"}
+          {isLoginPrompt ? "登录后继续" : "查看月度会员"}
         </a>
         <button className="practice-lock-secondary" type="button" onClick={onClose}>
           {isLoginPrompt ? "暂时返回" : "返回免费练习"}

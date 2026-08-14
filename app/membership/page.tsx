@@ -113,15 +113,24 @@ export default async function MembershipPage() {
                 </div>
                 <Link className="membership-primary-action" href="/practice">会员已生效，开始练习</Link>
               </>
-            ) : access.isAuthenticated ? (
-              <CheckoutButton />
             ) : (
-              <Link className="membership-primary-action" href="/?auth=login&next=/membership">登录后升级会员</Link>
+              <>
+                <div className="membership-billing-summary">
+                  <strong>₩12,900 / 月</strong>
+                  <span>月度订阅，每月自动续费</span>
+                  <small>可随时取消；取消后仍可使用到当前付费周期结束。</small>
+                </div>
+                {access.isAuthenticated ? (
+                  <CheckoutButton />
+                ) : (
+                  <Link className="membership-primary-action" href="/?auth=login&next=/membership">登录后订阅会员</Link>
+                )}
+              </>
             )}
           </article>
         </div>
 
-        <p className="membership-note">会员按月自动续费，可随时取消；取消后仍可使用到当前付费周期结束。</p>
+        <p className="membership-note">这是月度自动续费订阅，不是单次购买。付款即表示同意每月自动扣款，直至取消。</p>
       </section>
     </main>
   );
