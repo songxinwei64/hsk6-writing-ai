@@ -12,11 +12,15 @@ const QUESTIONS_PER_PAGE = 10;
 export default function SentencePractice({
   items,
   totalItems,
+  loggedInFreeItems,
+  isAuthenticated,
   isPaidMember,
   initialAttemptSummaries,
 }: {
   items: SentencePracticeItem[];
   totalItems: number;
+  loggedInFreeItems: number;
+  isAuthenticated: boolean;
   isPaidMember: boolean;
   initialAttemptSummaries: Record<string, PracticeAttemptSummary>;
 }) {
@@ -193,8 +197,12 @@ export default function SentencePractice({
       <p className="practice-pagination-status">第 {questionPage + 1} / {totalPages} 页</p>
       {!isPaidMember && lockedTarget !== null && (
         <PracticeLockOverlay
-          title={`你已完成 ${items.length} 道免费句子缩写`}
-          description={`第 ${lockedTarget} 道起为会员练习。解锁剩余 ${totalItems - items.length} 道题，继续提高信息提取与压缩能力。`}
+          variant={isAuthenticated ? "membership" : "login"}
+          title={isAuthenticated ? `你已完成 ${items.length} 道免费句子缩写` : `登录后继续句子缩写`}
+          description={isAuthenticated
+            ? `第 ${lockedTarget} 道起为会员练习。解锁剩余 ${totalItems - items.length} 道题，继续提高信息提取与压缩能力。`
+            : `游客可以体验 ${items.length} 道题。登录后可免费练习前 ${loggedInFreeItems} 道，并保存每次练习记录。`}
+          loginNext="/practice/sentence"
           onClose={closePaywall}
         />
       )}

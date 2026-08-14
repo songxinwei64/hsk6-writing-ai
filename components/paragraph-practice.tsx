@@ -20,11 +20,15 @@ function formatTime(seconds: number) {
 export default function ParagraphPractice({
   items,
   totalItems,
+  loggedInFreeItems,
+  isAuthenticated,
   isPaidMember,
   initialAttemptSummaries,
 }: {
   items: ParagraphPracticeItem[];
   totalItems: number;
+  loggedInFreeItems: number;
+  isAuthenticated: boolean;
   isPaidMember: boolean;
   initialAttemptSummaries: Record<string, PracticeAttemptSummary>;
 }) {
@@ -257,8 +261,12 @@ export default function ParagraphPractice({
       <p className="practice-pagination-status">第 {questionPage + 1} / {totalPages} 页</p>
       {!isPaidMember && lockedTarget !== null && (
         <PracticeLockOverlay
-          title={`你已完成 ${items.length} 篇免费短文缩写`}
-          description={`第 ${lockedTarget} 篇起为会员练习。解锁剩余 ${totalItems - items.length} 篇短文，继续训练完整主线与连贯表达。`}
+          variant={isAuthenticated ? "membership" : "login"}
+          title={isAuthenticated ? `你已完成 ${items.length} 篇免费短文缩写` : `登录后继续短文缩写`}
+          description={isAuthenticated
+            ? `第 ${lockedTarget} 篇起为会员练习。解锁剩余 ${totalItems - items.length} 篇短文，继续训练完整主线与连贯表达。`
+            : `游客可以体验 ${items.length} 篇。登录后可免费练习前 ${loggedInFreeItems} 篇，并保存每次练习记录。`}
+          loginNext="/practice/paragraph"
           onClose={closePaywall}
         />
       )}

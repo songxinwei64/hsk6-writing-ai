@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import Hsk6MockPractice from "../../../components/hsk6-mock-practice";
 import { getHsk6MockPracticeItems, PRACTICE_ACCESS } from "../../../lib/practice-items";
 import { getMembershipAccess } from "../../../lib/membership";
@@ -8,6 +9,9 @@ export const dynamic = "force-dynamic";
 
 export default async function Hsk6MockPracticePage() {
   const access = await getMembershipAccess();
+  if (!access.isAuthenticated) {
+    redirect("/?auth=login&next=%2Fpractice%2Fmock");
+  }
   const limits = PRACTICE_ACCESS.mock;
   const items = await getHsk6MockPracticeItems(access.isPaidMember ? undefined : limits.free);
   const totalItems = limits.total;

@@ -29,9 +29,9 @@ export type Hsk6MockPracticeItem = {
 };
 
 export const PRACTICE_ACCESS = {
-  sentence: { free: 20, total: 100 },
-  paragraph: { free: 10, total: 80 },
-  mock: { free: 3, total: 50 },
+  sentence: { guest: 5, free: 20, total: 100 },
+  paragraph: { guest: 3, free: 10, total: 80 },
+  mock: { guest: 0, free: 3, total: 50 },
 } as const;
 
 async function getPublishedItems(

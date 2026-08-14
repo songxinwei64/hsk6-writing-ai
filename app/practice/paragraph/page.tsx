@@ -9,7 +9,12 @@ export const dynamic = "force-dynamic";
 export default async function ParagraphPracticePage() {
   const access = await getMembershipAccess();
   const limits = PRACTICE_ACCESS.paragraph;
-  const items = await getParagraphPracticeItems(access.isPaidMember ? undefined : limits.free);
+  const itemLimit = access.isPaidMember
+    ? undefined
+    : access.isAuthenticated
+      ? limits.free
+      : limits.guest;
+  const items = await getParagraphPracticeItems(itemLimit);
   const totalItems = limits.total;
   const attemptSummaries = await getPracticeAttemptSummaries(items.map((item) => item.databaseId));
 
@@ -25,6 +30,8 @@ export default async function ParagraphPracticePage() {
         <ParagraphPractice
           items={items}
           totalItems={totalItems}
+          loggedInFreeItems={limits.free}
+          isAuthenticated={access.isAuthenticated}
           isPaidMember={access.isPaidMember}
           initialAttemptSummaries={attemptSummaries}
         />
