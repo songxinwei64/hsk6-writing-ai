@@ -52,6 +52,10 @@ export default function SiteSidebar() {
     : pathname.startsWith("/community/wall") ? "激励文字墙"
     : pathname.startsWith("/community/practice") ? "题目讨论"
     : pathname.startsWith("/community/discussions") ? "题目讨论区"
+    : pathname === "/privacy" ? "隐私政策"
+    : pathname === "/terms" ? "服务条款"
+    : pathname === "/refunds" ? "退款与取消"
+    : pathname === "/contact" ? "联系我们"
     : "Write HSK";
 
   const pageIcon = pathname === "/" ? "home"

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import "./globals.css";
 import SiteSidebar from "../components/site-sidebar";
+import SiteFooter from "../components/site-footer";
 
 export const metadata: Metadata = {
   title: "Write HSK",
@@ -17,7 +18,10 @@ export default function RootLayout({
         <Suspense fallback={<div className="site-sidebar-loading" aria-hidden="true"><span>W</span></div>}>
           <SiteSidebar />
         </Suspense>
-        <div className="site-shell-main">{children}</div>
+        <div className="site-shell-main">
+          {children}
+          <SiteFooter />
+        </div>
       </body>
     </html>
   );

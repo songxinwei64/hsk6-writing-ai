@@ -153,14 +153,6 @@ export default function Home() {
         ))}
       </section>
 
-      <footer className="footer">
-        <div className="brand">
-          <span className="brand-mark">W</span>
-          <span>Write HSK</span>
-        </div>
-        <p>陪你练好 HSK 6 写作</p>
-        <span>© 2026 Write HSK</span>
-      </footer>
     </main>
   );
 }
