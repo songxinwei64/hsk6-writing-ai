@@ -1,5 +1,8 @@
 node_modules
 .next
+.next-hsk
+.next-dev
+.next-broken-*
 out
 .env*
 *.log

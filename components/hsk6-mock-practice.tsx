@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import type { Hsk6MockPracticeItem } from "../lib/practice-items";
 import { saveCompletedAttempt } from "../lib/save-practice-attempt";
 import AiFeedbackPanel from "./ai-feedback-panel";
+import PracticeLockOverlay from "./practice-lock-overlay";
+
+const QUESTIONS_PER_PAGE = 10;
 
 type MockStatus = "idle" | "reading" | "writing" | "submitted" | "expired";
 
@@ -30,6 +33,8 @@ export default function Hsk6MockPractice({
   const [statuses, setStatuses] = useState<Record<number, MockStatus>>({});
   const [remainingTimes, setRemainingTimes] = useState<Record<number, number>>({});
   const [error, setError] = useState("");
+  const [questionPage, setQuestionPage] = useState(0);
+  const [lockedTarget, setLockedTarget] = useState<number | null>(null);
 
   const item = items[currentIndex];
   const status = statuses[item.id] || "idle";
@@ -38,6 +43,12 @@ export default function Hsk6MockPractice({
   const remaining = remainingTimes[item.id] ?? item.readingSeconds;
   const isActive = status === "reading" || status === "writing";
   const hasFinished = status === "submitted" || status === "expired";
+  const totalPages = Math.ceil(totalItems / QUESTIONS_PER_PAGE);
+  const pageStart = questionPage * QUESTIONS_PER_PAGE;
+  const visibleQuestionIndexes = Array.from(
+    { length: Math.min(QUESTIONS_PER_PAGE, totalItems - pageStart) },
+    (_, offset) => pageStart + offset,
+  );
 
   useEffect(() => {
     if (!isActive) return;
@@ -91,16 +102,30 @@ export default function Hsk6MockPractice({
   }
 
   function moveTo(index: number) {
-    setCurrentIndex(Math.min(Math.max(index, 0), items.length - 1));
+    const nextIndex = Math.min(Math.max(index, 0), items.length - 1);
+    setCurrentIndex(nextIndex);
+    setQuestionPage(Math.floor(nextIndex / QUESTIONS_PER_PAGE));
     setError("");
+  }
+
+  function changePage(page: number) {
+    const nextPage = Math.min(Math.max(page, 0), totalPages - 1);
+    chooseQuestion(nextPage * QUESTIONS_PER_PAGE);
   }
 
   function chooseQuestion(index: number) {
     if (index >= items.length) {
-      window.location.href = "/membership";
+      setQuestionPage(Math.floor(index / QUESTIONS_PER_PAGE));
+      setLockedTarget(index + 1);
       return;
     }
+    setLockedTarget(null);
     moveTo(index);
+  }
+
+  function closePaywall() {
+    setLockedTarget(null);
+    setQuestionPage(Math.floor((items.length - 1) / QUESTIONS_PER_PAGE));
   }
 
   return (
@@ -109,16 +134,6 @@ export default function Hsk6MockPractice({
         <span>模拟题 {currentIndex + 1} / {totalItems}</span>
         <span>写作要求：自拟标题 · {item.targetCharCount}字左右</span>
       </div>
-
-      {!isPaidMember && (
-        <div className="mock-guest-notice">
-          <div>
-            <strong>免费版开放 {items.length} / {totalItems} 篇</strong>
-            <span>升级会员后解锁全部HSK写作模拟题。</span>
-          </div>
-          <a href="/membership">查看会员权益</a>
-        </div>
-      )}
 
       {status === "idle" ? (
         <section className="mock-start-panel">
@@ -213,8 +228,10 @@ export default function Hsk6MockPractice({
         </>
       )}
 
-      <nav className="mock-navigation" aria-label="HSK 6模拟题导航">
-          {Array.from({ length: totalItems }, (_, index) => {
+      <nav className="sentence-navigation mock-navigation" aria-label="HSK 6模拟题导航">
+        <button type="button" onClick={() => changePage(questionPage - 1)} disabled={questionPage === 0 || isActive}>← 上一页</button>
+        <div>
+          {visibleQuestionIndexes.map((index) => {
           const question = items[index];
           const locked = !question;
           return (
@@ -226,11 +243,21 @@ export default function Hsk6MockPractice({
             aria-label={locked ? `模拟题 ${index + 1}，会员专享` : `模拟题 ${index + 1}`}
             key={question?.id ?? `locked-${index}`}
           >
-            模拟题 {index + 1}{locked && <span aria-hidden="true"> · 锁定</span>}
+            {index + 1}{locked && <span aria-hidden="true"> · 锁定</span>}
           </button>
           );
         })}
+        </div>
+        <button type="button" onClick={() => changePage(questionPage + 1)} disabled={questionPage === totalPages - 1 || isActive}>下一页 →</button>
       </nav>
+      <p className="practice-pagination-status">第 {questionPage + 1} / {totalPages} 页</p>
+      {!isPaidMember && lockedTarget !== null && (
+        <PracticeLockOverlay
+          title={`你已完成 ${items.length} 篇免费 HSK 写作模拟`}
+          description={`第 ${lockedTarget} 篇起为会员模拟题。解锁剩余 ${totalItems - items.length} 篇，按照真实 HSK 6 考试流程继续训练。`}
+          onClose={closePaywall}
+        />
+      )}
     </div>
   );
 }

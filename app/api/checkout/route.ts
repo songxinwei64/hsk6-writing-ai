@@ -15,7 +15,11 @@ export async function POST(request: Request) {
   const apiKey = process.env.LEMONSQUEEZY_API_KEY;
   const variantId = process.env.LEMONSQUEEZY_VARIANT_ID;
   if (!apiKey || !variantId) {
-    return NextResponse.json({ error: "Payment is not configured." }, { status: 503 });
+    const missing = [
+      !apiKey ? "LEMONSQUEEZY_API_KEY" : null,
+      !variantId ? "LEMONSQUEEZY_VARIANT_ID" : null,
+    ].filter(Boolean).join(", ");
+    return NextResponse.json({ error: `Payment configuration is missing: ${missing}.` }, { status: 503 });
   }
 
   const supabase = await createClient();

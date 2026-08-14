@@ -1895,6 +1895,162 @@ a.primary-button {
   background: var(--green);
 }
 
+.practice-pagination-status {
+  margin: 10px 0 0;
+  color: var(--muted);
+  text-align: center;
+  font-size: 11px;
+}
+
+.practice-lock-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  padding: 24px;
+  display: grid;
+  place-items: center;
+  overflow-y: auto;
+  background: rgba(243, 246, 243, 0.58);
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+}
+
+.practice-lock-card {
+  width: min(100%, 480px);
+  padding: 38px;
+  color: var(--ink);
+  background: rgba(255, 255, 253, 0.97);
+  border: 1px solid rgba(32, 113, 84, 0.25);
+  border-radius: 18px;
+  box-shadow: 0 24px 80px rgba(30, 53, 43, 0.18);
+  text-align: center;
+}
+
+.practice-lock-icon {
+  width: 42px;
+  height: 42px;
+  margin: 0 auto 15px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: var(--green);
+  border-radius: 50%;
+  font-size: 20px;
+}
+
+.practice-lock-card h2 {
+  margin: 12px 0 10px;
+  font-family: var(--font-serif);
+  font-size: clamp(25px, 4vw, 34px);
+  line-height: 1.25;
+}
+
+.practice-lock-card > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+.practice-lock-card ul {
+  margin: 24px 0;
+  padding: 18px 0;
+  display: grid;
+  gap: 11px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  list-style: none;
+  text-align: left;
+  font-size: 13px;
+}
+
+.practice-lock-card li {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.practice-lock-card li span {
+  color: var(--green);
+  font-weight: 900;
+}
+
+.practice-lock-price {
+  margin-bottom: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.practice-lock-price strong {
+  font-size: 25px;
+}
+
+.practice-lock-price span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.practice-lock-primary,
+.practice-lock-secondary {
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.practice-lock-primary {
+  color: #fff;
+  background: var(--green);
+}
+
+.practice-lock-secondary {
+  margin-top: 8px;
+  color: var(--muted);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.practice-lock-primary:hover {
+  background: var(--green-dark);
+}
+
+@media (max-width: 560px) {
+  .practice-lock-overlay {
+    padding: 14px;
+  }
+
+  .practice-lock-card {
+    padding: 28px 22px;
+  }
+}
+
+.mock-navigation {
+  display: grid;
+  grid-template-columns: 90px 1fr 90px;
+  align-items: center;
+  gap: 15px;
+}
+
+.mock-navigation > div {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+
+.mock-navigation > div button {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border-radius: 50%;
+}
+
 .choice-action {
   margin-top: auto;
   padding-top: 18px;

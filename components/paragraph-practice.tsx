@@ -3,6 +3,9 @@
 import { useEffect, useState } from "react";
 import type { ParagraphPracticeItem } from "../lib/practice-items";
 import { saveCompletedAttempt } from "../lib/save-practice-attempt";
+import PracticeLockOverlay from "./practice-lock-overlay";
+
+const QUESTIONS_PER_PAGE = 10;
 
 type PracticeStatus = "idle" | "reading" | "writing" | "submitted" | "expired";
 
@@ -15,15 +18,19 @@ function formatTime(seconds: number) {
 export default function ParagraphPractice({
   items,
   totalItems,
+  isPaidMember,
 }: {
   items: ParagraphPracticeItem[];
   totalItems: number;
+  isPaidMember: boolean;
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [statuses, setStatuses] = useState<Record<number, PracticeStatus>>({});
   const [remainingTimes, setRemainingTimes] = useState<Record<number, number>>({});
   const [error, setError] = useState("");
+  const [questionPage, setQuestionPage] = useState(0);
+  const [lockedTarget, setLockedTarget] = useState<number | null>(null);
 
   const item = items[currentIndex];
   const answer = answers[item.id] || "";
@@ -34,6 +41,12 @@ export default function ParagraphPractice({
   const completedCount = Object.values(statuses).filter(
     (value) => value === "submitted" || value === "expired",
   ).length;
+  const totalPages = Math.ceil(totalItems / QUESTIONS_PER_PAGE);
+  const pageStart = questionPage * QUESTIONS_PER_PAGE;
+  const visibleQuestionIndexes = Array.from(
+    { length: Math.min(QUESTIONS_PER_PAGE, totalItems - pageStart) },
+    (_, offset) => pageStart + offset,
+  );
 
   useEffect(() => {
     if (status !== "reading" && status !== "writing") return;
@@ -58,16 +71,30 @@ export default function ParagraphPractice({
   }, [item.id, item.readingSeconds, item.writingSeconds, status]);
 
   function moveTo(index: number) {
-    setCurrentIndex(Math.min(Math.max(index, 0), items.length - 1));
+    const nextIndex = Math.min(Math.max(index, 0), items.length - 1);
+    setCurrentIndex(nextIndex);
+    setQuestionPage(Math.floor(nextIndex / QUESTIONS_PER_PAGE));
     setError("");
+  }
+
+  function changePage(page: number) {
+    const nextPage = Math.min(Math.max(page, 0), totalPages - 1);
+    chooseQuestion(nextPage * QUESTIONS_PER_PAGE);
   }
 
   function chooseQuestion(index: number) {
     if (index >= items.length) {
-      window.location.href = "/membership";
+      setQuestionPage(Math.floor(index / QUESTIONS_PER_PAGE));
+      setLockedTarget(index + 1);
       return;
     }
+    setLockedTarget(null);
     moveTo(index);
+  }
+
+  function closePaywall() {
+    setLockedTarget(null);
+    setQuestionPage(Math.floor((items.length - 1) / QUESTIONS_PER_PAGE));
   }
 
   function startPractice() {
@@ -188,9 +215,9 @@ export default function ParagraphPractice({
       )}
 
       <nav className="sentence-navigation" aria-label="短文练习题目导航">
-        <button type="button" onClick={() => moveTo(currentIndex - 1)} disabled={currentIndex === 0 || isActive}>← 上一题</button>
+        <button type="button" onClick={() => changePage(questionPage - 1)} disabled={questionPage === 0 || isActive}>← 上一页</button>
         <div>
-          {Array.from({ length: totalItems }, (_, index) => {
+          {visibleQuestionIndexes.map((index) => {
             const question = items[index];
             const locked = !question;
             return (
@@ -207,8 +234,16 @@ export default function ParagraphPractice({
             );
           })}
         </div>
-        <button type="button" onClick={() => chooseQuestion(currentIndex + 1)} disabled={currentIndex === totalItems - 1 || isActive}>下一题 →</button>
+        <button type="button" onClick={() => changePage(questionPage + 1)} disabled={questionPage === totalPages - 1 || isActive}>下一页 →</button>
       </nav>
+      <p className="practice-pagination-status">第 {questionPage + 1} / {totalPages} 页</p>
+      {!isPaidMember && lockedTarget !== null && (
+        <PracticeLockOverlay
+          title={`你已完成 ${items.length} 篇免费短文缩写`}
+          description={`第 ${lockedTarget} 篇起为会员练习。解锁剩余 ${totalItems - items.length} 篇短文，继续训练完整主线与连贯表达。`}
+          onClose={closePaywall}
+        />
+      )}
     </div>
   );
 }

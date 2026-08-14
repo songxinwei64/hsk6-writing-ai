@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { NextResponse } from "next/server";
 import { aiFeedbackSchema, type AiWritingFeedback } from "../../../lib/ai-feedback";
+import { PRACTICE_ACCESS } from "../../../lib/practice-items";
 import { createClient } from "../../../utils/supabase/server";
 
 const MODEL = "gpt-5.4-mini";
@@ -53,7 +54,7 @@ export async function POST(request: Request) {
       .maybeSingle(),
     supabase
       .from("practice_items")
-      .select("id,practice_type,title,original_text,reference_title,reference_text,target_char_count")
+      .select("id,practice_type,order_no,title,original_text,reference_title,reference_text,target_char_count")
       .eq("id", practiceItemId)
       .eq("practice_type", "mock")
       .eq("is_published", true)
@@ -76,6 +77,9 @@ export async function POST(request: Request) {
     && (!membership.expires_at || new Date(membership.expires_at).getTime() > Date.now());
   if (!item) {
     return NextResponse.json({ error: "没有找到对应的HSK 6模拟题。" }, { status: 404 });
+  }
+  if (!isActiveMember && item.order_no > PRACTICE_ACCESS.mock.free) {
+    return NextResponse.json({ error: "这道模拟题需要升级会员后使用。" }, { status: 403 });
   }
   const usedCount = isActiveMember ? (dailyUsageResult.count ?? 0) : (totalUsageResult.count ?? 0);
   const usageLimit = isActiveMember ? MEMBER_DAILY_LIMIT : FREE_TRIAL_LIMIT;
