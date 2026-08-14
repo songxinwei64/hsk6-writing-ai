@@ -470,7 +470,7 @@ a {
 
 .eyebrow {
   color: var(--green);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 800;
   line-height: 1.4;
   letter-spacing: 0.14em;
@@ -835,7 +835,7 @@ a.primary-button {
   margin-bottom: 32px;
   display: block;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .back-link:hover {
@@ -852,7 +852,7 @@ a.primary-button {
 .practice-intro p {
   margin: 0;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.8;
 }
 
@@ -903,13 +903,13 @@ a.primary-button {
   align-items: center;
   justify-content: space-between;
   color: var(--green);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 800;
 }
 
 .writing-level-top small {
   color: var(--muted);
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 400;
 }
 
@@ -921,7 +921,7 @@ a.primary-button {
 .writing-level-card p {
   margin: 0;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.8;
 }
 
@@ -946,7 +946,7 @@ a.primary-button {
 .sentence-page-heading p {
   margin: 0;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 15px;
   line-height: 1.8;
 }
 
@@ -961,7 +961,7 @@ a.primary-button {
   display: flex;
   justify-content: space-between;
   color: var(--muted);
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 700;
 }
 
@@ -994,7 +994,7 @@ a.primary-button {
 .sentence-tip > span {
   padding-top: 3px;
   color: #8a6d2f;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.06em;
 }
@@ -1007,7 +1007,7 @@ a.primary-button {
 .sentence-tip p {
   margin: 6px 0 0;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.7;
 }
 
@@ -1020,7 +1020,7 @@ a.primary-button {
 
 .sentence-kicker {
   color: var(--green);
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.08em;
 }
@@ -1053,7 +1053,7 @@ a.primary-button {
 
 .sentence-writing-head > small {
   color: #858d89;
-  font-size: 9px;
+  font-size: 12px;
 }
 
 .sentence-writing textarea {
@@ -1083,7 +1083,7 @@ a.primary-button {
 .sentence-practice-error {
   margin: 9px 0 0;
   color: #9e342d;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .sentence-practice-submit {
@@ -1095,7 +1095,7 @@ a.primary-button {
   border: 0;
   border-radius: 7px;
   cursor: pointer;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 800;
 }
 
@@ -1154,7 +1154,7 @@ a.primary-button {
   background: transparent;
   border: 0;
   cursor: pointer;
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 800;
 }
 
@@ -1173,7 +1173,7 @@ a.primary-button {
   background: transparent;
   border: 0;
   cursor: pointer;
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 800;
 }
 
@@ -1194,12 +1194,12 @@ a.primary-button {
 }
 
 .paragraph-workspace .sentence-progress-head {
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .paragraph-workspace .sentence-tip > span,
 .paragraph-workspace .sentence-kicker {
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .paragraph-workspace .sentence-tip h2 {
@@ -1235,7 +1235,7 @@ a.primary-button {
 }
 
 .paragraph-workspace .sentence-navigation > button {
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .paragraph-start-panel {
@@ -1848,7 +1848,7 @@ a.primary-button {
   border: 1px solid var(--line);
   border-radius: 6px;
   cursor: pointer;
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .mock-navigation button.current {
@@ -1874,15 +1874,15 @@ a.primary-button {
 }
 
 .sentence-navigation > div button {
-  width: 25px;
-  height: 25px;
+  width: 32px;
+  height: 32px;
   padding: 0;
   color: #747c78;
   background: var(--soft);
   border: 1px solid transparent;
   border-radius: 50%;
   cursor: pointer;
-  font-size: 8px;
+  font-size: 12px;
 }
 
 .sentence-navigation > div button.completed {
@@ -1899,7 +1899,7 @@ a.primary-button {
   margin: 10px 0 0;
   color: var(--muted);
   text-align: center;
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .practice-lock-overlay {
@@ -1916,8 +1916,8 @@ a.primary-button {
 }
 
 .practice-lock-card {
-  width: min(100%, 480px);
-  padding: 38px;
+  width: min(100%, 560px);
+  padding: 40px 44px;
   color: var(--ink);
   background: rgba(255, 255, 253, 0.97);
   border: 1px solid rgba(32, 113, 84, 0.25);
@@ -1941,8 +1941,11 @@ a.primary-button {
 .practice-lock-card h2 {
   margin: 12px 0 10px;
   font-family: var(--font-serif);
-  font-size: clamp(25px, 4vw, 34px);
-  line-height: 1.25;
+  font-size: clamp(25px, 3vw, 32px);
+  line-height: 1.3;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
 }
 
 .practice-lock-card > p {
@@ -2028,6 +2031,10 @@ a.primary-button {
 
   .practice-lock-card {
     padding: 28px 22px;
+  }
+
+  .practice-lock-card h2 {
+    font-size: 25px;
   }
 }
 
@@ -2665,6 +2672,72 @@ a.primary-button {
 
 .membership-plan li b {
   color: var(--green-dark);
+}
+
+.membership-status-card {
+  margin-top: 24px;
+  padding: 18px;
+  border: 1px solid #bfd8cd;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.78);
+  text-align: left;
+}
+
+.membership-status-heading {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.membership-status-heading > span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.membership-status-heading > strong {
+  color: var(--green-dark);
+  font-size: 15px;
+}
+
+.membership-status-heading > small {
+  margin-left: auto;
+  padding: 4px 8px;
+  color: #8a6d2f;
+  background: #faf3df;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.membership-status-card dl {
+  margin: 15px 0 0;
+}
+
+.membership-status-card dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+}
+
+.membership-status-card dt {
+  color: var(--muted);
+}
+
+.membership-status-card dd {
+  margin: 0;
+  font-weight: 800;
+  text-align: right;
+}
+
+.membership-status-card > a {
+  display: inline-block;
+  margin-top: 10px;
+  color: var(--green-dark);
+  font-size: 14px;
+  font-weight: 800;
 }
 
 .membership-primary-action,

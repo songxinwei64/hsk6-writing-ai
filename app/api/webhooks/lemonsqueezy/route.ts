@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "../../../../utils/supabase/admin";
 
 type SubscriptionAttributes = {
+  created_at?: string | null;
   customer_id?: number | string;
   variant_id?: number | string;
   status?: string;
@@ -111,6 +112,8 @@ export async function POST(request: Request) {
     user_id: userId,
     status: membership.status,
     expires_at: membership.expiresAt,
+    renews_at: attributes.renews_at ?? null,
+    subscription_started_at: attributes.created_at ?? null,
     lemonsqueezy_subscription_id: subscriptionId,
     lemonsqueezy_customer_id: attributes.customer_id == null ? null : String(attributes.customer_id),
     lemonsqueezy_variant_id: attributes.variant_id == null ? null : String(attributes.variant_id),

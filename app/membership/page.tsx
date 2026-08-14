@@ -5,6 +5,16 @@ import CheckoutButton from "../../components/checkout-button";
 
 export const dynamic = "force-dynamic";
 
+function formatMembershipDate(value: string | null) {
+  if (!value) return "暂未提供";
+  return new Intl.DateTimeFormat("zh-CN", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "Asia/Seoul",
+  }).format(new Date(value));
+}
+
 const benefits = [
   {
     label: "句子缩写",
@@ -82,7 +92,27 @@ export default async function MembershipPage() {
               <li><span>AI个性化反馈</span><b>最近24小时5次</b></li>
             </ul>
             {access.isPaidMember ? (
-              <Link className="membership-primary-action" href="/practice">会员已生效，开始练习</Link>
+              <>
+                <div className="membership-status-card">
+                  <div className="membership-status-heading">
+                    <span>当前会员状态</span>
+                    <strong>已生效</strong>
+                    {access.isTestMode && <small>测试会员</small>}
+                  </div>
+                  <dl>
+                    <div><dt>开通日期</dt><dd>{formatMembershipDate(access.startedAt)}</dd></div>
+                    {access.expiresAt ? (
+                      <div><dt>会员有效期至</dt><dd>{formatMembershipDate(access.expiresAt)}</dd></div>
+                    ) : (
+                      <div><dt>下次续费日期</dt><dd>{formatMembershipDate(access.renewsAt)}</dd></div>
+                    )}
+                  </dl>
+                  {access.customerPortalUrl && (
+                    <a href={access.customerPortalUrl} target="_blank" rel="noreferrer">管理或取消订阅 →</a>
+                  )}
+                </div>
+                <Link className="membership-primary-action" href="/practice">会员已生效，开始练习</Link>
+              </>
             ) : access.isAuthenticated ? (
               <CheckoutButton />
             ) : (
