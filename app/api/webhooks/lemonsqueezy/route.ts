@@ -1,5 +1,6 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
+import { matchesLemonEnvironment } from "../../../../lib/lemon-environment";
 import { createAdminClient } from "../../../../utils/supabase/admin";
 
 type SubscriptionAttributes = {
@@ -87,6 +88,9 @@ export async function POST(request: Request) {
 
   const subscriptionId = payload.data.id;
   const attributes = payload.data.attributes;
+  if (!matchesLemonEnvironment(attributes.test_mode)) {
+    return NextResponse.json({ error: "Webhook environment mismatch." }, { status: 400 });
+  }
   const configuredVariantId = process.env.LEMONSQUEEZY_VARIANT_ID;
   if (configuredVariantId && String(attributes.variant_id) !== configuredVariantId) {
     return NextResponse.json({ error: "Unknown subscription variant." }, { status: 400 });

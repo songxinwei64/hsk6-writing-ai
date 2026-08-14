@@ -1,4 +1,5 @@
 import { createClient } from "../utils/supabase/server";
+import { matchesLemonEnvironment } from "./lemon-environment";
 
 export type MembershipAccess = {
   isAuthenticated: boolean;
@@ -34,19 +35,21 @@ export async function getMembershipAccess(): Promise<MembershipAccess> {
 
   if (error) throw new Error(`Unable to load membership: ${error.message}`);
 
+  const environmentMatches = Boolean(data && matchesLemonEnvironment(data.test_mode));
   const isPaidMember = Boolean(
-    data?.status === "active"
+    environmentMatches
+    && data?.status === "active"
     && (!data.expires_at || new Date(data.expires_at).getTime() > Date.now()),
   );
 
   return {
     isAuthenticated: true,
     isPaidMember,
-    status: data?.status === "active" || data?.status === "inactive" ? data.status : null,
-    startedAt: data?.subscription_started_at ?? data?.created_at ?? null,
-    renewsAt: data?.renews_at ?? null,
-    expiresAt: data?.expires_at ?? null,
-    customerPortalUrl: data?.customer_portal_url ?? null,
-    isTestMode: Boolean(data?.test_mode),
+    status: environmentMatches && (data?.status === "active" || data?.status === "inactive") ? data.status : null,
+    startedAt: environmentMatches ? data?.subscription_started_at ?? data?.created_at ?? null : null,
+    renewsAt: environmentMatches ? data?.renews_at ?? null : null,
+    expiresAt: environmentMatches ? data?.expires_at ?? null : null,
+    customerPortalUrl: environmentMatches ? data?.customer_portal_url ?? null : null,
+    isTestMode: environmentMatches && Boolean(data?.test_mode),
   };
 }

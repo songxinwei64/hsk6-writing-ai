@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { NextResponse } from "next/server";
 import { aiFeedbackSchema, type AiWritingFeedback } from "../../../lib/ai-feedback";
+import { matchesLemonEnvironment } from "../../../lib/lemon-environment";
 import { PRACTICE_ACCESS } from "../../../lib/practice-items";
 import { createClient } from "../../../utils/supabase/server";
 
@@ -49,7 +50,7 @@ export async function POST(request: Request) {
   const [{ data: membership, error: membershipError }, { data: item, error: itemError }, dailyUsageResult, totalUsageResult] = await Promise.all([
     supabase
       .from("user_memberships")
-      .select("status,expires_at")
+      .select("status,expires_at,test_mode")
       .eq("user_id", user.id)
       .maybeSingle(),
     supabase
@@ -73,7 +74,8 @@ export async function POST(request: Request) {
   if (membershipError || itemError || dailyUsageResult.error || totalUsageResult.error) {
     return NextResponse.json({ error: "暂时无法验证AI使用权限。" }, { status: 500 });
   }
-  const isActiveMember = membership?.status === "active"
+  const isActiveMember = matchesLemonEnvironment(membership?.test_mode)
+    && membership?.status === "active"
     && (!membership.expires_at || new Date(membership.expires_at).getTime() > Date.now());
   if (!item) {
     return NextResponse.json({ error: "没有找到对应的HSK 6模拟题。" }, { status: 404 });
