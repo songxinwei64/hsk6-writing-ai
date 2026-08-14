@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { SentencePracticeItem } from "../lib/practice-items";
 import type { PracticeAttemptSummary } from "../lib/practice-attempt-summary";
 import { saveCompletedAttempt } from "../lib/save-practice-attempt";
+import AttemptBadge from "./attempt-badge";
 import PracticeLockOverlay from "./practice-lock-overlay";
 
 const QUESTIONS_PER_PAGE = 10;
@@ -95,17 +96,7 @@ export default function SentencePractice({
       <div className="sentence-progress-head">
         <span>练习 {currentIndex + 1} / {totalItems}</span>
         <span className="sentence-progress-meta">
-          {attemptSummary && (
-            <span
-              className="practice-attempt-badge"
-              title={`最近练习：${new Intl.DateTimeFormat("zh-CN", { dateStyle: "medium" }).format(new Date(attemptSummary.latestAt))}`}
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12 7v5l3 2M21 12a9 9 0 1 1-2.64-6.36M21 4v5h-5" />
-              </svg>
-              已练习 {attemptSummary.count} 次
-            </span>
-          )}
+          {attemptSummary && <AttemptBadge summary={attemptSummary} />}
           <span>已完成 {completedCount} / {totalItems}</span>
         </span>
       </div>

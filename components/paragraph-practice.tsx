@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import type { ParagraphPracticeItem } from "../lib/practice-items";
+import type { PracticeAttemptSummary } from "../lib/practice-attempt-summary";
 import { saveCompletedAttempt } from "../lib/save-practice-attempt";
+import AttemptBadge from "./attempt-badge";
 import PracticeLockOverlay from "./practice-lock-overlay";
 
 const QUESTIONS_PER_PAGE = 10;
@@ -19,10 +21,12 @@ export default function ParagraphPractice({
   items,
   totalItems,
   isPaidMember,
+  initialAttemptSummaries,
 }: {
   items: ParagraphPracticeItem[];
   totalItems: number;
   isPaidMember: boolean;
+  initialAttemptSummaries: Record<string, PracticeAttemptSummary>;
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
@@ -31,6 +35,7 @@ export default function ParagraphPractice({
   const [error, setError] = useState("");
   const [questionPage, setQuestionPage] = useState(0);
   const [lockedTarget, setLockedTarget] = useState<number | null>(null);
+  const [attemptSummaries, setAttemptSummaries] = useState(initialAttemptSummaries);
 
   const item = items[currentIndex];
   const answer = answers[item.id] || "";
@@ -41,6 +46,7 @@ export default function ParagraphPractice({
   const completedCount = Object.values(statuses).filter(
     (value) => value === "submitted" || value === "expired",
   ).length;
+  const attemptSummary = attemptSummaries[item.databaseId];
   const totalPages = Math.ceil(totalItems / QUESTIONS_PER_PAGE);
   const pageStart = questionPage * QUESTIONS_PER_PAGE;
   const visibleQuestionIndexes = Array.from(
@@ -109,21 +115,33 @@ export default function ParagraphPractice({
     setStatuses((current) => ({ ...current, [item.id]: "writing" }));
   }
 
-  function submitAnswer() {
+  async function submitAnswer() {
     if (!answer.trim()) {
       setError("请先写下你的缩写。");
       return;
     }
     setStatuses((current) => ({ ...current, [item.id]: "submitted" }));
     setError("");
-    void saveCompletedAttempt({ practiceItemId: item.databaseId, answerText: answer });
+    const result = await saveCompletedAttempt({ practiceItemId: item.databaseId, answerText: answer });
+    if (result.saved) {
+      setAttemptSummaries((current) => ({
+        ...current,
+        [item.databaseId]: {
+          count: (current[item.databaseId]?.count ?? 0) + 1,
+          latestAt: new Date().toISOString(),
+        },
+      }));
+    }
   }
 
   return (
     <div className="paragraph-workspace">
       <div className="sentence-progress-head">
         <span>练习 {currentIndex + 1} / {totalItems}</span>
-        <span>已完成 {completedCount} / {totalItems}</span>
+        <span className="sentence-progress-meta">
+          {attemptSummary && <AttemptBadge summary={attemptSummary} />}
+          <span>已完成 {completedCount} / {totalItems}</span>
+        </span>
       </div>
 
       <div className="sentence-progress-track">

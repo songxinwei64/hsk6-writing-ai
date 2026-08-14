@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react";
 import type { Hsk6MockPracticeItem } from "../lib/practice-items";
+import type { PracticeAttemptSummary } from "../lib/practice-attempt-summary";
 import { saveCompletedAttempt } from "../lib/save-practice-attempt";
 import AiFeedbackPanel from "./ai-feedback-panel";
+import AttemptBadge from "./attempt-badge";
 import PracticeLockOverlay from "./practice-lock-overlay";
 
 const QUESTIONS_PER_PAGE = 10;
@@ -21,11 +23,13 @@ export default function Hsk6MockPractice({
   totalItems,
   isAuthenticated,
   isPaidMember,
+  initialAttemptSummaries,
 }: {
   items: Hsk6MockPracticeItem[];
   totalItems: number;
   isAuthenticated: boolean;
   isPaidMember: boolean;
+  initialAttemptSummaries: Record<string, PracticeAttemptSummary>;
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [titles, setTitles] = useState<Record<number, string>>({});
@@ -35,6 +39,7 @@ export default function Hsk6MockPractice({
   const [error, setError] = useState("");
   const [questionPage, setQuestionPage] = useState(0);
   const [lockedTarget, setLockedTarget] = useState<number | null>(null);
+  const [attemptSummaries, setAttemptSummaries] = useState(initialAttemptSummaries);
 
   const item = items[currentIndex];
   const status = statuses[item.id] || "idle";
@@ -43,6 +48,7 @@ export default function Hsk6MockPractice({
   const remaining = remainingTimes[item.id] ?? item.readingSeconds;
   const isActive = status === "reading" || status === "writing";
   const hasFinished = status === "submitted" || status === "expired";
+  const attemptSummary = attemptSummaries[item.databaseId];
   const totalPages = Math.ceil(totalItems / QUESTIONS_PER_PAGE);
   const pageStart = questionPage * QUESTIONS_PER_PAGE;
   const visibleQuestionIndexes = Array.from(
@@ -83,7 +89,7 @@ export default function Hsk6MockPractice({
     setStatuses((current) => ({ ...current, [item.id]: "writing" }));
   }
 
-  function submitMock() {
+  async function submitMock() {
     if (!title.trim()) {
       setError("请先填写标题。");
       return;
@@ -94,11 +100,20 @@ export default function Hsk6MockPractice({
     }
     setStatuses((current) => ({ ...current, [item.id]: "submitted" }));
     setError("");
-    void saveCompletedAttempt({
+    const result = await saveCompletedAttempt({
       practiceItemId: item.databaseId,
       answerTitle: title,
       answerText: answer,
     });
+    if (result.saved) {
+      setAttemptSummaries((current) => ({
+        ...current,
+        [item.databaseId]: {
+          count: (current[item.databaseId]?.count ?? 0) + 1,
+          latestAt: new Date().toISOString(),
+        },
+      }));
+    }
   }
 
   function moveTo(index: number) {
@@ -132,7 +147,10 @@ export default function Hsk6MockPractice({
     <div className="mock-workspace">
       <div className="mock-progress">
         <span>模拟题 {currentIndex + 1} / {totalItems}</span>
-        <span>写作要求：自拟标题 · {item.targetCharCount}字左右</span>
+        <span className="sentence-progress-meta">
+          {attemptSummary && <AttemptBadge summary={attemptSummary} />}
+          <span>写作要求：自拟标题 · {item.targetCharCount}字左右</span>
+        </span>
       </div>
 
       {status === "idle" ? (
