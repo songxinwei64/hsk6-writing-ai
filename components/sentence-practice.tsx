@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { SentencePracticeItem } from "../lib/practice-items";
+import type { PracticeAttemptSummary } from "../lib/practice-attempt-summary";
 import { saveCompletedAttempt } from "../lib/save-practice-attempt";
 import PracticeLockOverlay from "./practice-lock-overlay";
 
@@ -11,10 +12,12 @@ export default function SentencePractice({
   items,
   totalItems,
   isPaidMember,
+  initialAttemptSummaries,
 }: {
   items: SentencePracticeItem[];
   totalItems: number;
   isPaidMember: boolean;
+  initialAttemptSummaries: Record<string, PracticeAttemptSummary>;
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
@@ -22,11 +25,13 @@ export default function SentencePractice({
   const [error, setError] = useState("");
   const [questionPage, setQuestionPage] = useState(0);
   const [lockedTarget, setLockedTarget] = useState<number | null>(null);
+  const [attemptSummaries, setAttemptSummaries] = useState(initialAttemptSummaries);
 
   const item = items[currentIndex];
   const answer = answers[item.id] || "";
   const isSubmitted = Boolean(submitted[item.id]);
   const completedCount = Object.keys(submitted).length;
+  const attemptSummary = attemptSummaries[item.databaseId];
   const totalPages = Math.ceil(totalItems / QUESTIONS_PER_PAGE);
   const pageStart = questionPage * QUESTIONS_PER_PAGE;
   const visibleQuestionIndexes = Array.from(
@@ -61,14 +66,24 @@ export default function SentencePractice({
     setQuestionPage(Math.floor((items.length - 1) / QUESTIONS_PER_PAGE));
   }
 
-  function submitAnswer() {
+  async function submitAnswer() {
     if (!answer.trim()) {
       setError("请先写下你的缩写。");
       return;
     }
     setSubmitted((current) => ({ ...current, [item.id]: true }));
     setError("");
-    void saveCompletedAttempt({ practiceItemId: item.databaseId, answerText: answer });
+    const result = await saveCompletedAttempt({ practiceItemId: item.databaseId, answerText: answer });
+    if (result.saved) {
+      const latestAt = new Date().toISOString();
+      setAttemptSummaries((current) => ({
+        ...current,
+        [item.databaseId]: {
+          count: (current[item.databaseId]?.count ?? 0) + 1,
+          latestAt,
+        },
+      }));
+    }
   }
 
   function editAnswer() {
@@ -79,7 +94,20 @@ export default function SentencePractice({
     <div className="sentence-workspace">
       <div className="sentence-progress-head">
         <span>练习 {currentIndex + 1} / {totalItems}</span>
-        <span>已完成 {completedCount} / {totalItems}</span>
+        <span className="sentence-progress-meta">
+          {attemptSummary && (
+            <span
+              className="practice-attempt-badge"
+              title={`最近练习：${new Intl.DateTimeFormat("zh-CN", { dateStyle: "medium" }).format(new Date(attemptSummary.latestAt))}`}
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 7v5l3 2M21 12a9 9 0 1 1-2.64-6.36M21 4v5h-5" />
+              </svg>
+              已练习 {attemptSummary.count} 次
+            </span>
+          )}
+          <span>已完成 {completedCount} / {totalItems}</span>
+        </span>
       </div>
 
       <div className="sentence-progress-track">
