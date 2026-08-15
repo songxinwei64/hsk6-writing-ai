@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/write-hsk-social-preview-en.jpg",
+        url: "/write-hsk-social-preview-bilingual.jpg",
         width: 1200,
         height: 630,
         alt: "Write HSK: HSK 6 writing practice with summarization training and personalized AI feedback",
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Write HSK | HSK 6 Writing Practice",
     description: "Summarization training, HSK 6 writing practice, and personalized AI feedback.",
-    images: ["/write-hsk-social-preview-en.jpg"],
+    images: ["/write-hsk-social-preview-bilingual.jpg"],
   },
 };
 
