@@ -23,7 +23,7 @@ export default function CheckoutButton() {
   return (
     <div className="checkout-action">
       <button className="membership-primary-action" type="button" onClick={startCheckout} disabled={isLoading}>
-        {isLoading ? "正在打开结账页面…" : "订阅会员（每月自动续费）"}
+      {isLoading ? "Opening checkout…" : "Subscribe — Renews Monthly"}
       </button>
       {error && <p className="checkout-error" role="alert">{error}</p>}
     </div>

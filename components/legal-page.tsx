@@ -14,11 +14,11 @@ export default function LegalPage({ eyebrow, title, summary, children }: LegalPa
         <span>{eyebrow}</span>
         <h1>{title}</h1>
         <p>{summary}</p>
-        <small>生效日期：2026年8月14日</small>
+          <small>Effective date: August 14, 2026</small>
       </header>
       <article className="legal-content">{children}</article>
       <div className="legal-help">
-        对本页面有疑问？<Link href="/contact">联系我们</Link>
+          Questions about this page? <Link href="/contact">Contact us</Link>
       </div>
     </main>
   );

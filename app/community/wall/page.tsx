@@ -26,7 +26,7 @@ export default async function CommunityWallPage() {
 
   return (
     <main className="wall-page">
-      <div className="wall-page-top"><span>激励文字墙</span><small>鼓励与陪伴</small></div>
+      <div className="wall-page-top"><span>Motivation Wall</span><small>Encouragement & Support</small></div>
       <CommunityWall
         posts={(posts ?? []) as CommunityPost[]}
         themes={(themes ?? []) as CommunityWallTheme[]}

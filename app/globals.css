@@ -4084,6 +4084,33 @@ a.primary-button {
   }
 }
 
+.site-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.language-switcher {
+  display: grid;
+  min-width: 48px;
+  height: 34px;
+  padding: 0 11px;
+  border: 1px solid #d8dfdb;
+  border-radius: 8px;
+  color: var(--green-dark);
+  background: #fff;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  place-items: center;
+}
+
+.language-switcher:hover {
+  border-color: #9ebbae;
+  background: #f2f7f4;
+}
+
 /* Shared legal pages and launch footer */
 .site-footer {
   width: min(1120px, calc(100% - 48px));

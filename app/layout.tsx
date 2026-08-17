@@ -39,7 +39,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="zh-CN">
+    <html lang="en">
       <body>
         <Suspense fallback={<div className="site-sidebar-loading" aria-hidden="true"><span>W</span></div>}>
           <SiteSidebar />

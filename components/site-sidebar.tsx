@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import AuthEntry from "./auth-entry";
+import LanguageController from "./language-controller";
 
 type Panel = "practice" | "community" | null;
 
@@ -42,20 +43,20 @@ export default function SiteSidebar() {
     setPanel((current) => current === nextPanel ? null : nextPanel);
   }
 
-  const pageTitle = pathname === "/" ? "首页"
-    : pathname === "/practice" ? "缩写练习"
-    : pathname.startsWith("/practice/sentence") ? "句子缩写"
-    : pathname.startsWith("/practice/paragraph") ? "短文缩写"
-    : pathname.startsWith("/practice/mock") ? "HSK写作模拟题库"
-    : pathname.startsWith("/my-library") ? "我的题库"
-    : pathname.startsWith("/membership") ? "会员权益"
-    : pathname.startsWith("/community/wall") ? "激励文字墙"
-    : pathname.startsWith("/community/practice") ? "题目讨论"
-    : pathname.startsWith("/community/discussions") ? "题目讨论区"
-    : pathname === "/privacy" ? "隐私政策"
-    : pathname === "/terms" ? "服务条款"
-    : pathname === "/refunds" ? "退款与取消"
-    : pathname === "/contact" ? "联系我们"
+  const pageTitle = pathname === "/" ? "Home"
+    : pathname === "/practice" ? "Writing Practice"
+    : pathname.startsWith("/practice/sentence") ? "Sentence Summarization"
+    : pathname.startsWith("/practice/paragraph") ? "Passage Summarization"
+    : pathname.startsWith("/practice/mock") ? "HSK 6 Mock Tests"
+    : pathname.startsWith("/my-library") ? "My Practice"
+    : pathname.startsWith("/membership") ? "Membership"
+    : pathname.startsWith("/community/wall") ? "Motivation Wall"
+    : pathname.startsWith("/community/practice") ? "Exercise Discussion"
+    : pathname.startsWith("/community/discussions") ? "Discussions"
+    : pathname === "/privacy" ? "Privacy Policy"
+    : pathname === "/terms" ? "Terms of Service"
+    : pathname === "/refunds" ? "Refunds & Cancellation"
+    : pathname === "/contact" ? "Contact"
     : "Write HSK";
 
   const pageIcon = pathname === "/" ? "home"
@@ -68,42 +69,42 @@ export default function SiteSidebar() {
 
   return (
     <>
-      <button className="site-mobile-menu" type="button" onClick={() => setMobileOpen(true)} aria-label="打开菜单">☰</button>
-      {(panel || mobileOpen) && <button className="site-flyout-backdrop" type="button" onClick={() => { setPanel(null); setMobileOpen(false); }} aria-label="关闭菜单" />}
+      <button className="site-mobile-menu" type="button" onClick={() => setMobileOpen(true)} aria-label="Open menu">☰</button>
+      {(panel || mobileOpen) && <button className="site-flyout-backdrop" type="button" onClick={() => { setPanel(null); setMobileOpen(false); }} aria-label="Close menu" />}
 
       <aside className={`site-icon-rail${panel ? " panel-open" : ""}${mobileOpen ? " mobile-open" : ""}`}>
-        <Link className="site-rail-brand" href="/" aria-label="Write HSK 首页"><span>W</span><b>Write HSK</b></Link>
-        <nav aria-label="网站主菜单">
-          <Link className={active("/", true) ? "active" : ""} href="/" title="首页"><MenuIcon name="home" /><span>首页</span></Link>
-          <button className={active("/practice") && !active("/practice/mock") ? "active" : ""} type="button" onClick={() => togglePanel("practice")} title="缩写练习" aria-expanded={panel === "practice"}><MenuIcon name="practice" /><span>缩写练习</span><i>›</i></button>
-          <Link className={active("/practice/mock") ? "active" : ""} href="/practice/mock" title="HSK写作模拟题库"><MenuIcon name="mock" /><span>模拟题库</span></Link>
-          <Link className={active("/my-library") ? "active" : ""} href="/my-library" title="我的题库"><MenuIcon name="library" /><span>我的题库</span></Link>
-          <button className={active("/community") ? "active" : ""} type="button" onClick={() => togglePanel("community")} title="学习社区" aria-expanded={panel === "community"}><MenuIcon name="community" /><span>学习社区</span><i>›</i></button>
-          <Link className={active("/membership") ? "active" : ""} href="/membership" title="会员权益"><MenuIcon name="membership" /><span>会员权益</span></Link>
+        <Link className="site-rail-brand" href="/" aria-label="Write HSK home"><span>W</span><b>Write HSK</b></Link>
+        <nav aria-label="Main menu">
+          <Link className={active("/", true) ? "active" : ""} href="/" title="Home"><MenuIcon name="home" /><span>Home</span></Link>
+          <button className={active("/practice") && !active("/practice/mock") ? "active" : ""} type="button" onClick={() => togglePanel("practice")} title="Writing Practice" aria-expanded={panel === "practice"}><MenuIcon name="practice" /><span>Writing Practice</span><i>›</i></button>
+          <Link className={active("/practice/mock") ? "active" : ""} href="/practice/mock" title="HSK 6 Mock Tests"><MenuIcon name="mock" /><span>Mock Tests</span></Link>
+          <Link className={active("/my-library") ? "active" : ""} href="/my-library" title="My Practice"><MenuIcon name="library" /><span>My Practice</span></Link>
+          <button className={active("/community") ? "active" : ""} type="button" onClick={() => togglePanel("community")} title="Community" aria-expanded={panel === "community"}><MenuIcon name="community" /><span>Community</span><i>›</i></button>
+          <Link className={active("/membership") ? "active" : ""} href="/membership" title="Membership"><MenuIcon name="membership" /><span>Membership</span></Link>
         </nav>
       </aside>
 
       {panel && (
-        <aside className="site-menu-flyout" aria-label={panel === "practice" ? "缩写练习子菜单" : "学习社区子菜单"}>
+        <aside className="site-menu-flyout" aria-label={panel === "practice" ? "Writing practice submenu" : "Community submenu"}>
           {panel === "practice" ? (
             <>
-              <header><span>练习</span><h2>缩写练习</h2><p>先练习信息取舍，再进入完整模拟。</p></header>
+              <header><span>Practice</span><h2>Writing Practice</h2><p>Learn to select key information before taking a complete mock test.</p></header>
               <nav>
-                <Link href="/practice"><span>练习首页</span><b>→</b></Link>
-                <Link className={active("/practice/sentence") ? "active" : ""} href="/practice/sentence"><span><b>句子缩写</b><small>识别重点与次要细节</small></span><b>→</b></Link>
-                <Link className={active("/practice/paragraph") ? "active" : ""} href="/practice/paragraph"><span><b>短文缩写</b><small>梳理人物、事件与结果</small></span><b>→</b></Link>
+                <Link href="/practice"><span>Practice Overview</span><b>→</b></Link>
+                <Link className={active("/practice/sentence") ? "active" : ""} href="/practice/sentence"><span><b>Sentence Summarization</b><small>Separate key ideas from minor details</small></span><b>→</b></Link>
+                <Link className={active("/practice/paragraph") ? "active" : ""} href="/practice/paragraph"><span><b>Passage Summarization</b><small>Organize people, events, and outcomes</small></span><b>→</b></Link>
               </nav>
             </>
           ) : (
             <>
-              <header><span>社区</span><h2>学习社区</h2><p>鼓励与学习讨论分开放置。</p></header>
+              <header><span>Community</span><h2>Learning Community</h2><p>Share encouragement and discuss practice exercises.</p></header>
               <nav>
-                <Link className={active("/community/wall") ? "active" : ""} href="/community/wall"><span><b>激励文字墙</b><small>共同写成“加油”</small></span><b>→</b></Link>
-                <div className="flyout-section-label">题目讨论</div>
-                <Link className={pathname === "/community/discussions" && !selectedType ? "active" : ""} href="/community/discussions"><span>全部题目</span><b>→</b></Link>
-                <Link className={selectedType === "sentence" ? "active" : ""} href="/community/discussions?type=sentence"><span>句子缩写</span><b>→</b></Link>
-                <Link className={selectedType === "paragraph" ? "active" : ""} href="/community/discussions?type=paragraph"><span>短文缩写</span><b>→</b></Link>
-                <Link className={selectedType === "mock" ? "active" : ""} href="/community/discussions?type=mock"><span>HSK写作模拟</span><b>→</b></Link>
+                <Link className={active("/community/wall") ? "active" : ""} href="/community/wall"><span><b>Motivation Wall</b><small>Create an encouraging message together</small></span><b>→</b></Link>
+                <div className="flyout-section-label">Exercise Discussions</div>
+                <Link className={pathname === "/community/discussions" && !selectedType ? "active" : ""} href="/community/discussions"><span>All Exercises</span><b>→</b></Link>
+                <Link className={selectedType === "sentence" ? "active" : ""} href="/community/discussions?type=sentence"><span>Sentences</span><b>→</b></Link>
+                <Link className={selectedType === "paragraph" ? "active" : ""} href="/community/discussions?type=paragraph"><span>Passages</span><b>→</b></Link>
+                <Link className={selectedType === "mock" ? "active" : ""} href="/community/discussions?type=mock"><span>HSK 6 Mock Tests</span><b>→</b></Link>
               </nav>
             </>
           )}
@@ -115,7 +116,10 @@ export default function SiteSidebar() {
           <span className="site-topbar-page-icon"><MenuIcon name={pageIcon} /></span>
           <span>{pageTitle}</span>
         </div>
-        <AuthEntry autoOpen={auth === "login"} nextPath={nextPath} />
+        <div className="site-topbar-actions">
+          <LanguageController />
+          <AuthEntry autoOpen={auth === "login"} nextPath={nextPath} />
+        </div>
       </header>
     </>
   );

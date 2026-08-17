@@ -24,7 +24,7 @@ type MosaicPiece = WallItem & { x: number; y: number; fragment: string };
 
 function getDisplayName(user: User) {
   const name = user.user_metadata?.full_name || user.user_metadata?.first_name;
-  return String(name || "HSK学习者").trim().slice(0, 40);
+  return String(name || "HSK Learner").trim().slice(0, 40);
 }
 
 function getFragment(content: string, index: number) {
@@ -91,7 +91,7 @@ function TextMosaic({ items, word }: { items: WallItem[]; word: string }) {
   }, [items, word]);
 
   return (
-    <div className="word-mosaic" ref={stageRef} aria-label={`由学习短句组成的“${word}”`}>
+    <div className="word-mosaic" ref={stageRef} aria-label={`The Chinese characters “${word}” formed by community messages`}>
       {pieces.map((piece, index) => (
         <span
           className={piece.official ? "official" : ""}
@@ -204,8 +204,8 @@ export default function CommunityWall({
   async function publish(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const cleanContent = content.trim();
-    if (cleanContent.length < 2) return setError("请至少写两个字。");
-    if (cleanContent.length > 20) return setError("为了组成清晰的汉字，请控制在20个字以内。");
+    if (cleanContent.length < 2) return setError("Please enter at least two Chinese characters.");
+    if (cleanContent.length > 20) return setError("Please keep your message within 20 Chinese characters.");
     if (!user) {
       window.localStorage.setItem(draftKey, cleanContent);
       window.location.href = "/?auth=login&next=/community/wall";
@@ -223,7 +223,7 @@ export default function CommunityWall({
       is_anonymous: anonymous,
     });
     if (insertError) {
-      setError("发布失败，请稍后再试。");
+      setError("Your message could not be published. Please try again later.");
       setSubmitting(false);
       return;
     }
@@ -249,7 +249,7 @@ export default function CommunityWall({
         .eq("user_id", user.id)
         .eq("round_no", theme.round_no);
       if (deleteError) {
-        setVoteError("暂时无法更换投票，请稍后再试。");
+      setVoteError("Your vote could not be changed. Please try again later.");
         setVotingThemeId(null);
         return;
       }
@@ -261,7 +261,7 @@ export default function CommunityWall({
         .delete()
         .eq("user_id", user.id)
         .eq("round_no", theme.round_no);
-      if (deleteError) setVoteError("暂时无法取消投票，请稍后再试。");
+      if (deleteError) setVoteError("Your vote could not be removed. Please try again later.");
       else setMyVoteThemeId(null);
     } else {
       const { error: insertError } = await supabase.from("community_wall_votes").insert({
@@ -269,7 +269,7 @@ export default function CommunityWall({
         round_no: theme.round_no,
         user_id: user.id,
       });
-      if (insertError) setVoteError("投票没有成功，请刷新后再试。");
+    if (insertError) setVoteError("Your vote was not recorded. Please refresh and try again.");
       else setMyVoteThemeId(theme.id);
     }
     await reloadThemes();
@@ -280,13 +280,13 @@ export default function CommunityWall({
     ? livePosts.map((post) => ({
         id: post.id,
         content: post.content,
-        author: post.is_anonymous ? "匿名学习者" : post.display_name,
+      author: post.is_anonymous ? "Anonymous Learner" : post.display_name,
         official: false,
       }))
     : officialPrompts.map((prompt, index) => ({
         id: `official-${index}`,
         content: prompt,
-        author: "Write HSK 学习提示",
+      author: "Write HSK Study Tip",
         official: true,
       })), [livePosts, officialPrompts]);
 
@@ -294,42 +294,42 @@ export default function CommunityWall({
     <div className="wall-experience">
       <section className="wall-canvas-panel">
         <div className="wall-canvas-heading">
-          <div><span className="eyebrow">本期共同写成</span><h1>{currentWord}</h1></div>
-          <p>{livePosts.length ? `${livePosts.length} 句话正在实时组成这两个字。` : "当前使用官方学习提示构成字形，等待第一条真实留言。"}</p>
+          <div><span className="eyebrow">This Week&apos;s Community Message</span><h1>{currentWord}</h1></div>
+          <p>{livePosts.length ? `${livePosts.length} messages are forming these Chinese characters in real time.` : "Study tips currently form the characters while we wait for the first community message."}</p>
         </div>
         <TextMosaic items={wallItems} word={currentWord} />
-        <p className="wall-hover-tip">把鼠标放在文字上，可以看到完整短句和发布者。</p>
+          <p className="wall-hover-tip">Hover over the mosaic to read each message and see who posted it.</p>
       </section>
 
       <aside className="wall-sidebar">
         <div className="wall-compose-copy">
-          <span>写一句鼓励的话</span>
-          <h2>让你的文字，成为“{currentWord}”的一部分。</h2>
-          <p>最多20个字。发布后，你的短句会实时进入左侧汉字。</p>
+              <span>Share Some Encouragement</span>
+              <h2>Make your message part of “{currentWord}”.</h2>
+              <p>Write up to 20 Chinese characters. Your message will join the mosaic in real time.</p>
         </div>
         <form className="wall-inline-form" onSubmit={publish}>
-          <textarea value={content} onChange={(event) => { setContent(event.target.value); setError(""); }} maxLength={20} placeholder="例如：慢一点也没关系，继续走。" />
+              <textarea value={content} onChange={(event) => { setContent(event.target.value); setError(""); }} maxLength={20} placeholder="例如：慢一点也没关系，继续走。" />
           <div className="wall-form-meta"><span>{content.length} / 20</span></div>
           <div className="community-categories">
             {(Object.keys(communityCategoryLabels) as Array<keyof typeof communityCategoryLabels>).map((key) => (
               <button type="button" className={category === key ? "selected" : ""} onClick={() => setCategory(key)} key={key}>{communityCategoryLabels[key]}</button>
             ))}
           </div>
-          <label className="community-anonymous"><input type="checkbox" checked={anonymous} onChange={(event) => setAnonymous(event.target.checked)} />匿名显示</label>
+                <label className="community-anonymous"><input type="checkbox" checked={anonymous} onChange={(event) => setAnonymous(event.target.checked)} />Post anonymously</label>
           {error && <p className="community-compose-error" role="alert">{error}</p>}
-          <button className="wall-publish-button" type="submit" disabled={submitting}>{submitting ? "正在发布…" : user ? "加入文字墙" : "登录并发布"}</button>
+              <button className="wall-publish-button" type="submit" disabled={submitting}>{submitting ? "Publishing…" : user ? "Add to the Wall" : "Sign In to Post"}</button>
         </form>
 
         <div className="wall-recent">
-          <div><strong>实时短句</strong><span>{livePosts.length ? "真实留言" : "官方示例"}</span></div>
+              <div><strong>Live Messages</strong><span>{livePosts.length ? "Community posts" : "Study examples"}</span></div>
           <ul>{wallItems.slice(0, 9).map((item) => <li key={item.id}><span>{item.content}</span><small>{item.author}</small></li>)}</ul>
         </div>
       </aside>
 
       <section className="wall-next-themes">
         <div>
-          <span>下一期写什么？</span>
-          <p>登录后选择一个主题。每人每期一票，可随时更换；获得 {voteThreshold} 票后，文字墙会实时换成新的字。</p>
+            <span>What Should We Create Next?</span>
+            <p>Sign in to vote for a theme. Each learner receives one vote per round and may change it anytime. The wall changes when a theme reaches {voteThreshold} votes.</p>
           {voteError && <small className="wall-vote-error">{voteError}</small>}
         </div>
         {candidates.map((theme) => {
@@ -343,10 +343,10 @@ export default function CommunityWall({
               disabled={votingThemeId !== null}
               key={theme.id}
             >
-              <span className="wall-theme-card-top"><strong>{theme.word}</strong><b>{theme.vote_count} 票</b></span>
+                    <span className="wall-theme-card-top"><strong>{theme.word}</strong><b>{theme.vote_count} votes</b></span>
               <span>{theme.description}</span>
               <span className="wall-vote-progress"><i style={{ width: `${Math.min(100, theme.vote_count / voteThreshold * 100)}%` }} /></span>
-              <small>{isWinner ? "正在组成文字墙" : selected ? "已投票 · 点击取消" : user ? "为这个字投票" : "登录后投票"}</small>
+                    <small>{isWinner ? "Currently on the wall" : selected ? "Voted · Click to remove" : user ? "Vote for this theme" : "Sign in to vote"}</small>
             </button>
           );
         })}

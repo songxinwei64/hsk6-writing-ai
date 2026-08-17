@@ -5,9 +5,9 @@ import { createClient } from "../../utils/supabase/server";
 export const dynamic = "force-dynamic";
 
 const typeDetails = {
-  sentence: { label: "句子缩写", href: "/practice/sentence" },
-  paragraph: { label: "短文缩写", href: "/practice/paragraph" },
-  mock: { label: "HSK写作模拟", href: "/practice/mock" },
+  sentence: { label: "Sentence Summarization", href: "/practice/sentence" },
+  paragraph: { label: "Passage Summarization", href: "/practice/paragraph" },
+  mock: { label: "HSK 6 Mock Tests", href: "/practice/mock" },
 } as const;
 
 type PracticeType = keyof typeof typeDetails;
@@ -56,18 +56,18 @@ export default async function MyLibraryPage() {
     <main className="page">
       <section className="my-library-shell">
         <div className="my-library-heading">
-          <span className="eyebrow">Write HSK · 个人学习记录</span>
-          <h1>我的题库</h1>
-          <p>{user.email}，这里保存你的做题进度和写作记录。</p>
+          <span className="eyebrow">Write HSK · Practice History</span>
+          <h1>My Practice</h1>
+          <p>Your progress and writing history are saved here for {user.email}.</p>
         </div>
 
         <div className="library-overview">
           <div>
-            <small>总体进度</small>
+            <small>Overall Progress</small>
             <strong>{totalCompleted}<span> / {totalItems}</span></strong>
-            <p>已完成的不同题目</p>
+            <p>Unique exercises completed</p>
           </div>
-          <div className="library-overview-progress" aria-label={`总体完成 ${totalCompleted} / ${totalItems}`}>
+          <div className="library-overview-progress" aria-label={`Overall progress ${totalCompleted} of ${totalItems}`}>
             <span style={{ width: `${totalItems ? (totalCompleted / totalItems) * 100 : 0}%` }} />
           </div>
         </div>
@@ -77,15 +77,15 @@ export default async function MyLibraryPage() {
             <Link href={entry.href} className="library-progress-card" key={entry.type}>
               <div><span>{entry.label}</span><strong>{entry.completed} / {entry.total}</strong></div>
               <div className="library-card-track"><span style={{ width: `${entry.total ? (entry.completed / entry.total) * 100 : 0}%` }} /></div>
-              <small>{entry.completed === entry.total && entry.total > 0 ? "已全部完成" : "继续练习 →"}</small>
+                    <small>{entry.completed === entry.total && entry.total > 0 ? "Completed" : "Continue →"}</small>
             </Link>
           ))}
         </div>
 
         <section className="library-records">
           <div className="library-section-title">
-            <div><span>写作记录</span><h2>最近完成的练习</h2></div>
-            <small>每次重新提交都会保留一条新记录</small>
+            <div><span>Writing History</span><h2>Recently Completed</h2></div>
+            <small>Each new submission is saved as a separate record</small>
           </div>
 
           {recentAttempts.length ? (
@@ -96,13 +96,13 @@ export default async function MyLibraryPage() {
                 return (
                   <Link className="library-record" href={`/my-library/${attempt.id}`} key={attempt.id}>
                     <div>
-                      <span>{details?.label ?? "缩写练习"}</span>
-                      <h3>{item.title ?? `${details?.label ?? "练习"} ${item.order_no}`}</h3>
+                    <span>{details?.label ?? "Writing Practice"}</span>
+                    <h3>{item.title ?? `${details?.label ?? "Exercise"} ${item.order_no}`}</h3>
                       <p>{attempt.answer_title && <b>{attempt.answer_title} · </b>}{attempt.answer_text}</p>
                     </div>
                     <div className="library-record-meta">
                       <time>{new Intl.DateTimeFormat("zh-CN", { dateStyle: "medium" }).format(new Date(attempt.completed_at ?? attempt.updated_at))}</time>
-                      <span aria-hidden="true">查看详情 →</span>
+                  <span aria-hidden="true">View Details →</span>
                     </div>
                   </Link>
                 );
@@ -110,9 +110,9 @@ export default async function MyLibraryPage() {
             </div>
           ) : (
             <div className="library-empty">
-              <h3>还没有写作记录</h3>
-              <p>完成并提交一次练习后，进度和答案会自动保存在这里。</p>
-              <Link href="/practice">开始第一次练习</Link>
+              <h3>No Practice History Yet</h3>
+              <p>Complete and submit an exercise to save your progress and answer here.</p>
+              <Link href="/practice">Start Your First Exercise</Link>
             </div>
           )}
         </section>

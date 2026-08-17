@@ -3,16 +3,16 @@ import Link from "next/link";
 const writingLevels = [
   {
     number: "01",
-    title: "句子缩写",
-    description: "从一个长句开始，删除多余细节、合并表达，在不改变原意的情况下把句子写得更简洁。",
-    status: "基础训练",
+    title: "Sentence Summarization",
+    description: "Remove unnecessary details and combine ideas without changing the original meaning.",
+    status: "Foundation",
     href: "/practice/sentence",
   },
   {
     number: "02",
-    title: "短文缩写",
-    description: "阅读一篇短文，提取人物、事件和结果，删除次要内容，写成更精炼、连贯的短文。",
-    status: "进阶训练",
+    title: "Passage Summarization",
+    description: "Identify the people, events, and outcome, then rewrite the passage clearly and concisely.",
+    status: "Intermediate",
     href: "/practice/paragraph",
   },
 ];
@@ -23,10 +23,10 @@ export default function PracticePage() {
 
       <section className="practice-shell">
         <div className="practice-intro">
-          <Link className="back-link" href="/">← 返回首页</Link>
-          <span className="eyebrow">HSK 6 写作 · 缩写练习</span>
-          <h1>练会提取重点与压缩表达</h1>
-          <p>先从句子开始，再练习短文缩写。准备好以后，可以进入HSK写作模拟题库完成整篇训练。</p>
+          <Link className="back-link" href="/">← Back to Home</Link>
+          <span className="eyebrow">HSK 6 Writing · Summarization Practice</span>
+          <h1>Identify Key Ideas and Write Concisely</h1>
+          <p>Begin with sentences, continue with passages, and then move on to complete HSK 6 mock writing tests.</p>
         </div>
 
         <div className="writing-level-grid">
@@ -41,10 +41,10 @@ export default function PracticePage() {
               <p>{level.description}</p>
               {level.href ? (
                 <span className="choice-action">
-                  开始练习 <span>→</span>
+                  Start Practice <span>→</span>
                 </span>
               ) : (
-                <span className="choice-action disabled" aria-disabled="true">即将开放</span>
+                <span className="choice-action disabled" aria-disabled="true">Coming Soon</span>
               )}
               </>
             );
@@ -54,7 +54,7 @@ export default function PracticePage() {
                 className="writing-level-card writing-level-card-link"
                 href={level.href}
                 key={level.number}
-                aria-label={`开始${level.title}`}
+                aria-label={`Start ${level.title}`}
               >
                 {cardContent}
               </Link>

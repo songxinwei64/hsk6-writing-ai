@@ -2,66 +2,66 @@ import type { Metadata } from "next";
 import LegalPage from "../../components/legal-page";
 
 export const metadata: Metadata = {
-  title: "隐私政策 | Write HSK",
-  description: "Write HSK 如何收集、使用和保护用户信息。",
+  title: "Privacy Policy | Write HSK",
+  description: "How Write HSK collects, uses, and protects user information.",
 };
 
 export default function PrivacyPage() {
   return (
     <LegalPage
-      eyebrow="Write HSK · 法律与隐私"
-      title="隐私政策"
-      summary="本政策说明你使用 Write HSK 时，我们会处理哪些信息、为什么处理，以及你可以如何管理自己的数据。"
+      eyebrow="Write HSK · Legal & Privacy"
+      title="Privacy Policy"
+      summary="This policy explains what information we process when you use Write HSK, why we process it, and how you can manage your data."
     >
       <section>
-        <h2>1. 我们收集的信息</h2>
+          <h2>1. Information We Collect</h2>
         <ul>
-          <li><b>账号信息：</b>电子邮箱、显示名称、头像以及登录方式。使用 Google 登录时，我们会接收 Google 允许提供的基本账号资料。</li>
-          <li><b>学习信息：</b>你的缩写答案、标题、练习次数、完成记录、收藏和 AI 反馈。</li>
-          <li><b>社区信息：</b>你主动发布的帖子、评论、投票和与题目有关的讨论。</li>
-          <li><b>会员信息：</b>会员状态、订阅开始与续费时间、订单和客户标识。银行卡、PayPal 密码等完整支付资料由 Lemon Squeezy 处理，我们不会保存完整卡号。</li>
-          <li><b>技术信息：</b>为维持登录、安全和故障排查所需的 Cookie、会话信息、IP 地址、浏览器和访问日志。</li>
+            <li><b>Account information:</b> email address, display name, profile image, and sign-in method. Google sign-in provides the basic account information authorized by Google.</li>
+            <li><b>Learning information:</b> your summaries, titles, practice attempts, completion history, saved exercises, and AI feedback.</li>
+            <li><b>Community information:</b> posts, comments, votes, and exercise discussions you choose to publish.</li>
+            <li><b>Membership information:</b> membership status, subscription and renewal dates, orders, and customer identifiers. Lemon Squeezy processes full payment details; we do not store full card numbers or PayPal passwords.</li>
+            <li><b>Technical information:</b> cookies, session data, IP addresses, browser information, and access logs needed for sign-in, security, and troubleshooting.</li>
         </ul>
       </section>
 
       <section>
-        <h2>2. 信息的使用目的</h2>
-        <p>我们使用上述信息来创建和保护账号、保存学习进度、提供题库与社区功能、生成个性化 AI 反馈、管理会员权限、处理客服请求，以及防止滥用和改进服务稳定性。</p>
+          <h2>2. How We Use Information</h2>
+          <p>We use this information to create and protect accounts, save learning progress, provide exercises and community features, generate personalized AI feedback, manage membership access, respond to support requests, prevent abuse, and improve service reliability.</p>
       </section>
 
       <section>
-        <h2>3. AI 反馈与内容处理</h2>
-        <p>当你主动请求 AI 反馈时，相关题目、你的标题和缩写内容会发送给 OpenAI API 生成反馈。Write HSK 的请求设置为不在 API 中建立可供本网站继续调用的响应存储，但服务提供商仍可能按照其安全与滥用监测规则处理必要日志。请不要在练习答案中填写身份证号、地址、健康资料或其他不必要的敏感信息。</p>
+          <h2>3. AI Feedback and Content Processing</h2>
+          <p>When you request AI feedback, the relevant prompt, your title, and your summary are sent to the OpenAI API. Write HSK does not create reusable API response storage for these requests, although the provider may process necessary logs under its safety and abuse-monitoring rules. Do not include identification numbers, addresses, health information, or other unnecessary sensitive data in practice answers.</p>
       </section>
 
       <section>
-        <h2>4. 服务提供商与跨境处理</h2>
-        <p>为了运行网站，我们会使用 Supabase（账号、数据库与实时功能）、Google（可选登录）、OpenAI（AI 反馈）、Lemon Squeezy（结账、订阅与税务处理）和 Vercel（网站托管）。这些服务可能在你所在国家或地区以外处理数据，并分别受其隐私与安全条款约束。</p>
+          <h2>4. Service Providers and International Processing</h2>
+          <p>We use Supabase for accounts, databases, and realtime features; Google for optional sign-in; OpenAI for AI feedback; Lemon Squeezy for checkout, subscriptions, and tax handling; and Vercel for hosting. These providers may process data outside your country or region under their respective privacy and security terms.</p>
       </section>
 
       <section>
-        <h2>5. 保存期限与安全</h2>
-        <p>账号、学习记录和社区内容通常会保留至账号删除或不再需要提供服务为止。付款与交易记录可能因税务、会计、防欺诈或法律义务保存更长时间。我们采用访问控制、服务器端密钥管理和数据库行级权限等措施，但任何互联网服务都无法保证绝对安全。</p>
+          <h2>5. Retention and Security</h2>
+          <p>Account, learning, and community data are generally retained until the account is deleted or the data is no longer needed to provide the service. Payment and transaction records may be retained longer for tax, accounting, fraud prevention, or legal obligations. We use access controls, server-side secret management, and database row-level security, but no internet service can guarantee absolute security.</p>
       </section>
 
       <section>
-        <h2>6. 你的权利</h2>
-        <p>你可以要求查询、更正、导出或删除个人信息，也可以撤回不必要的处理同意。删除账号可能同时删除无法与账号分离的学习记录；依法必须保存的交易记录除外。请通过联系页面提交请求，我们可能需要先验证账号所有权。</p>
+          <h2>6. Your Rights</h2>
+          <p>You may request access to, correction, export, or deletion of personal information and may withdraw consent for optional processing. Account deletion may also remove learning records that cannot be separated from the account, except transaction records that must be retained by law. Submit requests through the contact page; we may first verify account ownership.</p>
       </section>
 
       <section>
-        <h2>7. Cookie 与登录状态</h2>
-        <p>网站使用必要 Cookie 维持登录会话、保护账号和保存基本界面状态。关闭必要 Cookie 可能导致登录、练习记录或会员功能无法正常使用。</p>
+          <h2>7. Cookies and Sign-In Sessions</h2>
+          <p>We use necessary cookies to maintain sign-in sessions, protect accounts, and preserve basic interface state. Disabling necessary cookies may prevent sign-in, practice history, or membership features from working correctly.</p>
       </section>
 
       <section>
-        <h2>8. 未成年人</h2>
-        <p>如果你未达到所在地区可独立同意使用网络服务的年龄，应在父母或监护人同意和指导下使用。监护人如认为未成年人不当提交了个人信息，可以联系我们处理。</p>
+          <h2>8. Minors</h2>
+          <p>If you are below the age at which you may independently consent to online services in your region, use Write HSK only with a parent or guardian's consent and guidance. Guardians may contact us if they believe a minor has improperly submitted personal information.</p>
       </section>
 
       <section>
-        <h2>9. 政策更新</h2>
-        <p>服务或法律要求发生变化时，我们可能更新本政策。重要变化会通过网站页面或适当方式提示，页面顶部的生效日期将同步更新。</p>
+          <h2>9. Policy Updates</h2>
+          <p>We may update this policy when the service or legal requirements change. Material changes will be announced on the website or through another appropriate method, and the effective date will be updated.</p>
       </section>
     </LegalPage>
   );

@@ -20,11 +20,11 @@ export default async function Hsk6MockPracticePage() {
   return (
     <main className="page">
       <section className="mock-page-shell">
-        <Link className="back-link" href="/practice">← 返回缩写练习</Link>
+        <Link className="back-link" href="/practice">← Back to Writing Practice</Link>
         <div className="mock-page-heading">
-          <span className="eyebrow">HSK 6 · 写作模拟</span>
-          <h1>按照真实流程完成缩写</h1>
-          <p>阅读10分钟，写作35分钟。原文隐藏后不能重新查看。</p>
+          <span className="eyebrow">HSK 6 · Writing Mock Test</span>
+          <h1>Practice with the Official Exam Flow</h1>
+          <p>Read for 10 minutes and write for 35 minutes. Once hidden, the original passage cannot be viewed again.</p>
         </div>
         <Hsk6MockPractice
           items={items}

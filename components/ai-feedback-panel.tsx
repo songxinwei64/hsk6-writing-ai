@@ -28,12 +28,12 @@ export default function AiFeedbackPanel({ practiceItemId, answerTitle, answerTex
         body: JSON.stringify({ practiceItemId, answerTitle, answerText }),
       });
       const result = await response.json() as { feedback?: AiWritingFeedback; remaining?: number; quotaType?: "daily" | "trial"; error?: string };
-      if (!response.ok || !result.feedback) throw new Error(result.error || "AI反馈生成失败。请稍后重试。");
+      if (!response.ok || !result.feedback) throw new Error(result.error || "AI feedback could not be generated. Please try again later.");
       setFeedback(result.feedback);
       setRemaining(result.remaining ?? null);
       setQuotaType(result.quotaType ?? null);
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : "AI反馈生成失败。请稍后重试。");
+      setError(requestError instanceof Error ? requestError.message : "AI feedback could not be generated. Please try again later.");
     } finally {
       setIsLoading(false);
     }
@@ -42,53 +42,53 @@ export default function AiFeedbackPanel({ practiceItemId, answerTitle, answerTex
   return (
     <section className="ai-feedback-panel">
       <div className="ai-feedback-heading">
-        <div><span>Write HSK AI助教</span><h3>针对你的缩写进行具体反馈</h3></div>
+        <div><span>Write HSK AI Tutor</span><h3>Personalized Feedback on Your Summary</h3></div>
         {!feedback && isAuthenticated && (
           <button type="button" onClick={requestFeedback} disabled={isLoading}>
-            {isLoading ? "正在阅读你的缩写…" : "获取AI反馈"}
+          {isLoading ? "Reviewing your summary…" : "Get AI Feedback"}
           </button>
         )}
       </div>
 
-      {!isAuthenticated && <p className="ai-feedback-access">登录后可免费体验3次AI反馈。</p>}
-      {isAuthenticated && !isPaidMember && !feedback && <p className="ai-feedback-access">免费账户可累计体验3次AI反馈。</p>}
+      {!isAuthenticated && <p className="ai-feedback-access">Sign in to try AI feedback three times for free.</p>}
+      {isAuthenticated && !isPaidMember && !feedback && <p className="ai-feedback-access">Free accounts include three AI feedback sessions.</p>}
       {error && <p className="ai-feedback-error" role="alert">{error}</p>}
 
       {feedback && (
         <div className="ai-feedback-content">
           {feedback.priorityIssues.length > 0 && (
             <section className="ai-feedback-priority">
-              <strong>优先修改的问题</strong>
+            <strong>Top Priority</strong>
               <ol>{feedback.priorityIssues.map((item, index) => <li key={`priority-${index}`}>{item}</li>)}</ol>
             </section>
           )}
           <section className="ai-feedback-requirements">
-            <h4>任务要求检查</h4>
+            <h4>Task Requirements</h4>
             <dl>
-              <div><dt>标题</dt><dd>{feedback.titleFeedback}</dd></div>
-              <div><dt>字数</dt><dd>{feedback.lengthFeedback}</dd></div>
-              <div><dt>忠于原文</dt><dd>{feedback.fidelityFeedback}</dd></div>
-              <div><dt>个人观点</dt><dd>{feedback.viewpointFeedback}</dd></div>
+              <div><dt>Title</dt><dd>{feedback.titleFeedback}</dd></div>
+              <div><dt>Length</dt><dd>{feedback.lengthFeedback}</dd></div>
+              <div><dt>Fidelity</dt><dd>{feedback.fidelityFeedback}</dd></div>
+              <div><dt>Personal Opinion</dt><dd>{feedback.viewpointFeedback}</dd></div>
             </dl>
           </section>
           <div className="ai-feedback-grid">
             <section>
-              <h4>做得好的地方</h4>
-              {feedback.retained.length ? <ul>{feedback.retained.map((item, index) => <li key={`retained-${index}`}>{item}</li>)}</ul> : <p>这次缩写还没有充分呈现出可以保留的内容。</p>}
+            <h4>What You Did Well</h4>
+            {feedback.retained.length ? <ul>{feedback.retained.map((item, index) => <li key={`retained-${index}`}>{item}</li>)}</ul> : <p>The current summary does not yet contain enough accurate content to highlight.</p>}
             </section>
             <section>
-              <h4>需要修改的地方</h4>
+            <h4>What Needs Improvement</h4>
               {[...feedback.revisions, ...feedback.expression].length ? (
                 <ul>{[...feedback.revisions, ...feedback.expression].map((item, index) => <li key={`change-${index}`}>{item}</li>)}</ul>
-              ) : <p>暂未发现明显需要修改的地方。</p>}
+            ) : <p>No clear issues were found.</p>}
             </section>
           </div>
-          <section className="ai-feedback-example"><h4>改进示例</h4><p>{feedback.improvedExample}</p></section>
-          {remaining !== null && <small>{quotaType === "trial" ? `免费体验还剩 ${remaining} 次` : `最近24小时还可以获取 ${remaining} 次AI反馈`}</small>}
+          <section className="ai-feedback-example"><h4>Suggested Revision</h4><p>{feedback.improvedExample}</p></section>
+          {remaining !== null && <small>{quotaType === "trial" ? `${remaining} free AI feedback sessions remaining` : `${remaining} AI feedback sessions remaining in the current 24-hour period`}</small>}
         </div>
       )}
 
-      <p className="ai-feedback-note">AI反馈仅用于帮助你修改缩写，不代表官方HSK考试评价。</p>
+      <p className="ai-feedback-note">AI feedback is provided for revision support and is not an official HSK assessment.</p>
     </section>
   );
 }

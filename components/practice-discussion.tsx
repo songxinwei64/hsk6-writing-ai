@@ -7,7 +7,7 @@ import { createClient } from "../utils/supabase/client";
 import type { CommunityPost } from "../lib/community";
 
 function getDisplayName(user: User) {
-  return String(user.user_metadata?.full_name || user.user_metadata?.first_name || "HSK学习者").trim().slice(0, 40);
+  return String(user.user_metadata?.full_name || user.user_metadata?.first_name || "HSK Learner").trim().slice(0, 40);
 }
 
 export default function PracticeDiscussion({
@@ -32,7 +32,7 @@ export default function PracticeDiscussion({
     event.preventDefault();
     const cleanContent = content.trim();
     if (cleanContent.length < 2) {
-      setError("请先写下你的想法或问题。");
+      setError("Please write your idea or question first.");
       return;
     }
 
@@ -54,7 +54,7 @@ export default function PracticeDiscussion({
       is_anonymous: false,
     });
     if (insertError) {
-      setError("发布失败，请稍后再试。");
+      setError("Your post could not be published. Please try again later.");
       setSubmitting(false);
       return;
     }
@@ -67,9 +67,9 @@ export default function PracticeDiscussion({
   return (
     <div className="discussion-layout">
       <form className="discussion-compose" onSubmit={publish}>
-        <span>参与讨论</span>
-        <h2>你怎样理解这道题？</h2>
-        <p>可以讨论主线、信息取舍和表达方法。不要只复制参考答案。</p>
+          <span>Join the Discussion</span>
+          <h2>How Would You Approach This Exercise?</h2>
+          <p>Discuss the main thread, information selection, or wording. Please do not simply copy the suggested answer.</p>
         <textarea
           value={content}
           onChange={(event) => {
@@ -77,33 +77,33 @@ export default function PracticeDiscussion({
             setError("");
           }}
           maxLength={280}
-          placeholder="例如：我觉得地点在这里可以删掉，因为它不影响事件结果。"
+          placeholder="For example: I would remove the location because it does not affect the outcome."
         />
         <div className="discussion-compose-foot">
           <small>{content.length} / 280</small>
-          <button type="submit" disabled={submitting}>{submitting ? "发布中…" : "发表想法"}</button>
+        <button type="submit" disabled={submitting}>{submitting ? "Publishing…" : "Post Idea"}</button>
         </div>
         {error && <p className="community-compose-error" role="alert">{error}</p>}
       </form>
 
       <section className="discussion-posts">
         <div className="discussion-section-head">
-          <span>这道题的讨论</span>
-          <small>{posts.length} 条</small>
+          <span>Discussion</span>
+          <small>{posts.length} posts</small>
         </div>
         {posts.length ? posts.map((post) => (
           <article className="discussion-post" key={post.id}>
             <div>
-              <strong>{post.is_anonymous ? "匿名学习者" : post.display_name}</strong>
+                  <strong>{post.is_anonymous ? "Anonymous Learner" : post.display_name}</strong>
               <time>{new Intl.DateTimeFormat("zh-CN", { dateStyle: "medium" }).format(new Date(post.created_at))}</time>
             </div>
             <p>{post.content}</p>
           </article>
         )) : (
           <div className="discussion-empty">
-            <span>第一个位置留给你</span>
-            <h3>还没有人讨论这道题</h3>
-            <p>写下你的判断或疑问，之后来到这里的学习者就能接着讨论。</p>
+            <span>Be the First</span>
+            <h3>No One Has Discussed This Exercise Yet</h3>
+            <p>Share your reasoning or question so the next learner can continue the conversation.</p>
           </div>
         )}
       </section>

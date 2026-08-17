@@ -6,8 +6,8 @@ import CheckoutButton from "../../components/checkout-button";
 export const dynamic = "force-dynamic";
 
 function formatMembershipDate(value: string | null) {
-  if (!value) return "暂未提供";
-  return new Intl.DateTimeFormat("zh-CN", {
+  if (!value) return "Not available";
+  return new Intl.DateTimeFormat("en", {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -17,22 +17,22 @@ function formatMembershipDate(value: string | null) {
 
 const benefits = [
   {
-    label: "句子缩写",
+    label: "Sentence Summarization",
     free: PRACTICE_ACCESS.sentence.free,
     total: PRACTICE_ACCESS.sentence.total,
-    unit: "道",
+    unit: "exercises",
   },
   {
-    label: "短文缩写",
+    label: "Passage Summarization",
     free: PRACTICE_ACCESS.paragraph.free,
     total: PRACTICE_ACCESS.paragraph.total,
-    unit: "篇",
+    unit: "exercises",
   },
   {
-    label: "HSK写作模拟",
+    label: "HSK 6 Mock Tests",
     free: PRACTICE_ACCESS.mock.free,
     total: PRACTICE_ACCESS.mock.total,
-    unit: "篇",
+    unit: "tests",
   },
 ] as const;
 
@@ -43,18 +43,18 @@ export default async function MembershipPage() {
     <main className="page">
       <section className="membership-shell">
         <div className="membership-heading">
-          <span className="eyebrow">Write HSK · 会员权益</span>
-          <h1>免费开始练习，需要时再解锁完整题库</h1>
-          <p>登录后可以保存进度、参与社区并体验AI反馈；付费会员可以使用全部缩写练习、HSK 6模拟题和更多AI反馈。</p>
+          <span className="eyebrow">Write HSK · Membership</span>
+          <h1>Start Free, Then Unlock the Complete Question Bank</h1>
+          <p>Sign in to save progress, join the community, and try AI feedback. Members receive all writing exercises, every HSK 6 mock test, and more AI feedback.</p>
         </div>
 
         <div className="membership-plans">
           <article className="membership-plan">
             <div className="membership-plan-title">
-              <span>免费版</span>
+              <span>Free</span>
               <strong>¥0</strong>
             </div>
-            <p>每类练习开放部分题目。登录后还可以保存记录并参与社区。</p>
+            <p>Try part of each exercise set. Sign in to save your history and join the community.</p>
             <ul>
               {benefits.map((benefit) => (
                 <li key={benefit.label}>
@@ -62,24 +62,24 @@ export default async function MembershipPage() {
                   <b>{benefit.free} / {benefit.total} {benefit.unit}</b>
                 </li>
               ))}
-              <li><span>保存做题进度</span><b>{access.isAuthenticated ? "可使用" : "登录后可用"}</b></li>
-              <li><span>参与学习社区</span><b>{access.isAuthenticated ? "可使用" : "登录后可用"}</b></li>
-              <li><span>AI个性化反馈</span><b>登录后免费体验3次</b></li>
+              <li><span>Save practice progress</span><b>{access.isAuthenticated ? "Available" : "Sign in"}</b></li>
+              <li><span>Join the community</span><b>{access.isAuthenticated ? "Available" : "Sign in"}</b></li>
+              <li><span>Personalized AI feedback</span><b>3 free sessions after sign-in</b></li>
             </ul>
             {!access.isAuthenticated ? (
-              <Link className="membership-secondary-action" href="/?auth=login&next=/membership">登录并保存进度</Link>
+              <Link className="membership-secondary-action" href="/?auth=login&next=/membership">Sign In and Save Progress</Link>
             ) : (
-              <span className="membership-current">当前为免费账户</span>
+              <span className="membership-current">Current Plan: Free</span>
             )}
           </article>
 
           <article className="membership-plan membership-plan-paid">
-            <div className="membership-plan-badge">完整题库</div>
+            <div className="membership-plan-badge">Complete Question Bank</div>
             <div className="membership-plan-title">
-              <span>付费会员</span>
-              <strong>全部开放</strong>
+              <span>Membership</span>
+              <strong>Full Access</strong>
             </div>
-            <p>适合需要完成全部缩写训练、HSK 6模拟训练并持续获得AI反馈的学习者。</p>
+            <p>For learners who want every summarization exercise, all HSK 6 mock tests, and continued AI feedback.</p>
             <ul>
               {benefits.map((benefit) => (
                 <li key={benefit.label}>
@@ -87,50 +87,50 @@ export default async function MembershipPage() {
                   <b>{benefit.total} / {benefit.total} {benefit.unit}</b>
                 </li>
               ))}
-              <li><span>保存做题进度</span><b>可使用</b></li>
-              <li><span>参与学习社区</span><b>可使用</b></li>
-              <li><span>AI个性化反馈</span><b>最近24小时5次</b></li>
+              <li><span>Save practice progress</span><b>Available</b></li>
+              <li><span>Join the community</span><b>Available</b></li>
+              <li><span>Personalized AI feedback</span><b>5 sessions per 24 hours</b></li>
             </ul>
             {access.isPaidMember ? (
               <>
                 <div className="membership-status-card">
                   <div className="membership-status-heading">
-                    <span>当前会员状态</span>
-                    <strong>已生效</strong>
-                    {access.isTestMode && <small>测试会员</small>}
+                    <span>Membership Status</span>
+                    <strong>Active</strong>
+                    {access.isTestMode && <small>Test Membership</small>}
                   </div>
                   <dl>
-                    <div><dt>开通日期</dt><dd>{formatMembershipDate(access.startedAt)}</dd></div>
+                    <div><dt>Started</dt><dd>{formatMembershipDate(access.startedAt)}</dd></div>
                     {access.expiresAt ? (
-                      <div><dt>会员有效期至</dt><dd>{formatMembershipDate(access.expiresAt)}</dd></div>
+                      <div><dt>Access Until</dt><dd>{formatMembershipDate(access.expiresAt)}</dd></div>
                     ) : (
-                      <div><dt>下次续费日期</dt><dd>{formatMembershipDate(access.renewsAt)}</dd></div>
+                      <div><dt>Next Renewal</dt><dd>{formatMembershipDate(access.renewsAt)}</dd></div>
                     )}
                   </dl>
                   {access.customerPortalUrl && (
-                    <a href={access.customerPortalUrl} target="_blank" rel="noreferrer">管理或取消订阅 →</a>
+                    <a href={access.customerPortalUrl} target="_blank" rel="noreferrer">Manage or Cancel Subscription →</a>
                   )}
                 </div>
-                <Link className="membership-primary-action" href="/practice">会员已生效，开始练习</Link>
+                <Link className="membership-primary-action" href="/practice">Membership Active — Start Practicing</Link>
               </>
             ) : (
               <>
                 <div className="membership-billing-summary">
-                  <strong>₩12,900 / 月</strong>
-                  <span>月度订阅，每月自动续费</span>
-                  <small>可随时取消；取消后仍可使用到当前付费周期结束。</small>
+                  <strong>₩12,900 / month</strong>
+                  <span>Monthly subscription · Renews automatically</span>
+                  <small>Cancel anytime. Access remains active until the end of the current billing period.</small>
                 </div>
                 {access.isAuthenticated ? (
                   <CheckoutButton />
                 ) : (
-                  <Link className="membership-primary-action" href="/?auth=login&next=/membership">登录后订阅会员</Link>
+                  <Link className="membership-primary-action" href="/?auth=login&next=/membership">Sign In to Subscribe</Link>
                 )}
               </>
             )}
           </article>
         </div>
 
-        <p className="membership-note">这是月度自动续费订阅，不是单次购买。付款即表示同意每月自动扣款，直至取消。</p>
+        <p className="membership-note">This is a recurring monthly subscription, not a one-time purchase. Payment authorizes automatic monthly billing until cancellation.</p>
       </section>
     </main>
   );

@@ -74,7 +74,7 @@ export default function SentencePractice({
 
   async function submitAnswer() {
     if (!answer.trim()) {
-      setError("请先写下你的缩写。");
+      setError("Please write your summary first.");
       return;
     }
     setSubmitted((current) => ({ ...current, [item.id]: true }));
@@ -99,10 +99,10 @@ export default function SentencePractice({
   return (
     <div className="sentence-workspace">
       <div className="sentence-progress-head">
-        <span>练习 {currentIndex + 1} / {totalItems}</span>
+          <span>Exercise {currentIndex + 1} / {totalItems}</span>
         <span className="sentence-progress-meta">
           {attemptSummary && <AttemptBadge summary={attemptSummary} />}
-          <span>已完成 {completedCount} / {totalItems}</span>
+          <span>Completed {completedCount} / {totalItems}</span>
         </span>
       </div>
 
@@ -111,7 +111,7 @@ export default function SentencePractice({
       </div>
 
       <section className="sentence-tip" aria-labelledby={`sentence-skill-${item.id}`}>
-        <span>本题技巧</span>
+            <span>Key Skill</span>
         <div>
           <h2 id={`sentence-skill-${item.id}`}>{item.skill}</h2>
           <p>{item.tip}</p>
@@ -119,15 +119,15 @@ export default function SentencePractice({
       </section>
 
       <section className="sentence-original">
-        <span className="sentence-kicker">原句</span>
+          <span className="sentence-kicker">Original Sentence</span>
         <p>{item.original}</p>
       </section>
 
       <section className="sentence-writing">
         <div className="sentence-writing-head">
           <div>
-            <span className="sentence-kicker">我的缩写</span>
-            <h2>用更简洁的话保留主要意思</h2>
+            <span className="sentence-kicker">Your Summary</span>
+            <h2>Keep the Main Idea in Fewer Words</h2>
           </div>
         </div>
 
@@ -137,8 +137,8 @@ export default function SentencePractice({
             setAnswers((current) => ({ ...current, [item.id]: event.target.value }));
             setError("");
           }}
-          placeholder="在这里写下你的缩写……"
-          aria-label={`第 ${currentIndex + 1} 题的缩写`}
+            placeholder="Write your Chinese summary here…"
+            aria-label={`Summary for exercise ${currentIndex + 1}`}
           disabled={isSubmitted}
         />
 
@@ -146,29 +146,29 @@ export default function SentencePractice({
 
         {!isSubmitted ? (
           <button className="sentence-practice-submit" type="button" onClick={submitAnswer}>
-            提交并查看参考答案
+              Submit and View Suggested Answer
           </button>
         ) : (
           <div className="sentence-reference">
             <div>
-              <strong>参考答案</strong>
+                <strong>Suggested Answer</strong>
             </div>
             <p>{item.reference}</p>
             <aside>
-              <small>技巧解析 · {item.skill}</small>
+                <small>Key Point · {item.skill}</small>
               <span>{item.explanation}</span>
             </aside>
             <div className="practice-result-actions">
-              <button type="button" onClick={editAnswer}>修改我的答案</button>
-              <a href={`/community/practice/${item.databaseId}`}>讨论这道题 →</a>
+                <button type="button" onClick={editAnswer}>Edit My Answer</button>
+                <a href={`/community/practice/${item.databaseId}`}>Discuss This Exercise →</a>
             </div>
           </div>
         )}
       </section>
 
-      <nav className="sentence-navigation" aria-label="句子练习题目导航">
+      <nav className="sentence-navigation" aria-label="Sentence exercise navigation">
         <button type="button" onClick={() => changePage(questionPage - 1)} disabled={questionPage === 0}>
-          ← 上一页
+          ← Previous
         </button>
         <div>
           {visibleQuestionIndexes.map((index) => {
@@ -179,7 +179,7 @@ export default function SentencePractice({
               className={`${index === currentIndex ? "current" : ""}${question && submitted[question.id] ? " completed" : ""}${locked ? " locked" : ""}`}
               type="button"
               onClick={() => chooseQuestion(index)}
-              aria-label={locked ? `第 ${index + 1} 题，${isAuthenticated ? "会员专享" : "登录后解锁"}` : `第 ${index + 1} 题`}
+              aria-label={locked ? `Exercise ${index + 1}, ${isAuthenticated ? "members only" : "sign in to unlock"}` : `Exercise ${index + 1}`}
               key={question?.id ?? `locked-${index}`}
             >
               {index + 1}{locked && <QuestionLockIcon />}
@@ -192,17 +192,17 @@ export default function SentencePractice({
           onClick={() => changePage(questionPage + 1)}
           disabled={questionPage === totalPages - 1}
         >
-          下一页 →
+          Next →
         </button>
       </nav>
-      <p className="practice-pagination-status">第 {questionPage + 1} / {totalPages} 页</p>
+      <p className="practice-pagination-status">Page {questionPage + 1} of {totalPages}</p>
       {!isPaidMember && lockedTarget !== null && (
         <PracticeLockOverlay
           variant={isAuthenticated ? "membership" : "login"}
-          title={isAuthenticated ? `继续解锁句子缩写练习` : `登录后继续句子缩写`}
+          title={isAuthenticated ? "Unlock More Sentence Exercises" : "Sign In for More Sentence Exercises"}
           description={isAuthenticated
-            ? `当前免费范围开放前 ${items.length} 道。第 ${lockedTarget} 道起为会员练习，解锁后可继续训练信息提取与压缩能力。`
-            : `游客可以体验 ${items.length} 道题。登录后可免费练习前 ${loggedInFreeItems} 道，并保存每次练习记录。`}
+            ? `Your free account includes the first ${items.length} exercises. Exercise ${lockedTarget} and later are available with membership.`
+            : `Guests can try ${items.length} exercises. Sign in to access the first ${loggedInFreeItems} exercises and save your practice history.`}
           loginNext="/practice/sentence"
           onClose={closePaywall}
         />

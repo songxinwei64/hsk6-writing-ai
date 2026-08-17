@@ -9,9 +9,9 @@ import { createClient } from "../../../../utils/supabase/server";
 export const dynamic = "force-dynamic";
 
 const labels = {
-  sentence: "句子缩写",
-  paragraph: "短文缩写",
-  mock: "HSK写作模拟",
+  sentence: "Sentence Summarization",
+  paragraph: "Passage Summarization",
+  mock: "HSK 6 Mock Test",
 } as const;
 
 export default async function CommunityPracticePage({ params }: { params: Promise<{ id: string }> }) {
@@ -43,17 +43,17 @@ export default async function CommunityPracticePage({ params }: { params: Promis
   const allowedItems = access.isPaidMember ? limits.total : access.isAuthenticated ? limits.free : limits.guest;
   if (item.order_no > allowedItems) notFound();
 
-  const label = labels[item.practice_type as keyof typeof labels] ?? "缩写练习";
+  const label = labels[item.practice_type as keyof typeof labels] ?? "Writing Practice";
 
   return (
     <main>
       <section className="discussion-shell">
-        <Link className="back-link" href="/community/discussions">← 返回题目讨论区</Link>
+        <Link className="back-link" href="/community/discussions">← Back to Exercise Discussions</Link>
         <header className="discussion-heading">
-          <span className="eyebrow">{label} · 第{item.order_no}题</span>
-          <h1>{item.title || item.skill || "讨论这道缩写题"}</h1>
-          <p>{item.tip || "讨论这道题的主线、信息取舍和表达方法。"}</p>
-          <div className="discussion-privacy-note">这里讨论解题思路。你的练习答案不会自动公开，只有你主动发表的内容才会出现在社区。</div>
+          <span className="eyebrow">{label} · Exercise {item.order_no}</span>
+          <h1>{item.title || item.skill || "Discuss This Exercise"}</h1>
+          <p>{item.tip || "Discuss the main thread, information selection, and wording."}</p>
+          <div className="discussion-privacy-note">This space is for discussing your approach. Saved practice answers are never published automatically; only content you choose to post appears here.</div>
         </header>
         <PracticeDiscussion practiceItemId={item.id} posts={(posts ?? []) as CommunityPost[]} />
       </section>

@@ -114,7 +114,7 @@ export default function ParagraphPractice({
   }
 
   function finishReadingEarly() {
-    const confirmed = window.confirm("进入缩写后将无法再次查看原文，确定现在开始缩写吗？");
+    const confirmed = window.confirm("Once writing begins, you cannot view the original passage again. Start writing now?");
     if (!confirmed) return;
     setRemainingTimes((current) => ({ ...current, [item.id]: item.writingSeconds }));
     setStatuses((current) => ({ ...current, [item.id]: "writing" }));
@@ -122,7 +122,7 @@ export default function ParagraphPractice({
 
   async function submitAnswer() {
     if (!answer.trim()) {
-      setError("请先写下你的缩写。");
+      setError("Please write your summary first.");
       return;
     }
     setStatuses((current) => ({ ...current, [item.id]: "submitted" }));
@@ -142,10 +142,10 @@ export default function ParagraphPractice({
   return (
     <div className="paragraph-workspace">
       <div className="sentence-progress-head">
-        <span>练习 {currentIndex + 1} / {totalItems}</span>
+          <span>Exercise {currentIndex + 1} / {totalItems}</span>
         <span className="sentence-progress-meta">
           {attemptSummary && <AttemptBadge summary={attemptSummary} />}
-          <span>已完成 {completedCount} / {totalItems}</span>
+          <span>Completed {completedCount} / {totalItems}</span>
         </span>
       </div>
 
@@ -154,7 +154,7 @@ export default function ParagraphPractice({
       </div>
 
       <section className="sentence-tip">
-        <span>本题技巧</span>
+            <span>Key Skill</span>
         <div>
           <h2>{item.skill}</h2>
           <p>{item.tip}</p>
@@ -163,46 +163,46 @@ export default function ParagraphPractice({
 
       {status === "idle" ? (
         <section className="paragraph-start-panel">
-          <span>本题流程</span>
+            <span>Exercise Flow</span>
           <p>
-            先阅读原文3分钟，再用7分钟完成缩写。
+              Read the original passage for 3 minutes, then write your summary in 7 minutes.
             <br />
-            进入写作阶段后原文会被隐藏，不能重新查看。
+              The passage will be hidden during writing and cannot be reopened.
           </p>
-          <button type="button" onClick={startPractice}>开始阅读</button>
+            <button type="button" onClick={startPractice}>Start Reading</button>
         </section>
       ) : (
         <>
           <div className={`paragraph-timer ${remaining <= 60 ? "urgent" : ""}`} aria-live="polite">
             <span>
-              {status === "reading" && "阅读剩余时间"}
-              {status === "writing" && "写作剩余时间"}
-              {hasFinished && (status === "expired" ? "写作时间已到" : "本题已提交")}
+              {status === "reading" && "Reading Time Remaining"}
+              {status === "writing" && "Writing Time Remaining"}
+              {hasFinished && (status === "expired" ? "Writing Time Ended" : "Submitted")}
             </span>
             <strong>{formatTime(remaining)}</strong>
           </div>
 
           {(status === "reading" || hasFinished) && (
             <section className="paragraph-original">
-              <span className="sentence-kicker">{status === "reading" ? "阅读材料" : "原文回顾"}</span>
+              <span className="sentence-kicker">{status === "reading" ? "Reading Passage" : "Original Passage Review"}</span>
               <p>{item.original}</p>
             </section>
           )}
 
           {status === "reading" ? (
             <section className="paragraph-reading-note">
-              <strong>阅读阶段</strong>
-              <p>阅读时不能记录。请记住主要人物、核心事件、原因和结果，倒计时结束后原文将自动隐藏。</p>
+                <strong>Reading Phase</strong>
+                <p>Do not take notes. Remember the main people, events, reasons, and outcome. The passage will be hidden when time ends.</p>
               <button className="finish-reading-button" type="button" onClick={finishReadingEarly}>
-                提前结束阅读，开始缩写
+                  Finish Reading and Start Writing
               </button>
             </section>
           ) : (
           <section className="sentence-writing paragraph-writing">
             <div className="sentence-writing-head">
               <div>
-                <span className="sentence-kicker">我的缩写</span>
-                <h2>用连贯的短文保留主要内容</h2>
+              <span className="sentence-kicker">Your Summary</span>
+              <h2>Retell the Main Content Coherently</h2>
               </div>
             </div>
             <textarea
@@ -211,25 +211,25 @@ export default function ParagraphPractice({
                 setAnswers((current) => ({ ...current, [item.id]: event.target.value }));
                 setError("");
               }}
-              placeholder="在这里写下你的短文缩写……"
-              aria-label={`第 ${currentIndex + 1} 篇短文的缩写`}
+              placeholder="Write your Chinese passage summary here…"
+              aria-label={`Summary for passage ${currentIndex + 1}`}
               disabled={hasFinished}
             />
             {error && <p className="sentence-practice-error" role="alert">{error}</p>}
             {!hasFinished ? (
               <button className="sentence-practice-submit" type="button" onClick={submitAnswer}>
-                提交并查看参考答案
+                Submit and View Suggested Answer
               </button>
             ) : (
               <div className="sentence-reference">
-                {status === "expired" && !answer.trim() && <p className="paragraph-expired-note">本题时间已到，你还没有提交答案。</p>}
-                <div><strong>参考答案</strong></div>
+            {status === "expired" && !answer.trim() && <p className="paragraph-expired-note">Time is up and no answer was submitted.</p>}
+            <div><strong>Suggested Answer</strong></div>
                 <p>{item.reference}</p>
                 <aside>
-                  <small>技巧解析 · {item.skill}</small>
+              <small>Key Point · {item.skill}</small>
                   <span>{item.explanation}</span>
                 </aside>
-                <a className="practice-discussion-link" href={`/community/practice/${item.databaseId}`}>讨论这道题 →</a>
+            <a className="practice-discussion-link" href={`/community/practice/${item.databaseId}`}>Discuss This Exercise →</a>
               </div>
             )}
           </section>
@@ -237,8 +237,8 @@ export default function ParagraphPractice({
         </>
       )}
 
-      <nav className="sentence-navigation" aria-label="短文练习题目导航">
-        <button type="button" onClick={() => changePage(questionPage - 1)} disabled={questionPage === 0 || isActive}>← 上一页</button>
+      <nav className="sentence-navigation" aria-label="Passage exercise navigation">
+        <button type="button" onClick={() => changePage(questionPage - 1)} disabled={questionPage === 0 || isActive}>← Previous</button>
         <div>
           {visibleQuestionIndexes.map((index) => {
             const question = items[index];
@@ -249,7 +249,7 @@ export default function ParagraphPractice({
               type="button"
               onClick={() => chooseQuestion(index)}
               disabled={isActive && index !== currentIndex}
-              aria-label={locked ? `第 ${index + 1} 篇短文，${isAuthenticated ? "会员专享" : "登录后解锁"}` : `第 ${index + 1} 篇短文`}
+              aria-label={locked ? `Passage ${index + 1}, ${isAuthenticated ? "members only" : "sign in to unlock"}` : `Passage ${index + 1}`}
               key={question?.id ?? `locked-${index}`}
             >
               {index + 1}{locked && <QuestionLockIcon />}
@@ -257,16 +257,16 @@ export default function ParagraphPractice({
             );
           })}
         </div>
-        <button type="button" onClick={() => changePage(questionPage + 1)} disabled={questionPage === totalPages - 1 || isActive}>下一页 →</button>
+        <button type="button" onClick={() => changePage(questionPage + 1)} disabled={questionPage === totalPages - 1 || isActive}>Next →</button>
       </nav>
-      <p className="practice-pagination-status">第 {questionPage + 1} / {totalPages} 页</p>
+      <p className="practice-pagination-status">Page {questionPage + 1} of {totalPages}</p>
       {!isPaidMember && lockedTarget !== null && (
         <PracticeLockOverlay
           variant={isAuthenticated ? "membership" : "login"}
-          title={isAuthenticated ? `继续解锁短文缩写练习` : `登录后继续短文缩写`}
+          title={isAuthenticated ? "Unlock More Passage Exercises" : "Sign In for More Passage Exercises"}
           description={isAuthenticated
-            ? `当前免费范围开放前 ${items.length} 篇。第 ${lockedTarget} 篇起为会员练习，解锁后可继续训练完整主线与连贯表达。`
-            : `游客可以体验 ${items.length} 篇。登录后可免费练习前 ${loggedInFreeItems} 篇，并保存每次练习记录。`}
+            ? `Your free account includes the first ${items.length} passages. Passage ${lockedTarget} and later are available with membership.`
+            : `Guests can try ${items.length} passages. Sign in to access the first ${loggedInFreeItems} passages and save your practice history.`}
           loginNext="/practice/paragraph"
           onClose={closePaywall}
         />

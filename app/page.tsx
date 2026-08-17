@@ -4,36 +4,36 @@ const mainEntries = [
   {
     number: "01",
     icon: "practice",
-    title: "缩写练习",
-    description: "先从句子和短文开始，练习提取重点、删除次要信息，把内容写得准确、简洁。",
-    links: ["句子缩写", "短文缩写"],
+    title: "Writing Practice",
+    description: "Start with sentences and short passages. Learn to identify key information and write accurate, concise summaries.",
+    links: ["Sentence Summaries", "Passage Summaries"],
     tone: "sage",
     href: "/practice",
   },
   {
     number: "02",
     icon: "library",
-    title: "HSK写作模拟题库",
-    description: "完成基础练习后，按照HSK 6考试流程阅读原文、隐藏原文并完成约400字的缩写。",
-    links: ["阅读10分钟", "写作35分钟", "AI反馈"],
+    title: "HSK 6 Mock Tests",
+    description: "Follow the HSK 6 exam format: read the passage, continue after it is hidden, and write a summary of about 400 Chinese characters.",
+    links: ["10-Minute Reading", "35-Minute Writing", "AI Feedback"],
     tone: "sand",
     href: "/practice/mock",
   },
   {
     number: "03",
     icon: "mine",
-    title: "我的题库",
-    description: "收藏过、做过的题，还有每次作文的修改记录，都放在这里。",
-    links: ["我的收藏", "练习记录"],
+    title: "My Practice",
+    description: "Review completed exercises, saved answers, and revision history in one place.",
+    links: ["Saved Exercises", "Practice History"],
     tone: "blue",
     href: "/my-library",
   },
   {
     number: "04",
     icon: "community",
-    title: "学习社区",
-    description: "看看别人怎样缩写同一篇文章，也可以交流写作和备考经验。",
-    links: ["作文交流", "备考讨论"],
+    title: "Community",
+    description: "Compare approaches to the same prompt and exchange writing and exam-preparation ideas.",
+    links: ["Writing Discussions", "Study Discussions"],
     tone: "rose",
     href: "/community",
   },
@@ -82,31 +82,31 @@ export default function Home() {
     <main className="page">
       <section className="hero-wrap">
         <div className="hero">
-          <span className="eyebrow">HSK 6 · AI 写作练习</span>
-          <h1>HSK 6级写作练习</h1>
-          <p>先用句子和短文练习提取重点，再按照HSK 6考试流程完成整篇缩写。</p>
+          <span className="eyebrow">HSK 6 · AI Writing Practice</span>
+          <h1>HSK 6 Writing Practice</h1>
+          <p>Build summarization skills step by step, then practice with the complete HSK 6 writing format.</p>
         </div>
 
         <div className="hero-visual" aria-hidden="true">
           <div className="paper">
             <div className="paper-top">
-              <span>完整写作 · AI反馈</span>
-              <small>原文约1000字</small>
+              <span>Full Writing · AI Feedback</span>
+              <small>About 1,000 Chinese characters</small>
             </div>
             <p className="paper-text">
               大雪封路后，老周仍步行四小时，把急需的药送到山村。
               <mark>这件事也让邮局重新认识了山区邮路的价值。</mark>
             </p>
             <div className="summary-box">
-              <small>我的缩写 · 约400字</small>
+              <small>My Summary · About 400 characters</small>
               <p>老周冒雪为老人送药，邮局因此决定保留这条邮路。</p>
             </div>
             <div className="ai-feedback-card">
               <div className="ai-feedback-head">
                 <span className="ai-avatar">W</span>
                 <span className="ai-identity">
-                  <b>Write HSK AI 助教</b>
-                  <small>内容准确性</small>
+                  <b>Write HSK AI Tutor</b>
+                  <small>Content Accuracy</small>
                 </span>
                 <span className="ai-spark" aria-hidden="true">✦</span>
               </div>
@@ -114,24 +114,24 @@ export default function Home() {
                 你保留了送药和邮路被保留的结果，但遗漏了村民清雪开路，以及邮路长期承担便民服务的原因。
               </p>
               <div className="ai-suggestion">
-                <small>建议修改</small>
+                <small>Suggested Revision</small>
                 <span>补充村民的行动和邮路的实际作用，让事件发展与最终结果衔接完整。</span>
               </div>
             </div>
           </div>
-          <span className="visual-note note-one">发现原意偏差</span>
-          <span className="visual-note note-two">给出修改方向</span>
+          <span className="visual-note note-one">Identify Missing Ideas</span>
+          <span className="visual-note note-two">Get Revision Guidance</span>
         </div>
       </section>
 
-      <section className="entry-grid" id="entries" aria-label="主要功能">
+      <section className="entry-grid" id="entries" aria-label="Main features">
         {mainEntries.map((entry, index) => (
           <Link
             className={`entry-card ${entry.tone}`}
             id={sectionIds[index]}
             key={entry.number}
             href={entry.href}
-            aria-label={`进入${entry.title}`}
+            aria-label={`Open ${entry.title}`}
           >
             <div className="entry-top">
               <span className="entry-icon">
@@ -147,7 +147,7 @@ export default function Home() {
               ))}
             </div>
             <span className="entry-action">
-              进入 <span>→</span>
+              Open <span>→</span>
             </span>
           </Link>
         ))}

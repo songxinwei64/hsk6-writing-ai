@@ -8,9 +8,9 @@ export const dynamic = "force-dynamic";
 
 const ITEMS_PER_PAGE = 12;
 const practiceLabels = {
-  sentence: "句子缩写",
-  paragraph: "短文缩写",
-  mock: "HSK写作模拟",
+  sentence: "Sentence Summarization",
+  paragraph: "Passage Summarization",
+  mock: "HSK 6 Mock Tests",
 } as const;
 type PracticeType = keyof typeof practiceLabels;
 
@@ -68,39 +68,39 @@ export default async function CommunityDiscussionsPage({
   return (
     <main className="page">
       <section className="discussions-index">
-        <Link className="back-link" href="/community">← 返回学习社区</Link>
+        <Link className="back-link" href="/community">← Back to Community</Link>
         <header className="discussions-index-heading">
-          <span className="eyebrow">题目讨论区</span>
-          <h1>{selectedType ? practiceLabels[selectedType] : "全部题目"}</h1>
-          <p>全部练习题都会显示在这里。可讨论的题目范围与当前账号的练习权限一致；你的练习答案不会自动公开。</p>
+          <span className="eyebrow">Exercise Discussions</span>
+          <h1>{selectedType ? practiceLabels[selectedType] : "All Exercises"}</h1>
+          <p>Browse every exercise here. Discussion access follows your current practice access, and your saved answers are never published automatically.</p>
         </header>
 
-        <nav className="discussion-filter-row" aria-label="讨论题目分类">
-          <Link className={!selectedType ? "active" : ""} href={discussionHref(null, 1)}>全部题目</Link>
+        <nav className="discussion-filter-row" aria-label="Exercise discussion categories">
+          <Link className={!selectedType ? "active" : ""} href={discussionHref(null, 1)}>All Exercises</Link>
           {(Object.keys(practiceLabels) as PracticeType[]).map((key) => (
             <Link className={selectedType === key ? "active" : ""} href={discussionHref(key, 1)} key={key}>{practiceLabels[key]}</Link>
           ))}
         </nav>
 
         <div className="discussion-list-summary">
-          <span>共 {sortedItems.length} 道题</span>
-          <small>第 {currentPage} / {totalPages} 页</small>
+            <span>{sortedItems.length} exercises</span>
+            <small>Page {currentPage} of {totalPages}</small>
         </div>
 
         <div className="community-topic-grid discussions-full-grid discussions-with-sidebar">
           {practiceItems.map((item) => {
             const practiceType = item.practice_type as PracticeType;
-            const label = practiceLabels[practiceType] ?? "缩写练习";
+              const label = practiceLabels[practiceType] ?? "Writing Practice";
             const count = discussionCounts.get(item.id) ?? 0;
             const limits = PRACTICE_ACCESS[practiceType];
             const allowedItems = access.isPaidMember ? limits.total : access.isAuthenticated ? limits.free : limits.guest;
             const locked = item.order_no > allowedItems;
             const cardContent = (
               <>
-                <div><span>{label} · {String(item.order_no).padStart(2, "0")}</span><small>{locked ? <><QuestionLockIcon /> 已锁定</> : count ? `${count} 条讨论` : "等待第一个想法"}</small></div>
-                <h3>{item.title || item.skill || `${label}第${item.order_no}题`}</h3>
-                <p>{locked ? (access.isAuthenticated ? "升级会员后可进入这道题的讨论。" : "登录后可按免费范围进入题目讨论。") : count ? "看看大家怎样判断这道题的信息主次。" : "提出一个问题，或者分享你的信息取舍。"}</p>
-                <b>{locked ? (access.isAuthenticated ? "会员题目" : "需要登录") : "进入讨论"} <span>→</span></b>
+                    <div><span>{label} · {String(item.order_no).padStart(2, "0")}</span><small>{locked ? <><QuestionLockIcon /> Locked</> : count ? `${count} discussions` : "Be the first to share"}</small></div>
+                    <h3>{item.title || item.skill || `${label} ${item.order_no}`}</h3>
+                    <p>{locked ? (access.isAuthenticated ? "Upgrade your membership to join this discussion." : "Sign in to access discussions within the free range.") : count ? "See how other learners decided which information to keep." : "Ask a question or explain which details you would keep."}</p>
+                    <b>{locked ? (access.isAuthenticated ? "Members Only" : "Sign In Required") : "Open Discussion"} <span>→</span></b>
               </>
             );
 
@@ -113,8 +113,8 @@ export default async function CommunityDiscussionsPage({
         </div>
 
         {totalPages > 1 && (
-          <nav className="discussion-pagination" aria-label="讨论题目分页">
-            <Link className={currentPage === 1 ? "disabled" : ""} aria-disabled={currentPage === 1} href={discussionHref(selectedType, Math.max(1, currentPage - 1))}>← 上一页</Link>
+          <nav className="discussion-pagination" aria-label="Discussion pagination">
+            <Link className={currentPage === 1 ? "disabled" : ""} aria-disabled={currentPage === 1} href={discussionHref(selectedType, Math.max(1, currentPage - 1))}>← Previous</Link>
             <div>
               {visiblePages.map((pageNumber, index) => (
                 <span key={pageNumber}>
@@ -123,7 +123,7 @@ export default async function CommunityDiscussionsPage({
                 </span>
               ))}
             </div>
-            <Link className={currentPage === totalPages ? "disabled" : ""} aria-disabled={currentPage === totalPages} href={discussionHref(selectedType, Math.min(totalPages, currentPage + 1))}>下一页 →</Link>
+            <Link className={currentPage === totalPages ? "disabled" : ""} aria-disabled={currentPage === totalPages} href={discussionHref(selectedType, Math.min(totalPages, currentPage + 1))}>Next →</Link>
           </nav>
         )}
       </section>
