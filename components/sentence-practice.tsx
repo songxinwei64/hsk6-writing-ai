@@ -7,6 +7,7 @@ import { saveCompletedAttempt } from "../lib/save-practice-attempt";
 import AttemptBadge from "./attempt-badge";
 import PracticeLockOverlay from "./practice-lock-overlay";
 import QuestionLockIcon from "./question-lock-icon";
+import { useSiteLocale } from "../lib/use-site-locale";
 
 const QUESTIONS_PER_PAGE = 10;
 
@@ -32,6 +33,7 @@ export default function SentencePractice({
   const [questionPage, setQuestionPage] = useState(0);
   const [lockedTarget, setLockedTarget] = useState<number | null>(null);
   const [attemptSummaries, setAttemptSummaries] = useState(initialAttemptSummaries);
+  const locale = useSiteLocale();
 
   const item = items[currentIndex];
   const answer = answers[item.id] || "";
@@ -113,8 +115,8 @@ export default function SentencePractice({
       <section className="sentence-tip" aria-labelledby={`sentence-skill-${item.id}`}>
             <span>Key Skill</span>
         <div>
-          <h2 id={`sentence-skill-${item.id}`}>{item.skill}</h2>
-          <p>{item.tip}</p>
+          <h2 id={`sentence-skill-${item.id}`}>{locale === "en" ? (item.skillEn ?? item.skill) : item.skill}</h2>
+          <p>{locale === "en" ? (item.tipEn ?? item.tip) : item.tip}</p>
         </div>
       </section>
 
@@ -155,8 +157,8 @@ export default function SentencePractice({
             </div>
             <p>{item.reference}</p>
             <aside>
-                <small>Key Point · {item.skill}</small>
-              <span>{item.explanation}</span>
+                <small>Key Point · {locale === "en" ? (item.skillEn ?? item.skill) : item.skill}</small>
+              <span>{locale === "en" ? (item.explanationEn ?? item.explanation) : item.explanation}</span>
             </aside>
             <div className="practice-result-actions">
                 <button type="button" onClick={editAnswer}>Edit My Answer</button>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { SITE_LOCALE_EVENT, SITE_LOCALE_KEY } from "../lib/use-site-locale";
 
 type Locale = "en" | "zh";
 
@@ -269,7 +270,7 @@ export default function LanguageController() {
   const [locale, setLocale] = useState<Locale>("en");
 
   useEffect(() => {
-    const saved = window.localStorage.getItem("write-hsk-language");
+    const saved = window.localStorage.getItem(SITE_LOCALE_KEY);
     const initial: Locale = saved === "zh" || saved === "en" ? saved : "en";
     setLocale(initial);
     localizeDocument(initial);
@@ -284,8 +285,9 @@ export default function LanguageController() {
 
   function switchLanguage() {
     const next: Locale = locale === "en" ? "zh" : "en";
-    window.localStorage.setItem("write-hsk-language", next);
+    window.localStorage.setItem(SITE_LOCALE_KEY, next);
     setLocale(next);
+    window.dispatchEvent(new Event(SITE_LOCALE_EVENT));
   }
 
   return (

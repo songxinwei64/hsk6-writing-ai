@@ -5,6 +5,7 @@ import type { Hsk6MockPracticeItem } from "../lib/practice-items";
 import type { PracticeAttemptSummary } from "../lib/practice-attempt-summary";
 import { saveCompletedAttempt } from "../lib/save-practice-attempt";
 import AiFeedbackPanel from "./ai-feedback-panel";
+import { useSiteLocale } from "../lib/use-site-locale";
 import AttemptBadge from "./attempt-badge";
 import PracticeLockOverlay from "./practice-lock-overlay";
 import QuestionLockIcon from "./question-lock-icon";
@@ -32,6 +33,7 @@ export default function Hsk6MockPractice({
   isPaidMember: boolean;
   initialAttemptSummaries: Record<string, PracticeAttemptSummary>;
 }) {
+  const locale = useSiteLocale();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [titles, setTitles] = useState<Record<number, string>>({});
   const [answers, setAnswers] = useState<Record<number, string>>({});
@@ -228,7 +230,7 @@ export default function Hsk6MockPractice({
                   <p>{item.reference}</p>
                   <aside>
               <strong>Summary Approach</strong>
-                    <p>{item.analysis}</p>
+                    <p>{locale === "en" ? (item.analysisEn ?? item.analysis) : item.analysis}</p>
                   </aside>
                   {status === "submitted" && (
                     <AiFeedbackPanel

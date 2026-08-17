@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { AiWritingFeedback } from "../lib/ai-feedback";
+import { getSiteLocale, useSiteLocale } from "../lib/use-site-locale";
 
 type Props = {
   practiceItemId: string;
@@ -17,6 +18,7 @@ export default function AiFeedbackPanel({ practiceItemId, answerTitle, answerTex
   const [error, setError] = useState("");
   const [remaining, setRemaining] = useState<number | null>(null);
   const [quotaType, setQuotaType] = useState<"daily" | "trial" | null>(null);
+  const locale = useSiteLocale();
 
   async function requestFeedback() {
     setIsLoading(true);
@@ -25,7 +27,7 @@ export default function AiFeedbackPanel({ practiceItemId, answerTitle, answerTex
       const response = await fetch("/api/ai-feedback", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ practiceItemId, answerTitle, answerText }),
+        body: JSON.stringify({ practiceItemId, answerTitle, answerText, responseLanguage: getSiteLocale() }),
       });
       const result = await response.json() as { feedback?: AiWritingFeedback; remaining?: number; quotaType?: "daily" | "trial"; error?: string };
       if (!response.ok || !result.feedback) throw new Error(result.error || "AI feedback could not be generated. Please try again later.");
@@ -74,13 +76,13 @@ export default function AiFeedbackPanel({ practiceItemId, answerTitle, answerTex
           <div className="ai-feedback-grid">
             <section>
             <h4>What You Did Well</h4>
-            {feedback.retained.length ? <ul>{feedback.retained.map((item, index) => <li key={`retained-${index}`}>{item}</li>)}</ul> : <p>The current summary does not yet contain enough accurate content to highlight.</p>}
+            {feedback.retained.length ? <ul>{feedback.retained.map((item, index) => <li key={`retained-${index}`}>{item}</li>)}</ul> : <p>{locale === "en" ? "The current summary does not yet contain enough accurate content to highlight." : "当前缩写还没有足够准确的内容可以作为优点说明。"}</p>}
             </section>
             <section>
             <h4>What Needs Improvement</h4>
               {[...feedback.revisions, ...feedback.expression].length ? (
                 <ul>{[...feedback.revisions, ...feedback.expression].map((item, index) => <li key={`change-${index}`}>{item}</li>)}</ul>
-            ) : <p>No clear issues were found.</p>}
+            ) : <p>{locale === "en" ? "No clear issues were found." : "没有发现需要明确修改的问题。"}</p>}
             </section>
           </div>
           <section className="ai-feedback-example"><h4>Suggested Revision</h4><p>{feedback.improvedExample}</p></section>

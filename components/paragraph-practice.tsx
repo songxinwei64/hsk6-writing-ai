@@ -7,6 +7,7 @@ import { saveCompletedAttempt } from "../lib/save-practice-attempt";
 import AttemptBadge from "./attempt-badge";
 import PracticeLockOverlay from "./practice-lock-overlay";
 import QuestionLockIcon from "./question-lock-icon";
+import { useSiteLocale } from "../lib/use-site-locale";
 
 const QUESTIONS_PER_PAGE = 10;
 
@@ -41,6 +42,7 @@ export default function ParagraphPractice({
   const [questionPage, setQuestionPage] = useState(0);
   const [lockedTarget, setLockedTarget] = useState<number | null>(null);
   const [attemptSummaries, setAttemptSummaries] = useState(initialAttemptSummaries);
+  const locale = useSiteLocale();
 
   const item = items[currentIndex];
   const answer = answers[item.id] || "";
@@ -156,8 +158,8 @@ export default function ParagraphPractice({
       <section className="sentence-tip">
             <span>Key Skill</span>
         <div>
-          <h2>{item.skill}</h2>
-          <p>{item.tip}</p>
+          <h2>{locale === "en" ? (item.skillEn ?? item.skill) : item.skill}</h2>
+          <p>{locale === "en" ? (item.tipEn ?? item.tip) : item.tip}</p>
         </div>
       </section>
 
@@ -226,8 +228,8 @@ export default function ParagraphPractice({
             <div><strong>Suggested Answer</strong></div>
                 <p>{item.reference}</p>
                 <aside>
-              <small>Key Point · {item.skill}</small>
-                  <span>{item.explanation}</span>
+              <small>Key Point · {locale === "en" ? (item.skillEn ?? item.skill) : item.skill}</small>
+                  <span>{locale === "en" ? (item.explanationEn ?? item.explanation) : item.explanation}</span>
                 </aside>
             <a className="practice-discussion-link" href={`/community/practice/${item.databaseId}`}>Discuss This Exercise →</a>
               </div>

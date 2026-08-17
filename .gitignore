@@ -3,6 +3,7 @@ node_modules
 .next-hsk
 .next-dev
 .next-broken-*
+.next-hsk.backup-*
 out
 .env*
 *.log
