@@ -22,6 +22,9 @@ export const metadata: Metadata = {
     template: "%s｜Write HSK",
   },
   description: "Practice HSK 6 summarization and writing with personalized AI feedback.",
+  applicationName: "Write HSK",
+  category: "education",
+  manifest: "/manifest.webmanifest",
   openGraph: {
     title: "Write HSK | HSK 6 Writing Practice",
     description: "Summarization training, HSK 6 writing practice, and personalized AI feedback.",

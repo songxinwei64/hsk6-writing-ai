@@ -1,4 +1,56 @@
 import Link from "next/link";
+import { createPageMetadata, SITE_URL } from "@/lib/seo";
+
+export const metadata = createPageMetadata({
+  title: "HSK 6 Writing Practice",
+  description: "Practice HSK 6 Chinese sentence and passage summarization, complete mock writing tests, and receive personalized AI feedback.",
+  path: "/",
+  keywords: [
+    "HSK 6 writing practice",
+    "HSK 6 writing",
+    "Chinese summarization practice",
+    "HSK writing mock test",
+    "汉语水平考试六级写作",
+    "HSK六级写作练习",
+  ],
+});
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: "Write HSK",
+      alternateName: "Write HSK 6",
+      inLanguage: ["en", "zh-CN"],
+    },
+    {
+      "@type": "WebApplication",
+      "@id": `${SITE_URL}/#application`,
+      name: "Write HSK",
+      url: SITE_URL,
+      applicationCategory: "EducationalApplication",
+      operatingSystem: "Any",
+      browserRequirements: "Requires a modern web browser",
+      description: "HSK 6 Chinese summarization practice, mock writing tests, and personalized AI feedback.",
+      inLanguage: ["en", "zh-CN"],
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "KRW",
+        description: "Free HSK 6 writing exercises with an optional paid membership.",
+      },
+      featureList: [
+        "Sentence summarization practice",
+        "Passage summarization practice",
+        "HSK 6 mock writing tests",
+        "Personalized AI feedback",
+      ],
+    },
+  ],
+};
 
 const mainEntries = [
   {
@@ -80,6 +132,10 @@ function EntryIcon({ name }: { name: string }) {
 export default function Home() {
   return (
     <main className="page">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, "\\u003c") }}
+      />
       <section className="hero-wrap">
         <div className="hero">
           <span className="eyebrow">HSK 6 · AI Writing Practice</span>

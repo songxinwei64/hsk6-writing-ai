@@ -3,6 +3,14 @@ import ParagraphPractice from "../../../components/paragraph-practice";
 import { getParagraphPracticeItems, PRACTICE_ACCESS } from "../../../lib/practice-items";
 import { getMembershipAccess } from "../../../lib/membership";
 import { getPracticeAttemptSummaries } from "../../../lib/practice-attempt-summary";
+import { createPageMetadata } from "@/lib/seo";
+
+export const metadata = createPageMetadata({
+  title: "HSK 6 Passage Summarization Practice",
+  description: "Practice summarizing short Chinese passages for HSK 6 by identifying essential events, removing minor details, and writing a concise response.",
+  path: "/practice/paragraph",
+  keywords: ["HSK 6 passage summary", "Chinese passage summarization", "短文缩写练习"],
+});
 
 export const dynamic = "force-dynamic";
 

@@ -1,6 +1,14 @@
 import CommunityWall, { type CommunityWallTheme } from "../../../components/community-wall";
 import { officialWallPrompts, type CommunityPost } from "../../../lib/community";
 import { createClient } from "../../../utils/supabase/server";
+import { createPageMetadata } from "@/lib/seo";
+
+export const metadata = createPageMetadata({
+  title: "HSK Study Motivation Wall",
+  description: "Share short encouragement and study motivation with the Write HSK community while preparing for HSK 6 writing.",
+  path: "/community/wall",
+  keywords: ["HSK study motivation", "HSK 6 community", "Chinese learners encouragement"],
+});
 
 export const dynamic = "force-dynamic";
 

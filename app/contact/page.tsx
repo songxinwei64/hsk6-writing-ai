@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
 import LegalPage from "../../components/legal-page";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Contact | Write HSK",
+export const metadata = createPageMetadata({
+  title: "Contact Write HSK",
   description: "Contact Write HSK for account, membership, refund, and privacy support.",
-};
+  path: "/contact",
+});
 
 export default function ContactPage() {
   return (

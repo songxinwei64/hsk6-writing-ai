@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
 import LegalPage from "../../components/legal-page";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Terms of Service | Write HSK",
+export const metadata = createPageMetadata({
+  title: "Terms of Service",
   description: "Terms that apply when using the Write HSK website and membership service.",
-};
+  path: "/terms",
+});
 
 export default function TermsPage() {
   return (

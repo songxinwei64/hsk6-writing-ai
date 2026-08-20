@@ -2,6 +2,14 @@ import Link from "next/link";
 import { getMembershipAccess } from "../../lib/membership";
 import { PRACTICE_ACCESS } from "../../lib/practice-items";
 import CheckoutButton from "../../components/checkout-button";
+import { createPageMetadata } from "@/lib/seo";
+
+export const metadata = createPageMetadata({
+  title: "Write HSK Membership",
+  description: "Compare free and paid Write HSK access. Unlock the complete HSK 6 writing question bank, mock tests, saved progress, and additional AI feedback.",
+  path: "/membership",
+  keywords: ["Write HSK membership", "HSK 6 writing question bank", "HSK writing AI feedback"],
+});
 
 export const dynamic = "force-dynamic";
 

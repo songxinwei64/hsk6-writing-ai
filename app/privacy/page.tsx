@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
 import LegalPage from "../../components/legal-page";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy | Write HSK",
+export const metadata = createPageMetadata({
+  title: "Privacy Policy",
   description: "How Write HSK collects, uses, and protects user information.",
-};
+  path: "/privacy",
+});
 
 export default function PrivacyPage() {
   return (

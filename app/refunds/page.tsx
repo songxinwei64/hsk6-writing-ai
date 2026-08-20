@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
 import LegalPage from "../../components/legal-page";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Refunds & Cancellation | Write HSK",
+export const metadata = createPageMetadata({
+  title: "Refunds & Cancellation",
   description: "Renewal, cancellation, and refund rules for Write HSK memberships.",
-};
+  path: "/refunds",
+});
 
 export default function RefundsPage() {
   return (

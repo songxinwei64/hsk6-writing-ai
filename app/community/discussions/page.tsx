@@ -3,6 +3,14 @@ import QuestionLockIcon from "../../../components/question-lock-icon";
 import { getMembershipAccess } from "../../../lib/membership";
 import { PRACTICE_ACCESS } from "../../../lib/practice-items";
 import { createClient } from "../../../utils/supabase/server";
+import { createPageMetadata } from "@/lib/seo";
+
+export const metadata = createPageMetadata({
+  title: "HSK 6 Writing Discussions",
+  description: "Discuss sentence summaries, passage summaries, and HSK 6 mock writing prompts with other Chinese learners.",
+  path: "/community/discussions",
+  keywords: ["HSK 6 writing discussion", "Chinese summary examples", "HSK learners community"],
+});
 
 export const dynamic = "force-dynamic";
 

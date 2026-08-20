@@ -4,6 +4,14 @@ import Hsk6MockPractice from "../../../components/hsk6-mock-practice";
 import { getHsk6MockPracticeItems, PRACTICE_ACCESS } from "../../../lib/practice-items";
 import { getMembershipAccess } from "../../../lib/membership";
 import { getPracticeAttemptSummaries } from "../../../lib/practice-attempt-summary";
+import { createPageMetadata } from "@/lib/seo";
+
+export const metadata = createPageMetadata({
+  title: "HSK 6 Writing Mock Tests",
+  description: "Practice the complete HSK 6 writing process: read a Chinese passage, continue after it is hidden, write a summary, and receive AI feedback.",
+  path: "/practice/mock",
+  keywords: ["HSK 6 writing mock test", "HSK 6 writing exam practice", "HSK六级写作模拟题"],
+});
 
 export const dynamic = "force-dynamic";
 

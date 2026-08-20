@@ -1,4 +1,12 @@
 import Link from "next/link";
+import { createPageMetadata } from "@/lib/seo";
+
+export const metadata = createPageMetadata({
+  title: "Chinese Summarization Practice for HSK 6",
+  description: "Build HSK 6 writing skills with sentence and passage summarization exercises focused on identifying key ideas and writing concisely.",
+  path: "/practice",
+  keywords: ["Chinese summarization practice", "HSK 6 summary writing", "HSK写作缩写练习"],
+});
 
 const writingLevels = [
   {
