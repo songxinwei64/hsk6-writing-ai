@@ -6,6 +6,17 @@ import SiteFooter from "../components/site-footer";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://hsk6-writing-ai.vercel.app"),
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   title: {
     default: "Write HSK | HSK 6 Writing Practice",
     template: "%s｜Write HSK",
@@ -16,7 +27,8 @@ export const metadata: Metadata = {
     description: "Summarization training, HSK 6 writing practice, and personalized AI feedback.",
     url: "/",
     siteName: "Write HSK",
-    locale: "zh_CN",
+    locale: "en_US",
+    alternateLocale: ["zh_CN"],
     type: "website",
     images: [
       {
