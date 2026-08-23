@@ -502,13 +502,10 @@ export default function LanguageController() {
   }
 
   return (
-    <label className="language-switcher" data-no-translate>
-      <span className="sr-only">Language</span>
-      <select value={locale} onChange={(event) => switchLanguage(event.target.value as Locale)} aria-label="Language">
-        <option value="en">EN</option>
-        <option value="zh">中文</option>
-        <option value="ko">한국어</option>
-      </select>
-    </label>
+    <div className="language-switcher" data-no-translate role="group" aria-label="Language / 语言 / 언어">
+      <button type="button" className={locale === "en" ? "active" : ""} onClick={() => switchLanguage("en")} aria-pressed={locale === "en"}>EN</button>
+      <button type="button" className={locale === "zh" ? "active" : ""} onClick={() => switchLanguage("zh")} aria-pressed={locale === "zh"}>中文</button>
+      <button type="button" className={locale === "ko" ? "active" : ""} onClick={() => switchLanguage("ko")} aria-pressed={locale === "ko"}>한국어</button>
+    </div>
   );
 }
