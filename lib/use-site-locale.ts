@@ -2,14 +2,15 @@
 
 import { useEffect, useState } from "react";
 
-export type SiteLocale = "en" | "zh";
+export type SiteLocale = "en" | "zh" | "ko";
 
 export const SITE_LOCALE_KEY = "write-hsk-language";
 export const SITE_LOCALE_EVENT = "write-hsk-language-change";
 
 export function getSiteLocale(): SiteLocale {
   if (typeof window === "undefined") return "en";
-  return window.localStorage.getItem(SITE_LOCALE_KEY) === "zh" ? "zh" : "en";
+  const saved = window.localStorage.getItem(SITE_LOCALE_KEY);
+  return saved === "zh" || saved === "ko" ? saved : "en";
 }
 
 export function useSiteLocale() {

@@ -4,6 +4,7 @@ const siteUrl = "https://hsk6-writing-ai.vercel.app";
 
 const publicRoutes = [
   "",
+  "/ko",
   "/practice",
   "/practice/sentence",
   "/practice/paragraph",

@@ -1,27 +1,38 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { createPageMetadata, SITE_URL } from "@/lib/seo";
 
-export const metadata = createPageMetadata({
-  title: "HSK 6 Writing Practice",
-  description: "Practice HSK 6 Chinese sentence and passage summarization, complete mock writing tests, and receive personalized AI feedback.",
-  path: "/",
-  keywords: [
-    "HSK 6 writing practice",
-    "HSK 6 writing",
-    "Chinese summarization practice",
-    "HSK writing mock test",
-    "HSK 6 AI writing feedback",
-    "汉语水平考试六级写作",
-    "HSK六级写作练习",
-    "HSK六级缩写练习",
-    "HSK六级写作模拟题",
-    "HSK 6 쓰기 연습",
-    "HSK 6 작문 연습",
-    "HSK 6 요약 연습",
-    "HSK 6 쓰기 모의고사",
-    "중국어 요약 연습",
-  ],
-});
+export const metadata: Metadata = {
+  ...createPageMetadata({
+    title: "HSK 6 Writing Practice",
+    description: "Practice HSK 6 Chinese sentence and passage summarization, complete mock writing tests, and receive personalized AI feedback.",
+    path: "/",
+    keywords: [
+      "HSK 6 writing practice",
+      "HSK 6 writing",
+      "Chinese summarization practice",
+      "HSK writing mock test",
+      "HSK 6 AI writing feedback",
+      "汉语水平考试六级写作",
+      "HSK六级写作练习",
+      "HSK六级缩写练习",
+      "HSK六级写作模拟题",
+      "HSK 6 쓰기 연습",
+      "HSK 6 작문 연습",
+      "HSK 6 요약 연습",
+      "HSK 6 쓰기 모의고사",
+      "중국어 요약 연습",
+    ],
+  }),
+  alternates: {
+    canonical: "/",
+    languages: {
+      en: "/",
+      "ko-KR": "/ko",
+      "x-default": "/",
+    },
+  },
+};
 
 const structuredData = {
   "@context": "https://schema.org",

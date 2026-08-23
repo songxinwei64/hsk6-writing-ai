@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { SITE_LOCALE_EVENT, SITE_LOCALE_KEY } from "../lib/use-site-locale";
 
-type Locale = "en" | "zh";
+type Locale = "en" | "zh" | "ko";
 
 const zhTranslations: Record<string, string> = {
   "Home": "首页",
@@ -208,6 +209,162 @@ const zhTranslations: Record<string, string> = {
   "Contact us": "联系我们",
 };
 
+const koTranslations: Record<string, string> = {
+  "Home": "홈",
+  "Writing Practice": "요약 쓰기 연습",
+  "Sentence Summarization": "문장 요약",
+  "Passage Summarization": "단락 요약",
+  "HSK 6 Mock Tests": "HSK 6 쓰기 모의고사",
+  "HSK 6 Mock Test": "HSK 6 쓰기 모의고사",
+  "Mock Tests": "모의고사",
+  "My Practice": "나의 연습",
+  "Community": "학습 커뮤니티",
+  "Membership": "멤버십",
+  "Motivation Wall": "응원 메시지 벽",
+  "Exercise Discussion": "문제 토론",
+  "Exercise Discussions": "문제별 토론",
+  "Discussions": "토론",
+  "Privacy Policy": "개인정보 처리방침",
+  "Terms of Service": "이용약관",
+  "Refunds & Cancellation": "환불 및 해지",
+  "Contact": "문의",
+  "Practice": "연습",
+  "Practice Overview": "연습 안내",
+  "← Back to Home": "← 홈으로",
+  "HSK 6 Writing · Summarization Practice": "HSK 6 쓰기 · 요약 연습",
+  "Identify Key Ideas and Write Concisely": "핵심 내용을 찾고 간결하게 쓰세요",
+  "Begin with sentences, continue with passages, and then move on to complete HSK 6 mock writing tests.": "문장부터 시작해 단락 요약을 연습한 뒤 HSK 6 쓰기 모의고사에 도전하세요.",
+  "Remove unnecessary details and combine ideas without changing the original meaning.": "원문의 뜻을 바꾸지 않으면서 불필요한 세부 내용을 덜어 내고 핵심을 한 문장으로 정리합니다.",
+  "Identify the people, events, and outcome, then rewrite the passage clearly and concisely.": "인물, 사건, 결과를 찾아 짧고 자연스러운 글로 다시 구성합니다.",
+  "Foundation": "기초",
+  "Intermediate": "중급",
+  "Start Practice": "연습 시작",
+  "Coming Soon": "준비 중",
+  "Open": "열기",
+  "Main features": "주요 기능",
+  "HSK 6 · AI Writing Practice": "HSK 6 · AI 쓰기 연습",
+  "HSK 6 Writing Practice": "HSK 6 쓰기 연습",
+  "Build summarization skills step by step, then practice with the complete HSK 6 writing format.": "문장과 단락으로 요약 능력을 익힌 뒤 실제 HSK 6 쓰기 방식으로 연습하세요.",
+  "Start with sentences and short passages. Learn to identify key information and write accurate, concise summaries.": "문장과 짧은 글에서 핵심 정보를 찾고 정확하고 간결하게 요약하는 법을 배웁니다.",
+  "Follow the HSK 6 exam format: read the passage, continue after it is hidden, and write a summary of about 400 Chinese characters.": "HSK 6 시험 방식에 따라 원문을 읽고, 원문이 가려진 뒤 약 400자의 중국어 요약문을 작성합니다.",
+  "Review completed exercises, saved answers, and revision history in one place.": "완료한 연습, 저장한 답안, 수정 기록을 한곳에서 확인합니다.",
+  "Compare approaches to the same prompt and exchange writing and exam-preparation ideas.": "같은 문제를 다른 학습자가 어떻게 요약했는지 살펴보고 쓰기와 시험 준비 방법을 나눕니다.",
+  "10-Minute Reading": "10분 읽기",
+  "35-Minute Writing": "35분 쓰기",
+  "Full Writing · AI Feedback": "전체 쓰기 · AI 피드백",
+  "About 1,000 Chinese characters": "원문 약 1,000자",
+  "My Summary · About 400 characters": "나의 요약 · 약 400자",
+  "Content Accuracy": "내용 정확성",
+  "Identify Missing Ideas": "빠진 핵심 찾기",
+  "Get Revision Guidance": "수정 방향 확인",
+  "Sentence Summaries": "문장 요약",
+  "Passage Summaries": "단락 요약",
+  "Saved Exercises": "저장한 문제",
+  "Practice History": "연습 기록",
+  "Writing Discussions": "쓰기 토론",
+  "Study Discussions": "시험 준비 토론",
+  "Writing History": "쓰기 기록",
+  "Recently Completed": "최근 완료한 연습",
+  "Overall Progress": "전체 진행률",
+  "Unique exercises completed": "완료한 서로 다른 문제",
+  "Completed": "완료",
+  "Continue": "계속하기",
+  "View Details": "상세 보기",
+  "No Practice History Yet": "아직 연습 기록이 없습니다",
+  "Start Your First Exercise": "첫 연습 시작",
+  "Original Prompt": "원문",
+  "My Answer": "나의 답안",
+  "Suggested Answer": "예시 답안",
+  "Key Point": "핵심 해설",
+  "Continue Practicing": "계속 연습",
+  "View All Records": "전체 기록 보기",
+  "Key Skill": "핵심 기술",
+  "Original Sentence": "원문 문장",
+  "Your Summary": "나의 요약",
+  "Submit and View Suggested Answer": "제출하고 예시 답안 보기",
+  "Edit My Answer": "답안 수정",
+  "Discuss This Exercise": "이 문제 토론하기",
+  "Previous": "이전",
+  "Next": "다음",
+  "Exercise Flow": "연습 순서",
+  "Start Reading": "읽기 시작",
+  "Reading Time Remaining": "남은 읽기 시간",
+  "Writing Time Remaining": "남은 쓰기 시간",
+  "Writing Time Ended": "쓰기 시간이 끝났습니다",
+  "Submitted": "제출 완료",
+  "Reading Passage": "읽기 자료",
+  "Original Passage Review": "원문 다시 보기",
+  "Reading Phase": "읽기 단계",
+  "Finish Reading and Start Writing": "읽기를 마치고 쓰기 시작",
+  "Retell the Main Content Coherently": "주요 내용을 자연스럽게 다시 쓰세요",
+  "Start Mock Test": "모의고사 시작",
+  "Phase One": "1단계",
+  "Phase Two": "2단계",
+  "Test Finished": "모의고사 종료",
+  "Read the Passage": "원문 읽기",
+  "Write Your Summary": "요약문 작성",
+  "Title": "제목",
+  "Submit Mock Response": "모의 답안 제출",
+  "Suggested Title": "예시 제목",
+  "Suggested Summary": "예시 요약",
+  "Summary Approach": "요약 방법",
+  "Write HSK AI Tutor": "Write HSK AI 튜터",
+  "Personalized Feedback on Your Summary": "작성한 요약문 맞춤 피드백",
+  "Get AI Feedback": "AI 피드백 받기",
+  "Reviewing your summary…": "요약문을 확인하고 있습니다…",
+  "Top Priority": "가장 먼저 고칠 부분",
+  "Task Requirements": "과제 조건 확인",
+  "Length": "글자 수",
+  "Fidelity": "원문 충실도",
+  "Personal Opinion": "개인 의견",
+  "What You Did Well": "잘한 점",
+  "What Needs Improvement": "수정할 점",
+  "Suggested Revision": "개선 예시",
+  "Complete Question Bank": "전체 문제",
+  "Write HSK · Membership": "Write HSK · 멤버십",
+  "Start Free, Then Unlock the Complete Question Bank": "무료로 시작하고 전체 문제를 이용하세요",
+  "Sign in to save progress, join the community, and try AI feedback. Members receive all writing exercises, every HSK 6 mock test, and more AI feedback.": "로그인하면 진도를 저장하고 커뮤니티와 AI 피드백을 이용할 수 있습니다. 멤버는 모든 쓰기 연습과 HSK 6 모의고사, 추가 AI 피드백을 이용할 수 있습니다.",
+  "Try part of each exercise set. Sign in to save your history and join the community.": "각 연습 세트의 일부를 무료로 이용하세요. 로그인하면 기록을 저장하고 커뮤니티에 참여할 수 있습니다.",
+  "For learners who want every summarization exercise, all HSK 6 mock tests, and continued AI feedback.": "모든 요약 연습과 HSK 6 모의고사, 지속적인 AI 피드백이 필요한 학습자에게 적합합니다.",
+  "Save practice progress": "연습 진도 저장",
+  "Join the community": "학습 커뮤니티 참여",
+  "Personalized AI feedback": "개인 맞춤 AI 피드백",
+  "3 free sessions after sign-in": "로그인 후 3회 무료 체험",
+  "5 sessions per 24 hours": "24시간마다 5회",
+  "Monthly subscription · Renews automatically": "월간 구독 · 매월 자동 갱신",
+  "Cancel anytime. Access remains active until the end of the current billing period.": "언제든지 해지할 수 있으며 현재 결제 기간이 끝날 때까지 이용할 수 있습니다.",
+  "This is a recurring monthly subscription, not a one-time purchase. Payment authorizes automatic monthly billing until cancellation.": "일회성 구매가 아닌 월간 자동 갱신 구독입니다. 결제하면 해지할 때까지 매월 자동 결제에 동의하게 됩니다.",
+  "Sign In to Continue": "로그인 후 계속",
+  "Sign In and Save Progress": "로그인하고 진도 저장",
+  "Current Plan: Free": "현재 무료 플랜",
+  "Free": "무료",
+  "Full Access": "전체 이용",
+  "Available": "이용 가능",
+  "Membership Status": "멤버십 상태",
+  "Active": "이용 중",
+  "Test Membership": "테스트 멤버십",
+  "Started": "시작일",
+  "Access Until": "이용 종료일",
+  "Next Renewal": "다음 결제일",
+  "Manage or Cancel Subscription": "구독 관리 또는 해지",
+  "Sign In to Subscribe": "로그인 후 구독",
+  "Subscribe — Renews Monthly": "멤버십 구독 · 매월 자동 갱신",
+  "Opening checkout…": "결제 화면을 여는 중…",
+  "Learning Community": "학습 커뮤니티",
+  "All Exercises": "전체 문제",
+  "Open Discussion": "토론 열기",
+  "Locked": "잠김",
+  "Members Only": "멤버 전용",
+  "Sign In Required": "로그인 필요",
+  "Join the Discussion": "토론 참여",
+  "Post Idea": "의견 게시",
+  "Publishing…": "게시 중…",
+  "Live Messages": "실시간 메시지",
+  "Contact Us": "문의하기",
+  "Support Email": "고객지원 이메일",
+  "Legal & Privacy": "약관 및 개인정보",
+};
+
 const zhPatterns: Array<[RegExp, (...matches: string[]) => string]> = [
   [/^Exercise (\d+) \/ (\d+)$/, (_all, a, b) => `练习 ${a} / ${b}`],
   [/^Mock Test (\d+) \/ (\d+)$/, (_all, a, b) => `模拟题 ${a} / ${b}`],
@@ -222,14 +379,30 @@ const zhPatterns: Array<[RegExp, (...matches: string[]) => string]> = [
   [/^(\d+) characters$/, (_all, a) => `${a} 字`],
 ];
 
+const koPatterns: Array<[RegExp, (...matches: string[]) => string]> = [
+  [/^Exercise (\d+) \/ (\d+)$/, (_all, a, b) => `연습 ${a} / ${b}`],
+  [/^Mock Test (\d+) \/ (\d+)$/, (_all, a, b) => `모의고사 ${a} / ${b}`],
+  [/^Completed (\d+) \/ (\d+)$/, (_all, a, b) => `완료 ${a} / ${b}`],
+  [/^Page (\d+) of (\d+)$/, (_all, a, b) => `${a} / ${b} 페이지`],
+  [/^Exercise (\d+)$/, (_all, a) => `${a}번 문제`],
+  [/^Practiced (\d+) time(?:s)?$/, (_all, a) => `${a}회 연습`],
+  [/^(\d+) exercises$/, (_all, a) => `총 ${a}문제`],
+  [/^(\d+) posts$/, (_all, a) => `${a}개 게시물`],
+  [/^(\d+) discussions$/, (_all, a) => `${a}개 토론`],
+  [/^(\d+) votes$/, (_all, a) => `${a}표`],
+  [/^(\d+) characters$/, (_all, a) => `${a}자`],
+];
+
 const originalText = new WeakMap<Text, string>();
 const originalAttributes = new WeakMap<Element, Map<string, string>>();
 
-function translateText(value: string) {
+function translateText(value: string, locale: Exclude<Locale, "en">) {
   const trimmed = value.trim();
-  const direct = zhTranslations[trimmed];
+  const translations = locale === "zh" ? zhTranslations : koTranslations;
+  const patterns = locale === "zh" ? zhPatterns : koPatterns;
+  const direct = translations[trimmed];
   if (direct) return value.replace(trimmed, direct);
-  for (const [pattern, replacer] of zhPatterns) {
+  for (const [pattern, replacer] of patterns) {
     const match = trimmed.match(pattern);
     if (match) return value.replace(trimmed, replacer(...match));
   }
@@ -237,7 +410,7 @@ function translateText(value: string) {
 }
 
 function localizeDocument(locale: Locale) {
-  document.documentElement.lang = locale === "zh" ? "zh-CN" : "en";
+  document.documentElement.lang = locale === "zh" ? "zh-CN" : locale === "ko" ? "ko-KR" : "en";
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   let node = walker.nextNode() as Text | null;
   while (node) {
@@ -245,7 +418,7 @@ function localizeDocument(locale: Locale) {
     if (parent && !parent.closest("[data-no-translate]") && !["SCRIPT", "STYLE", "TEXTAREA"].includes(parent.tagName)) {
       if (!originalText.has(node)) originalText.set(node, node.nodeValue || "");
       const source = originalText.get(node) || "";
-      node.nodeValue = locale === "zh" ? translateText(source) : source;
+      node.nodeValue = locale === "en" ? source : translateText(source, locale);
     }
     node = walker.nextNode() as Text | null;
   }
@@ -261,17 +434,19 @@ function localizeDocument(locale: Locale) {
       const current = element.getAttribute(name);
       if (current !== null && !saved!.has(name)) saved!.set(name, current);
       const source = saved!.get(name);
-      if (source !== undefined) element.setAttribute(name, locale === "zh" ? translateText(source) : source);
+      if (source !== undefined) element.setAttribute(name, locale === "en" ? source : translateText(source, locale));
     });
   });
 }
 
 export default function LanguageController() {
   const [locale, setLocale] = useState<Locale>("en");
+  const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     const saved = window.localStorage.getItem(SITE_LOCALE_KEY);
-    const initial: Locale = saved === "zh" || saved === "en" ? saved : "en";
+    const initial: Locale = pathname === "/ko" ? "ko" : saved === "zh" || saved === "ko" || saved === "en" ? saved : "en";
     setLocale(initial);
     localizeDocument(initial);
   }, []);
@@ -283,16 +458,22 @@ export default function LanguageController() {
     return () => observer.disconnect();
   }, [locale]);
 
-  function switchLanguage() {
-    const next: Locale = locale === "en" ? "zh" : "en";
+  function switchLanguage(next: Locale) {
     window.localStorage.setItem(SITE_LOCALE_KEY, next);
     setLocale(next);
     window.dispatchEvent(new Event(SITE_LOCALE_EVENT));
+    if (next === "ko" && pathname === "/") router.push("/ko");
+    if (next !== "ko" && pathname === "/ko") router.push("/");
   }
 
   return (
-    <button className="language-switcher" type="button" onClick={switchLanguage} data-no-translate aria-label={locale === "en" ? "切换到中文" : "Switch to English"}>
-      <span>{locale === "en" ? "中文" : "EN"}</span>
-    </button>
+    <label className="language-switcher" data-no-translate>
+      <span className="sr-only">Language</span>
+      <select value={locale} onChange={(event) => switchLanguage(event.target.value as Locale)} aria-label="Language">
+        <option value="en">EN</option>
+        <option value="zh">中文</option>
+        <option value="ko">한국어</option>
+      </select>
+    </label>
   );
 }

@@ -76,13 +76,13 @@ export default function AiFeedbackPanel({ practiceItemId, answerTitle, answerTex
           <div className="ai-feedback-grid">
             <section>
             <h4>What You Did Well</h4>
-            {feedback.retained.length ? <ul>{feedback.retained.map((item, index) => <li key={`retained-${index}`}>{item}</li>)}</ul> : <p>{locale === "en" ? "The current summary does not yet contain enough accurate content to highlight." : "当前缩写还没有足够准确的内容可以作为优点说明。"}</p>}
+            {feedback.retained.length ? <ul>{feedback.retained.map((item, index) => <li key={`retained-${index}`}>{item}</li>)}</ul> : <p>{locale === "en" ? "The current summary does not yet contain enough accurate content to highlight." : locale === "ko" ? "현재 요약문에는 장점으로 제시할 만큼 정확하게 반영된 내용이 아직 충분하지 않습니다." : "当前缩写还没有足够准确的内容可以作为优点说明。"}</p>}
             </section>
             <section>
             <h4>What Needs Improvement</h4>
               {[...feedback.revisions, ...feedback.expression].length ? (
                 <ul>{[...feedback.revisions, ...feedback.expression].map((item, index) => <li key={`change-${index}`}>{item}</li>)}</ul>
-            ) : <p>{locale === "en" ? "No clear issues were found." : "没有发现需要明确修改的问题。"}</p>}
+            ) : <p>{locale === "en" ? "No clear issues were found." : locale === "ko" ? "명확하게 수정해야 할 문제는 발견되지 않았습니다." : "没有发现需要明确修改的问题。"}</p>}
             </section>
           </div>
           <section className="ai-feedback-example"><h4>Suggested Revision</h4><p>{feedback.improvedExample}</p></section>

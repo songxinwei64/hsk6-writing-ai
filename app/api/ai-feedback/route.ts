@@ -39,7 +39,9 @@ export async function POST(request: Request) {
   const practiceItemId = body.practiceItemId?.trim();
   const answerTitle = body.answerTitle?.trim() ?? "";
   const answerText = body.answerText?.trim() ?? "";
-  const responseLanguage = body.responseLanguage === "zh" ? "zh" : "en";
+  const responseLanguage = body.responseLanguage === "zh" || body.responseLanguage === "ko"
+    ? body.responseLanguage
+    : "en";
   if (!practiceItemId || !answerText) {
     return NextResponse.json({ error: "缺少题目或缩写内容。" }, { status: 400 });
   }
@@ -98,10 +100,14 @@ export async function POST(request: Request) {
   const answerCharCount = Array.from(answerText.replace(/\s/g, "")).length;
   const feedbackLanguageInstruction = responseLanguage === "en"
     ? `反馈的解释性内容必须使用清晰、自然、适合中文学习者理解的英文。引用原文、用户答案或中文词语时保留中文并使用引号。improvedExample必须保持中文，不得翻译成英文。`
-    : `反馈的解释性内容使用简洁、自然的中文。引用原文和用户答案时保持原样。improvedExample保持中文。`;
+    : responseLanguage === "ko"
+      ? `피드백의 설명은 중국어 학습자가 이해하기 쉬운 자연스러운 한국어로 작성한다. 원문, 학습자 답안 또는 중국어 표현을 인용할 때는 중국어를 그대로 유지하고 따옴표를 사용한다. improvedExample은 반드시 중국어로 유지하며 한국어로 번역하지 않는다.`
+      : `反馈的解释性内容使用简洁、自然的中文。引用原文和用户答案时保持原样。improvedExample保持中文。`;
   const noViewpointExample = responseLanguage === "en"
     ? `The response does not add any personal opinions or evaluation.`
-    : `当前答案没有加入个人观点或评价。`;
+    : responseLanguage === "ko"
+      ? `현재 답안에는 개인적인 의견이나 평가가 추가되지 않았습니다.`
+      : `当前答案没有加入个人观点或评价。`;
   const prompt = `你是一名严谨的HSK 6写作缩写教师。比较原文与学习者缩写，按照HSK 6写作任务要求给出具体、可执行的反馈。
 
 反馈语言规则：
@@ -192,18 +198,26 @@ ${answerText}`;
   if (answerCharCount < targetCharCount * 0.5) {
     const issue = responseLanguage === "en"
       ? `The response contains only ${answerCharCount} Chinese characters, far below the target of about ${targetCharCount}, so it does not yet form a complete summary.`
-      : `正文只有${answerCharCount}字，远低于约${targetCharCount}字的任务要求，尚未形成完整缩写。`;
+      : responseLanguage === "ko"
+        ? `본문은 ${answerCharCount}자로 약 ${targetCharCount}자라는 과제 기준보다 매우 짧아 아직 완전한 요약문이 아닙니다.`
+        : `正文只有${answerCharCount}字，远低于约${targetCharCount}字的任务要求，尚未形成完整缩写。`;
     feedback.priorityIssues = [issue, ...feedback.priorityIssues.filter((item) => !item.includes("字"))];
     feedback.lengthFeedback = issue;
   } else if (answerCharCount > targetCharCount * 1.5) {
     const issue = responseLanguage === "en"
       ? `The response contains about ${answerCharCount} Chinese characters, well above the target of about ${targetCharCount}, and needs further compression.`
-      : `正文约${answerCharCount}字，明显超过约${targetCharCount}字的任务要求，需要进一步压缩。`;
+      : responseLanguage === "ko"
+        ? `본문은 약 ${answerCharCount}자로 약 ${targetCharCount}자라는 과제 기준을 크게 초과하므로 더 압축해야 합니다.`
+        : `正文约${answerCharCount}字，明显超过约${targetCharCount}字的任务要求，需要进一步压缩。`;
     feedback.priorityIssues = [issue, ...feedback.priorityIssues.filter((item) => !item.includes("字"))];
     feedback.lengthFeedback = issue;
   }
   if (!answerTitle) {
-    const issue = "没有填写自拟标题，这是HSK 6缩写任务的明确要求。";
+    const issue = responseLanguage === "en"
+      ? "No original title was provided, although an original title is required for the HSK 6 summary task."
+      : responseLanguage === "ko"
+        ? "직접 정한 제목이 없습니다. 제목 작성은 HSK 6 요약 과제의 필수 조건입니다."
+        : "没有填写自拟标题，这是HSK 6缩写任务的明确要求。";
     feedback.priorityIssues = [issue, ...feedback.priorityIssues];
     feedback.titleFeedback = issue;
   }

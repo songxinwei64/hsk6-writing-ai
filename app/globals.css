@@ -4091,24 +4091,44 @@ a.primary-button {
 }
 
 .language-switcher {
-  display: grid;
-  min-width: 48px;
+  display: block;
+  min-width: 76px;
   height: 34px;
-  padding: 0 11px;
   border: 1px solid #d8dfdb;
   border-radius: 8px;
-  color: var(--green-dark);
   background: #fff;
-  font: inherit;
-  font-size: 12px;
-  font-weight: 800;
-  cursor: pointer;
-  place-items: center;
+  overflow: hidden;
 }
 
 .language-switcher:hover {
   border-color: #9ebbae;
   background: #f2f7f4;
+}
+
+.language-switcher select {
+  width: 100%;
+  height: 100%;
+  padding: 0 24px 0 10px;
+  border: 0;
+  outline: 0;
+  color: var(--green-dark);
+  background: transparent;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* Shared legal pages and launch footer */

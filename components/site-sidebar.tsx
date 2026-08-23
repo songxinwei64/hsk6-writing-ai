@@ -43,7 +43,7 @@ export default function SiteSidebar() {
     setPanel((current) => current === nextPanel ? null : nextPanel);
   }
 
-  const pageTitle = pathname === "/" ? "Home"
+  const pageTitle = pathname === "/" || pathname === "/ko" ? "Home"
     : pathname === "/practice" ? "Writing Practice"
     : pathname.startsWith("/practice/sentence") ? "Sentence Summarization"
     : pathname.startsWith("/practice/paragraph") ? "Passage Summarization"
@@ -75,7 +75,7 @@ export default function SiteSidebar() {
       <aside className={`site-icon-rail${panel ? " panel-open" : ""}${mobileOpen ? " mobile-open" : ""}`}>
         <Link className="site-rail-brand" href="/" aria-label="Write HSK home"><span>W</span><b>Write HSK</b></Link>
         <nav aria-label="Main menu">
-          <Link className={active("/", true) ? "active" : ""} href="/" title="Home"><MenuIcon name="home" /><span>Home</span></Link>
+          <Link className={active("/", true) || pathname === "/ko" ? "active" : ""} href={pathname === "/ko" ? "/ko" : "/"} title="Home"><MenuIcon name="home" /><span>Home</span></Link>
           <button className={active("/practice") && !active("/practice/mock") ? "active" : ""} type="button" onClick={() => togglePanel("practice")} title="Writing Practice" aria-expanded={panel === "practice"}><MenuIcon name="practice" /><span>Writing Practice</span><i>›</i></button>
           <Link className={active("/practice/mock") ? "active" : ""} href="/practice/mock" title="HSK 6 Mock Tests"><MenuIcon name="mock" /><span>Mock Tests</span></Link>
           <Link className={active("/my-library") ? "active" : ""} href="/my-library" title="My Practice"><MenuIcon name="library" /><span>My Practice</span></Link>
