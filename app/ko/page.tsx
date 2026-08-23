@@ -42,6 +42,7 @@ const structuredData = {
 const entries = [
   {
     number: "01",
+    icon: "practice",
     title: "요약 쓰기 연습",
     description: "문장과 짧은 글에서 핵심 정보를 찾고, 불필요한 내용을 덜어 내 정확하고 간결한 중국어 요약문을 작성합니다.",
     details: ["문장 요약", "단락 요약"],
@@ -50,6 +51,7 @@ const entries = [
   },
   {
     number: "02",
+    icon: "library",
     title: "HSK 6 쓰기 모의고사",
     description: "실제 HSK 6 방식처럼 원문을 읽은 뒤 글이 가려지면 약 400자의 중국어 요약문을 작성합니다.",
     details: ["10분 읽기", "35분 쓰기", "AI 피드백"],
@@ -58,6 +60,7 @@ const entries = [
   },
   {
     number: "03",
+    icon: "mine",
     title: "나의 연습",
     description: "완료한 문제, 저장한 답안, 수정 기록을 한곳에서 확인하며 학습 진도를 이어 갈 수 있습니다.",
     details: ["저장한 문제", "연습 기록"],
@@ -66,6 +69,7 @@ const entries = [
   },
   {
     number: "04",
+    icon: "community",
     title: "학습 커뮤니티",
     description: "같은 문제에 대한 다양한 요약 방식을 비교하고 HSK 쓰기와 시험 준비 방법을 함께 나눕니다.",
     details: ["문제별 토론", "응원 메시지"],
@@ -73,6 +77,42 @@ const entries = [
     href: "/community",
   },
 ];
+
+function EntryIcon({ name }: { name: string }) {
+  if (name === "practice") {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6 3.5h9l3 3V20.5H6z" />
+        <path d="M15 3.5v3h3M9 11h6M9 15h4" />
+      </svg>
+    );
+  }
+
+  if (name === "library") {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4.5 5.5h6.2c1.1 0 1.8.5 1.8 1.5v12c0-1-.7-1.5-1.8-1.5H4.5z" />
+        <path d="M19.5 5.5h-6.2c-1.1 0-1.8.5-1.8 1.5v12c0-1 .7-1.5 1.8-1.5h6.2z" />
+      </svg>
+    );
+  }
+
+  if (name === "mine") {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 7.5h6l1.7 2H20v10H4z" />
+        <path d="M9.5 13h5M12 10.5V16" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 5h11v8H9l-4 3v-3H4z" />
+      <path d="M10 9h10v8h-3v3l-4-3h-3" />
+    </svg>
+  );
+}
 
 export default function KoreanHomePage() {
   return (
@@ -127,7 +167,7 @@ export default function KoreanHomePage() {
         {entries.map((entry) => (
           <Link className={`entry-card ${entry.tone}`} key={entry.number} href={entry.href}>
             <div className="entry-top">
-              <span className="entry-icon" aria-hidden="true">✎</span>
+              <span className="entry-icon"><EntryIcon name={entry.icon} /></span>
               <span className="entry-number">{entry.number}</span>
             </div>
             <h3>{entry.title}</h3>
