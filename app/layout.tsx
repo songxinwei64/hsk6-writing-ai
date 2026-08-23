@@ -22,6 +22,16 @@ export const metadata: Metadata = {
     template: "%s｜Write HSK",
   },
   description: "Practice HSK 6 summarization and writing with personalized AI feedback.",
+  keywords: [
+    "HSK",
+    "HSK 6 writing practice",
+    "HSK 6 summarization practice",
+    "HSK六级写作练习",
+    "HSK六级缩写练习",
+    "HSK 6 쓰기 연습",
+    "HSK 6 작문 연습",
+    "HSK 6 요약 연습",
+  ],
   applicationName: "Write HSK",
   category: "education",
   manifest: "/manifest.webmanifest",
@@ -31,7 +41,7 @@ export const metadata: Metadata = {
     url: "/",
     siteName: "Write HSK",
     locale: "en_US",
-    alternateLocale: ["zh_CN"],
+    alternateLocale: ["zh_CN", "ko_KR"],
     type: "website",
     images: [
       {

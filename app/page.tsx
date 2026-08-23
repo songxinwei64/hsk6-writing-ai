@@ -10,8 +10,16 @@ export const metadata = createPageMetadata({
     "HSK 6 writing",
     "Chinese summarization practice",
     "HSK writing mock test",
+    "HSK 6 AI writing feedback",
     "汉语水平考试六级写作",
     "HSK六级写作练习",
+    "HSK六级缩写练习",
+    "HSK六级写作模拟题",
+    "HSK 6 쓰기 연습",
+    "HSK 6 작문 연습",
+    "HSK 6 요약 연습",
+    "HSK 6 쓰기 모의고사",
+    "중국어 요약 연습",
   ],
 });
 
@@ -23,8 +31,8 @@ const structuredData = {
       "@id": `${SITE_URL}/#website`,
       url: SITE_URL,
       name: "Write HSK",
-      alternateName: "Write HSK 6",
-      inLanguage: ["en", "zh-CN"],
+      alternateName: ["Write HSK 6", "HSK六级写作练习", "HSK 6 쓰기 연습"],
+      inLanguage: ["en", "zh-CN", "ko-KR"],
     },
     {
       "@type": "WebApplication",
@@ -35,7 +43,7 @@ const structuredData = {
       operatingSystem: "Any",
       browserRequirements: "Requires a modern web browser",
       description: "HSK 6 Chinese summarization practice, mock writing tests, and personalized AI feedback.",
-      inLanguage: ["en", "zh-CN"],
+      inLanguage: ["en", "zh-CN", "ko-KR"],
       offers: {
         "@type": "Offer",
         price: "0",

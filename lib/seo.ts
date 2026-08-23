@@ -4,6 +4,23 @@ export const SITE_URL = "https://hsk6-writing-ai.vercel.app";
 export const SITE_NAME = "Write HSK";
 export const SOCIAL_IMAGE = "/write-hsk-product-preview.png";
 
+const DEFAULT_KEYWORDS = [
+  "HSK",
+  "HSK 6",
+  "HSK 6 writing practice",
+  "HSK 6 writing test",
+  "HSK 6 summarization practice",
+  "HSK六级写作",
+  "HSK六级写作练习",
+  "HSK六级缩写练习",
+  "汉语水平考试六级写作",
+  "HSK 6 쓰기",
+  "HSK 6 쓰기 연습",
+  "HSK 6 작문 연습",
+  "HSK 6 요약 연습",
+  "중국어 요약 연습",
+];
+
 type PageMetadataOptions = {
   title: string;
   description: string;
@@ -22,7 +39,7 @@ export function createPageMetadata({
   return {
     title,
     description,
-    keywords,
+    keywords: [...new Set([...DEFAULT_KEYWORDS, ...keywords])],
     alternates: {
       canonical: path,
     },
@@ -36,7 +53,7 @@ export function createPageMetadata({
       url: path,
       siteName: SITE_NAME,
       locale: "en_US",
-      alternateLocale: ["zh_CN"],
+      alternateLocale: ["zh_CN", "ko_KR"],
       type: "website",
       images: [
         {
