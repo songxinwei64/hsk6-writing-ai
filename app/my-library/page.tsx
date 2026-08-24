@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "../../utils/supabase/server";
+import LocalizedExerciseTitle from "../../components/localized-exercise-title";
 
 export const dynamic = "force-dynamic";
 
@@ -97,7 +98,7 @@ export default async function MyLibraryPage() {
                   <Link className="library-record" href={`/my-library/${attempt.id}`} key={attempt.id}>
                     <div>
                     <span>{details?.label ?? "Writing Practice"}</span>
-                    <h3>{item.title ?? `${details?.label ?? "Exercise"} ${item.order_no}`}</h3>
+                    <h3><LocalizedExerciseTitle practiceType={item.practice_type as PracticeType} orderNo={item.order_no} title={item.title} /></h3>
                       <p>{attempt.answer_title && <b>{attempt.answer_title} · </b>}{attempt.answer_text}</p>
                     </div>
                     <div className="library-record-meta">

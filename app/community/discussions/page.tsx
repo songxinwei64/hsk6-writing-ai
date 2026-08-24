@@ -1,5 +1,6 @@
 import Link from "next/link";
 import QuestionLockIcon from "../../../components/question-lock-icon";
+import LocalizedExerciseTitle from "../../../components/localized-exercise-title";
 import { getMembershipAccess } from "../../../lib/membership";
 import { PRACTICE_ACCESS } from "../../../lib/practice-items";
 import { createClient } from "../../../utils/supabase/server";
@@ -106,7 +107,7 @@ export default async function CommunityDiscussionsPage({
             const cardContent = (
               <>
                     <div><span>{label} · {String(item.order_no).padStart(2, "0")}</span><small>{locked ? <><QuestionLockIcon /> Locked</> : count ? `${count} discussions` : "Be the first to share"}</small></div>
-                    <h3>{item.title || item.skill || `${label} ${item.order_no}`}</h3>
+                    <h3><LocalizedExerciseTitle practiceType={practiceType} orderNo={item.order_no} title={item.title} skill={item.skill} /></h3>
                     <p>{locked ? (access.isAuthenticated ? "Upgrade your membership to join this discussion." : "Sign in to access discussions within the free range.") : count ? "See how other learners decided which information to keep." : "Ask a question or explain which details you would keep."}</p>
                     <b>{locked ? (access.isAuthenticated ? "Members Only" : "Sign In Required") : "Open Discussion"} <span>→</span></b>
               </>
