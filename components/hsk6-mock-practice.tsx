@@ -34,6 +34,9 @@ export default function Hsk6MockPractice({
   initialAttemptSummaries: Record<string, PracticeAttemptSummary>;
 }) {
   const locale = useSiteLocale();
+  const zh = locale === "zh";
+  const ko = locale === "ko";
+  const text = (z: string, e: string, k: string) => zh ? z : ko ? k : e;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [titles, setTitles] = useState<Record<number, string>>({});
   const [answers, setAnswers] = useState<Record<number, string>>({});
@@ -86,7 +89,7 @@ export default function Hsk6MockPractice({
   }
 
   function finishReadingEarly() {
-    const confirmed = window.confirm("Once writing begins, you cannot view the original passage again. Start writing now?");
+    const confirmed = window.confirm(text("进入写作后不能再次查看原文。现在开始写作吗？", "Once writing begins, you cannot view the original passage again. Start writing now?", "쓰기 시작 후에는 원문을 다시 볼 수 없습니다. 지금 시작할까요?"));
     if (!confirmed) return;
     setRemainingTimes((current) => ({ ...current, [item.id]: item.writingSeconds }));
     setStatuses((current) => ({ ...current, [item.id]: "writing" }));
@@ -94,11 +97,11 @@ export default function Hsk6MockPractice({
 
   async function submitMock() {
     if (!title.trim()) {
-      setError("Please add a title first.");
+      setError(text("请先填写标题。", "Please add a title first.", "먼저 제목을 작성하세요."));
       return;
     }
     if (!answer.trim()) {
-      setError("Please complete your summary first.");
+      setError(text("请先完成缩写。", "Please complete your summary first.", "먼저 요약문을 완성하세요."));
       return;
     }
     setStatuses((current) => ({ ...current, [item.id]: "submitted" }));
@@ -144,42 +147,42 @@ export default function Hsk6MockPractice({
   return (
     <div className="mock-workspace">
       <div className="mock-progress">
-          <span>Mock Test {currentIndex + 1} / {totalItems}</span>
+          <span>{text("模拟题", "Mock Test", "모의고사")} {currentIndex + 1} / {totalItems}</span>
         <span className="sentence-progress-meta">
           {attemptSummary && <AttemptBadge summary={attemptSummary} />}
-          <span>Requirements: Add a title · About {item.targetCharCount} Chinese characters</span>
+          <span>{text(`要求：自拟标题 · 约 ${item.targetCharCount} 个汉字`, `Requirements: Add a title · About ${item.targetCharCount} Chinese characters`, `조건: 제목 작성 · 중국어 약 ${item.targetCharCount}자`)}</span>
         </span>
       </div>
 
       {status === "idle" ? (
         <section className="mock-start-panel">
-            <span>HSK 6 Writing Mock Test</span>
+            <span>{text("HSK 6 写作模拟", "HSK 6 Writing Mock Test", "HSK 6 쓰기 모의고사")}</span>
           <h2>{item.title}</h2>
-            <p>Read for 10 minutes. After the passage is hidden, add your own title and write a summary of about 400 Chinese characters within 35 minutes. Do not take notes or reopen the passage.</p>
-            <button type="button" onClick={startMock}>Start Mock Test</button>
+            <p>{text("阅读原文10分钟。原文隐藏后，自拟标题，并在35分钟内完成约400字的缩写。不能记笔记，也不能再次查看原文。", "Read for 10 minutes. After the passage is hidden, add your own title and write a summary of about 400 Chinese characters within 35 minutes. Do not take notes or reopen the passage.", "원문을 10분 동안 읽습니다. 원문이 가려진 뒤 제목을 정하고 35분 안에 약 400자의 요약문을 작성하세요. 메모하거나 원문을 다시 볼 수 없습니다.")}</p>
+            <button type="button" onClick={startMock}>{text("开始模拟", "Start Mock Test", "모의고사 시작")}</button>
         </section>
       ) : (
         <>
           <div className={`mock-stage-bar ${remaining <= 60 && isActive ? "urgent" : ""}`} aria-live="polite">
             <div>
-              <small>{status === "reading" ? "Phase One" : status === "writing" ? "Phase Two" : "Test Finished"}</small>
-              <strong>{status === "reading" ? "Read the Passage" : status === "writing" ? "Write Your Summary" : status === "expired" ? "Writing Time Ended" : "Submitted"}</strong>
+              <small>{status === "reading" ? text("第一阶段", "Phase One", "1단계") : status === "writing" ? text("第二阶段", "Phase Two", "2단계") : text("模拟结束", "Test Finished", "모의고사 종료")}</small>
+              <strong>{status === "reading" ? text("阅读原文", "Read the Passage", "원문 읽기") : status === "writing" ? text("完成缩写", "Write Your Summary", "요약문 작성") : status === "expired" ? text("写作时间结束", "Writing Time Ended", "쓰기 시간 종료") : text("已提交", "Submitted", "제출 완료")}</strong>
             </div>
             <time>{formatTime(remaining)}</time>
           </div>
 
           {(status === "reading" || hasFinished) && (
             <section className="mock-original">
-              <span>{status === "reading" ? "Reading Passage" : "Original Passage Review"}</span>
+              <span>{status === "reading" ? text("阅读原文", "Reading Passage", "원문 읽기") : text("原文回顾", "Original Passage Review", "원문 다시 보기")}</span>
               <p>{item.original}</p>
             </section>
           )}
 
           {status === "reading" && (
             <div className="mock-reading-rule">
-                <span>Do not copy or take notes. Remember the people, sequence of events, and outcome.</span>
+                <span>{text("不能抄写或记笔记。请记住人物、事件顺序和结果。", "Do not copy or take notes. Remember the people, sequence of events, and outcome.", "베껴 쓰거나 메모하지 마세요. 인물, 사건의 순서와 결과를 기억하세요.")}</span>
               <button className="finish-reading-button" type="button" onClick={finishReadingEarly}>
-                  Finish Reading and Start Writing
+                  {text("结束阅读，开始写作", "Finish Reading and Start Writing", "읽기를 마치고 쓰기 시작")}
               </button>
             </div>
           )}
@@ -187,21 +190,21 @@ export default function Hsk6MockPractice({
           {(status === "writing" || hasFinished) && (
             <section className="mock-writing">
               <label>
-                <span>Title</span>
+                <span>{text("标题", "Title", "제목")}</span>
                 <input
                   value={title}
                   onChange={(event) => {
                     setTitles((current) => ({ ...current, [item.id]: event.target.value }));
                     setError("");
                   }}
-                placeholder="Add a Chinese title"
+                placeholder={text("填写中文标题", "Add a Chinese title", "중국어 제목을 입력하세요")}
                   disabled={hasFinished}
                 />
               </label>
               <label>
                 <div className="mock-writing-label">
-                <span>Your Summary</span>
-                <small className={answer.length >= 360 && answer.length <= 440 ? "near-target" : ""}>{answer.length} characters</small>
+                <span>{text("我的缩写", "Your Summary", "나의 요약")}</span>
+                <small className={answer.length >= 360 && answer.length <= 440 ? "near-target" : ""}>{answer.length} {text("字", "characters", "자")}</small>
                 </div>
                 <textarea
                   value={answer}
@@ -209,22 +212,22 @@ export default function Hsk6MockPractice({
                     setAnswers((current) => ({ ...current, [item.id]: event.target.value }));
                     setError("");
                   }}
-                placeholder="Write your Chinese summary from memory without adding personal opinions…"
+                placeholder={text("根据记忆完成中文缩写，不要加入个人观点……", "Write your Chinese summary from memory without adding personal opinions…", "개인 의견을 추가하지 말고 기억에 따라 중국어 요약문을 작성하세요……")}
                   disabled={hasFinished}
                 />
               </label>
               {error && <p className="sentence-practice-error" role="alert">{error}</p>}
-              {status === "writing" && <button type="button" onClick={submitMock}>Submit Mock Response</button>}
+              {status === "writing" && <button type="button" onClick={submitMock}>{text("提交缩写", "Submit Mock Response", "요약문 제출")}</button>}
 
               {hasFinished && (
                 <div className="mock-reference">
-            {status === "expired" && <p className="mock-expired">Writing time has ended. Your response can no longer be edited.</p>}
-            <span>Suggested Title</span>
+            {status === "expired" && <p className="mock-expired">{text("写作时间已结束，答案不能再修改。", "Writing time has ended. Your response can no longer be edited.", "쓰기 시간이 끝나 답안을 더 이상 수정할 수 없습니다.")}</p>}
+            <span>{text("参考标题", "Suggested Title", "예시 제목")}</span>
                   <h3>{item.referenceTitle}</h3>
-            <span>Suggested Summary</span>
+            <span>{text("参考缩写", "Suggested Summary", "예시 요약문")}</span>
                   <p>{item.reference}</p>
                   <aside>
-              <strong>Summary Approach</strong>
+              <strong>{text("缩写思路", "Summary Approach", "요약 방법")}</strong>
                     <p>{locale === "en" ? (item.analysisEn ?? item.analysis) : item.analysis}</p>
                   </aside>
                   {status === "submitted" && (
@@ -236,7 +239,7 @@ export default function Hsk6MockPractice({
                       isPaidMember={isPaidMember}
                     />
                   )}
-            <a className="practice-discussion-link" href={`/community/practice/${item.databaseId}`}>Discuss This Exercise →</a>
+            <a className="practice-discussion-link" href={`/community/practice/${item.databaseId}`}>{text("讨论这道题 →", "Discuss This Exercise →", "이 문제 토론하기 →")}</a>
                 </div>
               )}
             </section>
@@ -244,8 +247,8 @@ export default function Hsk6MockPractice({
         </>
       )}
 
-      <nav className="sentence-navigation mock-navigation" aria-label="HSK 6 mock test navigation">
-        <button type="button" onClick={() => chooseQuestion(currentIndex - 1)} disabled={currentIndex === 0 || isActive}>← Previous</button>
+      <nav className="sentence-navigation mock-navigation" aria-label={text("HSK 6 写作模拟题导航", "HSK 6 mock test navigation", "HSK 6 쓰기 모의고사 탐색")}>
+        <button type="button" onClick={() => chooseQuestion(currentIndex - 1)} disabled={currentIndex === 0 || isActive}>{text("← 上一题", "← Previous", "← 이전")}</button>
         <div>
           {visibleQuestionIndexes.map((index) => {
           const question = items[index];
@@ -256,7 +259,7 @@ export default function Hsk6MockPractice({
             className={`${index === currentIndex ? "current" : ""}${locked ? " locked" : ""}`}
             onClick={() => chooseQuestion(index)}
             disabled={isActive && index !== currentIndex}
-              aria-label={locked ? `Mock test ${index + 1}, members only` : `Mock test ${index + 1}`}
+              aria-label={locked ? text(`第 ${index + 1} 套模拟题，会员专享`, `Mock test ${index + 1}, members only`, `${index + 1}번 모의고사, 회원 전용`) : text(`第 ${index + 1} 套模拟题`, `Mock test ${index + 1}`, `${index + 1}번 모의고사`)}
             key={question?.id ?? `locked-${index}`}
           >
             {index + 1}{locked && <QuestionLockIcon />}
@@ -264,13 +267,19 @@ export default function Hsk6MockPractice({
           );
         })}
         </div>
-        <button type="button" onClick={() => chooseQuestion(currentIndex + 1)} disabled={currentIndex === totalItems - 1 || isActive}>Next →</button>
+        <button type="button" onClick={() => chooseQuestion(currentIndex + 1)} disabled={currentIndex === totalItems - 1 || isActive}>{text("下一题 →", "Next →", "다음 →")}</button>
       </nav>
-      <p className="practice-pagination-status">Page {questionPage + 1} of {totalPages}</p>
+      <p className="practice-pagination-status">{text(`第 ${questionPage + 1} / ${totalPages} 页`, `Page ${questionPage + 1} of ${totalPages}`, `${questionPage + 1} / ${totalPages} 페이지`)}</p>
       {!isPaidMember && lockedTarget !== null && (
         <PracticeLockOverlay
-          title="Unlock More HSK 6 Mock Tests"
-          description={`Your free account includes the first ${items.length} mock tests. Mock test ${lockedTarget} and later are available with membership.`}
+          variant={isAuthenticated ? "membership" : "login"}
+          title={text(isAuthenticated ? "解锁更多 HSK 6 写作模拟题" : "登录后练习 HSK 6 写作模拟题", "Unlock More HSK 6 Mock Tests", isAuthenticated ? "더 많은 HSK 6 쓰기 모의고사 잠금 해제" : "로그인 후 HSK 6 쓰기 모의고사 연습")}
+          description={text(
+            isAuthenticated ? `免费账号可练习前 ${items.length} 套模拟题，第 ${lockedTarget} 套及之后的题目需开通会员。` : "游客需要先登录，才能开始 HSK 6 写作模拟练习。",
+            `Your free account includes the first ${items.length} mock tests. Mock test ${lockedTarget} and later are available with membership.`,
+            isAuthenticated ? `무료 계정은 처음 ${items.length}회 모의고사를 연습할 수 있으며 ${lockedTarget}번부터는 멤버십이 필요합니다.` : "게스트는 로그인 후 HSK 6 쓰기 모의고사를 시작할 수 있습니다."
+          )}
+          loginNext="/practice/mock"
           onClose={closePaywall}
         />
       )}

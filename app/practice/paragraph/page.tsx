@@ -1,5 +1,5 @@
-import Link from "next/link";
 import ParagraphPractice from "../../../components/paragraph-practice";
+import PracticePageHeading from "../../../components/practice-page-heading";
 import { getParagraphPracticeItems, PRACTICE_ACCESS } from "../../../lib/practice-items";
 import { getMembershipAccess } from "../../../lib/membership";
 import { getPracticeAttemptSummaries } from "../../../lib/practice-attempt-summary";
@@ -29,12 +29,7 @@ export default async function ParagraphPracticePage() {
   return (
     <main className="page">
       <section className="sentence-page-shell">
-        <Link className="back-link" href="/practice">← Back to Writing Practice</Link>
-        <div className="sentence-page-heading">
-          <span className="eyebrow">Passage Summarization · {totalItems} Exercises</span>
-          <h1>Follow the Main Thread</h1>
-          <p>Read for 3 minutes, then write for 7 minutes. The original passage cannot be reopened during writing.</p>
-        </div>
+        <PracticePageHeading kind="paragraph" totalItems={totalItems} />
         <ParagraphPractice
           items={items}
           totalItems={totalItems}

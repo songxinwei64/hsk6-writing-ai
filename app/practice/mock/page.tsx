@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import Hsk6MockPractice from "../../../components/hsk6-mock-practice";
+import PracticePageHeading from "../../../components/practice-page-heading";
 import { getHsk6MockPracticeItems, PRACTICE_ACCESS } from "../../../lib/practice-items";
 import { getMembershipAccess } from "../../../lib/membership";
 import { getPracticeAttemptSummaries } from "../../../lib/practice-attempt-summary";
@@ -28,12 +28,7 @@ export default async function Hsk6MockPracticePage() {
   return (
     <main className="page">
       <section className="mock-page-shell">
-        <Link className="back-link" href="/practice">← Back to Writing Practice</Link>
-        <div className="mock-page-heading">
-          <span className="eyebrow">HSK 6 · Writing Mock Test</span>
-          <h1>Practice with the Official Exam Flow</h1>
-          <p>Read for 10 minutes and write for 35 minutes. Once hidden, the original passage cannot be viewed again.</p>
-        </div>
+        <PracticePageHeading kind="mock" totalItems={totalItems} />
         <Hsk6MockPractice
           items={items}
           totalItems={totalItems}
