@@ -4,6 +4,7 @@ import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "re
 import type { User } from "@supabase/supabase-js";
 import { createClient } from "../utils/supabase/client";
 import { communityCategoryLabels, type CommunityPost } from "../lib/community";
+import { useSiteLocale, type SiteLocale } from "../lib/use-site-locale";
 
 const draftKey = "write-hsk-community-wall-draft";
 const voteThreshold = 5;
@@ -35,7 +36,7 @@ function getFragment(content: string, index: number) {
   return clean.slice(start, start + length);
 }
 
-function TextMosaic({ items, word }: { items: WallItem[]; word: string }) {
+function TextMosaic({ items, word, locale }: { items: WallItem[]; word: string; locale: SiteLocale }) {
   const stageRef = useRef<HTMLDivElement>(null);
   const [pieces, setPieces] = useState<MosaicPiece[]>([]);
 
@@ -91,7 +92,11 @@ function TextMosaic({ items, word }: { items: WallItem[]; word: string }) {
   }, [items, word]);
 
   return (
-    <div className="word-mosaic" ref={stageRef} aria-label={`The Chinese characters “${word}” formed by community messages`}>
+    <div
+      className="word-mosaic"
+      ref={stageRef}
+      aria-label={locale === "zh" ? `由社区留言组成的汉字“${word}”` : locale === "ko" ? `커뮤니티 메시지로 만든 한자 “${word}”` : `The Chinese characters “${word}” formed by community messages`}
+    >
       {pieces.map((piece, index) => (
         <span
           className={piece.official ? "official" : ""}
@@ -116,6 +121,14 @@ export default function CommunityWall({
   themes: CommunityWallTheme[];
   officialPrompts: readonly string[];
 }) {
+  const locale = useSiteLocale();
+  const text = (zh: string, en: string, ko: string) => locale === "zh" ? zh : locale === "ko" ? ko : en;
+  const categoryLabels: Record<keyof typeof communityCategoryLabels, string> = {
+    check_in: text("今日打卡", "Daily Check-in", "오늘의 학습"),
+    insight: text("学习心得", "Study Notes", "학습 소감"),
+    question: text("遇到困难", "A Challenge", "어려운 점"),
+    encouragement: text("给大家加油", "Encouragement", "응원하기"),
+  };
   const supabase = useMemo(() => createClient(), []);
   const [user, setUser] = useState<User | null>(null);
   const [livePosts, setLivePosts] = useState(posts);
@@ -204,8 +217,8 @@ export default function CommunityWall({
   async function publish(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const cleanContent = content.trim();
-    if (cleanContent.length < 2) return setError("Please enter at least two Chinese characters.");
-    if (cleanContent.length > 20) return setError("Please keep your message within 20 Chinese characters.");
+    if (cleanContent.length < 2) return setError(text("请至少输入两个汉字。", "Please enter at least two Chinese characters.", "중국어 두 글자 이상 입력해 주세요."));
+    if (cleanContent.length > 20) return setError(text("留言请控制在二十个汉字以内。", "Please keep your message within 20 Chinese characters.", "메시지는 중국어 20자 이내로 작성해 주세요."));
     if (!user) {
       window.localStorage.setItem(draftKey, cleanContent);
       window.location.href = "/?auth=login&next=/community/wall";
@@ -223,7 +236,7 @@ export default function CommunityWall({
       is_anonymous: anonymous,
     });
     if (insertError) {
-      setError("Your message could not be published. Please try again later.");
+      setError(text("留言发布失败，请稍后再试。", "Your message could not be published. Please try again later.", "메시지를 게시하지 못했습니다. 잠시 후 다시 시도해 주세요."));
       setSubmitting(false);
       return;
     }
@@ -249,7 +262,7 @@ export default function CommunityWall({
         .eq("user_id", user.id)
         .eq("round_no", theme.round_no);
       if (deleteError) {
-      setVoteError("Your vote could not be changed. Please try again later.");
+      setVoteError(text("投票修改失败，请稍后再试。", "Your vote could not be changed. Please try again later.", "투표를 변경하지 못했습니다. 잠시 후 다시 시도해 주세요."));
         setVotingThemeId(null);
         return;
       }
@@ -261,7 +274,7 @@ export default function CommunityWall({
         .delete()
         .eq("user_id", user.id)
         .eq("round_no", theme.round_no);
-      if (deleteError) setVoteError("Your vote could not be removed. Please try again later.");
+      if (deleteError) setVoteError(text("投票取消失败，请稍后再试。", "Your vote could not be removed. Please try again later.", "투표를 취소하지 못했습니다. 잠시 후 다시 시도해 주세요."));
       else setMyVoteThemeId(null);
     } else {
       const { error: insertError } = await supabase.from("community_wall_votes").insert({
@@ -269,7 +282,7 @@ export default function CommunityWall({
         round_no: theme.round_no,
         user_id: user.id,
       });
-    if (insertError) setVoteError("Your vote was not recorded. Please refresh and try again.");
+    if (insertError) setVoteError(text("投票未能记录，请刷新页面后重试。", "Your vote was not recorded. Please refresh and try again.", "투표가 저장되지 않았습니다. 새로고침 후 다시 시도해 주세요."));
       else setMyVoteThemeId(theme.id);
     }
     await reloadThemes();
@@ -280,56 +293,58 @@ export default function CommunityWall({
     ? livePosts.map((post) => ({
         id: post.id,
         content: post.content,
-      author: post.is_anonymous ? "Anonymous Learner" : post.display_name,
+      author: post.is_anonymous ? text("匿名学习者", "Anonymous Learner", "익명 학습자") : post.display_name,
         official: false,
       }))
     : officialPrompts.map((prompt, index) => ({
         id: `official-${index}`,
         content: prompt,
-      author: "Write HSK Study Tip",
+      author: text("Write HSK 学习提示", "Write HSK Study Tip", "Write HSK 학습 도움말"),
         official: true,
-      })), [livePosts, officialPrompts]);
+       })), [livePosts, officialPrompts, locale]);
 
   return (
     <div className="wall-experience">
       <section className="wall-canvas-panel">
         <div className="wall-canvas-heading">
-          <div><span className="eyebrow">This Week&apos;s Community Message</span><h1>{currentWord}</h1></div>
-          <p>{livePosts.length ? `${livePosts.length} messages are forming these Chinese characters in real time.` : "Study tips currently form the characters while we wait for the first community message."}</p>
+          <div><span className="eyebrow">{text("本期共同写成", "This Week's Community Message", "이번 주 함께 만드는 글자")}</span><h1>{currentWord}</h1></div>
+          <p>{livePosts.length
+            ? text(`${livePosts.length} 条留言正在实时组成这个汉字。`, `${livePosts.length} messages are forming these Chinese characters in real time.`, `${livePosts.length}개의 메시지가 실시간으로 이 한자를 만들고 있습니다.`)
+            : text("还没有社区留言，当前由学习提示组成文字墙。", "Study tips currently form the characters while we wait for the first community message.", "첫 커뮤니티 메시지를 기다리는 동안 학습 도움말로 글자 벽을 만들고 있습니다.")}</p>
         </div>
-        <TextMosaic items={wallItems} word={currentWord} />
-          <p className="wall-hover-tip">Hover over the mosaic to read each message and see who posted it.</p>
+        <TextMosaic items={wallItems} word={currentWord} locale={locale} />
+          <p className="wall-hover-tip">{text("将鼠标移到文字上，可以查看完整留言和发布者。", "Hover over the mosaic to read each message and see who posted it.", "글자 위에 마우스를 올리면 전체 메시지와 작성자를 확인할 수 있습니다.")}</p>
       </section>
 
       <aside className="wall-sidebar">
         <div className="wall-compose-copy">
-              <span>Share Some Encouragement</span>
-              <h2>Make your message part of “{currentWord}”.</h2>
-              <p>Write up to 20 Chinese characters. Your message will join the mosaic in real time.</p>
+              <span>{text("写一句鼓励的话", "Share Some Encouragement", "응원의 한마디 쓰기")}</span>
+              <h2>{text(`让你的留言成为“${currentWord}”的一部分。`, `Make your message part of “${currentWord}”.`, `내 메시지를 “${currentWord}”의 일부로 만들어 보세요.`)}</h2>
+              <p>{text("最多输入二十个汉字，你的留言会实时加入文字墙。", "Write up to 20 Chinese characters. Your message will join the mosaic in real time.", "중국어 20자 이내로 작성하면 메시지가 실시간으로 글자 벽에 추가됩니다.")}</p>
         </div>
         <form className="wall-inline-form" onSubmit={publish}>
-              <textarea value={content} onChange={(event) => { setContent(event.target.value); setError(""); }} maxLength={20} placeholder="例如：慢一点也没关系，继续走。" />
+               <textarea value={content} onChange={(event) => { setContent(event.target.value); setError(""); }} maxLength={20} placeholder={text("例如：慢一点也没关系，继续走。", "Example: Keep going, one step at a time.", "예: 천천히 가도 괜찮아, 계속 나아가자.")} />
           <div className="wall-form-meta"><span>{content.length} / 20</span></div>
           <div className="community-categories">
             {(Object.keys(communityCategoryLabels) as Array<keyof typeof communityCategoryLabels>).map((key) => (
-              <button type="button" className={category === key ? "selected" : ""} onClick={() => setCategory(key)} key={key}>{communityCategoryLabels[key]}</button>
+               <button type="button" className={category === key ? "selected" : ""} onClick={() => setCategory(key)} key={key}>{categoryLabels[key]}</button>
             ))}
           </div>
-                <label className="community-anonymous"><input type="checkbox" checked={anonymous} onChange={(event) => setAnonymous(event.target.checked)} />Post anonymously</label>
+                 <label className="community-anonymous"><input type="checkbox" checked={anonymous} onChange={(event) => setAnonymous(event.target.checked)} />{text("匿名发布", "Post anonymously", "익명으로 게시")}</label>
           {error && <p className="community-compose-error" role="alert">{error}</p>}
-              <button className="wall-publish-button" type="submit" disabled={submitting}>{submitting ? "Publishing…" : user ? "Add to the Wall" : "Sign In to Post"}</button>
+               <button className="wall-publish-button" type="submit" disabled={submitting}>{submitting ? text("正在发布……", "Publishing…", "게시 중…") : user ? text("加入文字墙", "Add to the Wall", "글자 벽에 추가") : text("登录后发布", "Sign In to Post", "로그인 후 게시")}</button>
         </form>
 
         <div className="wall-recent">
-              <div><strong>Live Messages</strong><span>{livePosts.length ? "Community posts" : "Study examples"}</span></div>
+               <div><strong>{text("实时短句", "Live Messages", "실시간 메시지")}</strong><span>{livePosts.length ? text("真实留言", "Community posts", "커뮤니티 글") : text("学习示例", "Study examples", "학습 예시")}</span></div>
           <ul>{wallItems.slice(0, 9).map((item) => <li key={item.id}><span>{item.content}</span><small>{item.author}</small></li>)}</ul>
         </div>
       </aside>
 
       <section className="wall-next-themes">
         <div>
-            <span>What Should We Create Next?</span>
-            <p>Sign in to vote for a theme. Each learner receives one vote per round and may change it anytime. The wall changes when a theme reaches {voteThreshold} votes.</p>
+             <span>{text("下一期写什么？", "What Should We Create Next?", "다음에는 어떤 글자를 만들까요?")}</span>
+             <p>{text(`登录后可为主题投票。每轮每位学习者有一票，可随时更改；主题获得 ${voteThreshold} 票后，文字墙会自动更换。`, `Sign in to vote for a theme. Each learner receives one vote per round and may change it anytime. The wall changes when a theme reaches ${voteThreshold} votes.`, `로그인 후 주제에 투표할 수 있습니다. 라운드마다 한 표를 행사하고 언제든 변경할 수 있으며, ${voteThreshold}표를 받으면 글자 벽이 바뀝니다.`)}</p>
           {voteError && <small className="wall-vote-error">{voteError}</small>}
         </div>
         {candidates.map((theme) => {
@@ -343,10 +358,10 @@ export default function CommunityWall({
               disabled={votingThemeId !== null}
               key={theme.id}
             >
-                    <span className="wall-theme-card-top"><strong>{theme.word}</strong><b>{theme.vote_count} votes</b></span>
+                     <span className="wall-theme-card-top"><strong>{theme.word}</strong><b>{text(`${theme.vote_count} 票`, `${theme.vote_count} votes`, `${theme.vote_count}표`)}</b></span>
               <span>{theme.description}</span>
               <span className="wall-vote-progress"><i style={{ width: `${Math.min(100, theme.vote_count / voteThreshold * 100)}%` }} /></span>
-                    <small>{isWinner ? "Currently on the wall" : selected ? "Voted · Click to remove" : user ? "Vote for this theme" : "Sign in to vote"}</small>
+                     <small>{isWinner ? text("正在组成文字墙", "Currently on the wall", "현재 글자 벽에 표시 중") : selected ? text("已投票，点击可取消", "Voted · Click to remove", "투표함 · 클릭하여 취소") : user ? text("为这个主题投票", "Vote for this theme", "이 주제에 투표") : text("登录后投票", "Sign in to vote", "로그인 후 투표")}</small>
             </button>
           );
         })}
