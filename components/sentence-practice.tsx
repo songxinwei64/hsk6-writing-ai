@@ -54,11 +54,6 @@ export default function SentencePractice({
     setError("");
   }
 
-  function changePage(page: number) {
-    const nextPage = Math.min(Math.max(page, 0), totalPages - 1);
-    chooseQuestion(nextPage * QUESTIONS_PER_PAGE);
-  }
-
   function chooseQuestion(index: number) {
     if (index >= items.length) {
       setQuestionPage(Math.floor(index / QUESTIONS_PER_PAGE));
@@ -109,7 +104,7 @@ export default function SentencePractice({
       </div>
 
       <div className="sentence-progress-track">
-        <span style={{ width: `${((currentIndex + 1) / items.length) * 100}%` }} />
+        <span style={{ width: `${((currentIndex + 1) / totalItems) * 100}%` }} />
       </div>
 
       <section className="sentence-tip" aria-labelledby={`sentence-skill-${item.id}`}>
@@ -169,7 +164,7 @@ export default function SentencePractice({
       </section>
 
       <nav className="sentence-navigation" aria-label="Sentence exercise navigation">
-        <button type="button" onClick={() => changePage(questionPage - 1)} disabled={questionPage === 0}>
+        <button type="button" onClick={() => chooseQuestion(currentIndex - 1)} disabled={currentIndex === 0}>
           ← Previous
         </button>
         <div>
@@ -191,8 +186,8 @@ export default function SentencePractice({
         </div>
         <button
           type="button"
-          onClick={() => changePage(questionPage + 1)}
-          disabled={questionPage === totalPages - 1}
+          onClick={() => chooseQuestion(currentIndex + 1)}
+          disabled={currentIndex === totalItems - 1}
         >
           Next →
         </button>

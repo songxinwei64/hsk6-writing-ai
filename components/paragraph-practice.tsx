@@ -90,11 +90,6 @@ export default function ParagraphPractice({
     setError("");
   }
 
-  function changePage(page: number) {
-    const nextPage = Math.min(Math.max(page, 0), totalPages - 1);
-    chooseQuestion(nextPage * QUESTIONS_PER_PAGE);
-  }
-
   function chooseQuestion(index: number) {
     if (index >= items.length) {
       setQuestionPage(Math.floor(index / QUESTIONS_PER_PAGE));
@@ -152,7 +147,7 @@ export default function ParagraphPractice({
       </div>
 
       <div className="sentence-progress-track">
-        <span style={{ width: `${((currentIndex + 1) / items.length) * 100}%` }} />
+        <span style={{ width: `${((currentIndex + 1) / totalItems) * 100}%` }} />
       </div>
 
       <section className="sentence-tip">
@@ -240,7 +235,7 @@ export default function ParagraphPractice({
       )}
 
       <nav className="sentence-navigation" aria-label="Passage exercise navigation">
-        <button type="button" onClick={() => changePage(questionPage - 1)} disabled={questionPage === 0 || isActive}>← Previous</button>
+        <button type="button" onClick={() => chooseQuestion(currentIndex - 1)} disabled={currentIndex === 0 || isActive}>← Previous</button>
         <div>
           {visibleQuestionIndexes.map((index) => {
             const question = items[index];
@@ -259,7 +254,7 @@ export default function ParagraphPractice({
             );
           })}
         </div>
-        <button type="button" onClick={() => changePage(questionPage + 1)} disabled={questionPage === totalPages - 1 || isActive}>Next →</button>
+        <button type="button" onClick={() => chooseQuestion(currentIndex + 1)} disabled={currentIndex === totalItems - 1 || isActive}>Next →</button>
       </nav>
       <p className="practice-pagination-status">Page {questionPage + 1} of {totalPages}</p>
       {!isPaidMember && lockedTarget !== null && (
