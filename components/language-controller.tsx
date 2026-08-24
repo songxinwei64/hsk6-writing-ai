@@ -86,6 +86,9 @@ const zhTranslations: Record<string, string> = {
   "Submit and View Suggested Answer": "提交并查看参考答案",
   "Edit My Answer": "修改我的答案",
   "Discuss This Exercise": "讨论这道题",
+  "Discuss This Exercise →": "讨论这道题 →",
+  "Please write your summary first.": "请先写下你的缩写。",
+  "Please complete your summary first.": "请先完成你的缩写。",
   "Previous": "上一题",
   "Next": "下一题",
   "← Previous": "← 上一题",
@@ -461,6 +464,7 @@ const zhPatterns: Array<[RegExp, (...matches: string[]) => string]> = [
   [/^Mock Test (\d+) \/ (\d+)$/, (_all, a, b) => `模拟题 ${a} / ${b}`],
   [/^Completed (\d+) \/ (\d+)$/, (_all, a, b) => `已完成 ${a} / ${b}`],
   [/^Page (\d+) of (\d+)$/, (_all, a, b) => `第 ${a} / ${b} 页`],
+  [/^Key Point · (.+)$/, (_all, a) => `简要解析 · ${a}`],
   [/^Exercise (\d+)$/, (_all, a) => `第 ${a} 题`],
   [/^Practiced (\d+) time(?:s)?$/, (_all, a) => `已练习 ${a} 次`],
   [/^(\d+) exercises$/, (_all, a) => `共 ${a} 道题`],
@@ -521,9 +525,23 @@ function localizeDocument(locale: Locale) {
   while (node) {
     const parent = node.parentElement;
     if (parent && !parent.closest("[data-no-translate]") && !["SCRIPT", "STYLE", "TEXTAREA"].includes(parent.tagName)) {
-      if (!originalText.has(node)) originalText.set(node, node.nodeValue || "");
-      const source = originalText.get(node) || "";
-      node.nodeValue = locale === "en" ? source : translateText(source, locale);
+      const current = node.nodeValue || "";
+      let source = originalText.get(node);
+      if (source === undefined) {
+        source = current;
+        originalText.set(node, source);
+      } else {
+        const rendered = locale === "en" ? source : translateText(source, locale);
+        // React may reuse the same text node when the current exercise changes.
+        // If its value is neither the stored source nor our rendered translation,
+        // treat it as fresh application content instead of restoring stale text.
+        if (current !== source && current !== rendered) {
+          source = current;
+          originalText.set(node, source);
+        }
+      }
+      const translated = locale === "en" ? source : translateText(source, locale);
+      if (node.nodeValue !== translated) node.nodeValue = translated;
     }
     node = walker.nextNode() as Text | null;
   }
@@ -537,9 +555,20 @@ function localizeDocument(locale: Locale) {
     }
     ["placeholder", "title", "aria-label"].forEach((name) => {
       const current = element.getAttribute(name);
-      if (current !== null && !saved!.has(name)) saved!.set(name, current);
-      const source = saved!.get(name);
-      if (source !== undefined) element.setAttribute(name, locale === "en" ? source : translateText(source, locale));
+      if (current === null) return;
+      let source = saved!.get(name);
+      if (source === undefined) {
+        source = current;
+        saved!.set(name, source);
+      } else {
+        const rendered = locale === "en" ? source : translateText(source, locale);
+        if (current !== source && current !== rendered) {
+          source = current;
+          saved!.set(name, source);
+        }
+      }
+      const translated = locale === "en" ? source : translateText(source, locale);
+      if (current !== translated) element.setAttribute(name, translated);
     });
   });
 }
@@ -559,7 +588,7 @@ export default function LanguageController() {
   useEffect(() => {
     localizeDocument(locale);
     const observer = new MutationObserver(() => localizeDocument(locale));
-    observer.observe(document.body, { childList: true, subtree: true });
+    observer.observe(document.body, { childList: true, characterData: true, subtree: true });
     return () => observer.disconnect();
   }, [locale]);
 
