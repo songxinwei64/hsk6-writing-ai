@@ -126,8 +126,8 @@ export default function SentencePractice({
       <section className="sentence-tip" aria-labelledby={`sentence-skill-${item.id}`}>
             <span>{t.skill}</span>
         <div>
-          <h2 id={`sentence-skill-${item.id}`}>{locale === "en" ? (item.skillEn ?? item.skill) : item.skill}</h2>
-          <p>{locale === "en" ? (item.tipEn ?? item.tip) : item.tip}</p>
+          <h2 id={`sentence-skill-${item.id}`}>{locale === "en" ? (item.skillEn ?? item.skill) : locale === "ko" ? (item.skillKo ?? "핵심 내용 찾기") : item.skill}</h2>
+          <p>{locale === "en" ? (item.tipEn ?? item.tip) : locale === "ko" ? (item.tipKo ?? "중심 의미를 남기고 부수적인 내용을 삭제하세요.") : item.tip}</p>
         </div>
       </section>
 
@@ -168,8 +168,8 @@ export default function SentencePractice({
             </div>
             <p>{item.reference}</p>
             <aside>
-                <small>{t.keyPoint} · {locale === "en" ? (item.skillEn ?? item.skill) : item.skill}</small>
-              <span>{locale === "en" ? (item.explanationEn ?? item.explanation) : item.explanation}</span>
+                <small>{t.keyPoint} · {locale === "en" ? (item.skillEn ?? item.skill) : locale === "ko" ? (item.skillKo ?? "핵심 내용 찾기") : item.skill}</small>
+              <span>{locale === "en" ? (item.explanationEn ?? item.explanation) : locale === "ko" ? (item.explanationKo ?? "원문과 예시 답안을 비교하여 핵심 정보가 남았는지 확인하세요.") : item.explanation}</span>
             </aside>
             <div className="practice-result-actions">
                 <button type="button" onClick={editAnswer}>{t.edit}</button>

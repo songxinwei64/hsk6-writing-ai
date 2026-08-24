@@ -156,8 +156,8 @@ export default function ParagraphPractice({
       <section className="sentence-tip">
             <span>{text("本题技巧", "Key Skill", "핵심 기술")}</span>
         <div>
-          <h2>{locale === "en" ? (item.skillEn ?? item.skill) : item.skill}</h2>
-          <p>{locale === "en" ? (item.tipEn ?? item.tip) : item.tip}</p>
+          <h2>{locale === "en" ? (item.skillEn ?? item.skill) : ko ? (item.skillKo ?? "사건의 중심 흐름 찾기") : item.skill}</h2>
+          <p>{locale === "en" ? (item.tipEn ?? item.tip) : ko ? (item.tipKo ?? "인물, 사건, 원인과 결과를 정리한 뒤 세부 내용을 줄이세요.") : item.tip}</p>
         </div>
       </section>
 
@@ -226,8 +226,8 @@ export default function ParagraphPractice({
             <div><strong>{text("参考答案", "Suggested Answer", "예시 답안")}</strong></div>
                 <p>{item.reference}</p>
                 <aside>
-              <small>{text("简要解析", "Key Point", "핵심 해설")} · {locale === "en" ? (item.skillEn ?? item.skill) : item.skill}</small>
-                  <span>{locale === "en" ? (item.explanationEn ?? item.explanation) : item.explanation}</span>
+              <small>{text("简要解析", "Key Point", "핵심 해설")} · {locale === "en" ? (item.skillEn ?? item.skill) : ko ? (item.skillKo ?? "사건의 중심 흐름 찾기") : item.skill}</small>
+                  <span>{locale === "en" ? (item.explanationEn ?? item.explanation) : ko ? (item.explanationKo ?? "원문과 예시 답안을 비교하여 중심 흐름이 온전히 남았는지 확인하세요.") : item.explanation}</span>
                 </aside>
             <a className="practice-discussion-link" href={`/community/practice/${item.databaseId}`}>{text("讨论这道题 →", "Discuss This Exercise →", "이 문제 토론하기 →")}</a>
               </div>

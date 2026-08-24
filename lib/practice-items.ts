@@ -1,4 +1,5 @@
 import { createClient } from "../utils/supabase/server";
+import { getKoreanMockAnalysis, getKoreanParagraphGuidance, getKoreanSentenceGuidance } from "./practice-korean";
 
 export type SentencePracticeItem = {
   id: number;
@@ -11,6 +12,9 @@ export type SentencePracticeItem = {
   reference: string;
   explanation: string;
   explanationEn: string | null;
+  skillKo: string | null;
+  tipKo: string | null;
+  explanationKo: string | null;
 };
 
 export type ParagraphPracticeItem = SentencePracticeItem & {
@@ -27,6 +31,7 @@ export type Hsk6MockPracticeItem = {
   reference: string;
   analysis: string;
   analysisEn: string | null;
+  analysisKo: string | null;
   readingSeconds: number;
   writingSeconds: number;
   targetCharCount: number;
@@ -63,7 +68,9 @@ async function getPublishedItems(
 
 export async function getSentencePracticeItems(limit?: number): Promise<SentencePracticeItem[]> {
   const data = await getPublishedItems("sentence", limit);
-  return data.map((row) => ({
+  return data.map((row) => {
+    const ko = getKoreanSentenceGuidance(row.order_no);
+    return ({
     id: row.order_no,
     databaseId: row.id,
     skill: row.skill ?? "缩写练习",
@@ -74,12 +81,18 @@ export async function getSentencePracticeItems(limit?: number): Promise<Sentence
     reference: row.reference_text,
     explanation: row.explanation ?? "请对照原句和参考答案，判断信息的主次。",
     explanationEn: row.explanation_en,
-  }));
+    skillKo: ko?.skill ?? null,
+    tipKo: ko?.tip ?? null,
+    explanationKo: ko?.explanation ?? null,
+  });
+  });
 }
 
 export async function getParagraphPracticeItems(limit?: number): Promise<ParagraphPracticeItem[]> {
   const data = await getPublishedItems("paragraph", limit);
-  return data.map((row) => ({
+  return data.map((row) => {
+    const ko = getKoreanParagraphGuidance(row.order_no);
+    return ({
     id: row.order_no,
     databaseId: row.id,
     skill: row.skill ?? "短文缩写",
@@ -90,9 +103,13 @@ export async function getParagraphPracticeItems(limit?: number): Promise<Paragra
     reference: row.reference_text,
     explanation: row.explanation ?? "请对照原文检查是否保留了完整主线。",
     explanationEn: row.explanation_en,
+    skillKo: ko?.skill ?? null,
+    tipKo: ko?.tip ?? null,
+    explanationKo: ko?.explanation ?? null,
     readingSeconds: row.reading_seconds,
     writingSeconds: row.writing_seconds,
-  }));
+  });
+  });
 }
 
 export async function getHsk6MockPracticeItems(limit?: number): Promise<Hsk6MockPracticeItem[]> {
@@ -106,6 +123,7 @@ export async function getHsk6MockPracticeItems(limit?: number): Promise<Hsk6Mock
     reference: row.reference_text,
     analysis: row.explanation ?? "请对照原文检查人物、事件发展和结果是否完整。",
     analysisEn: row.explanation_en,
+    analysisKo: getKoreanMockAnalysis(row.order_no) ?? null,
     readingSeconds: row.reading_seconds,
     writingSeconds: row.writing_seconds,
     targetCharCount: row.target_char_count ?? 400,

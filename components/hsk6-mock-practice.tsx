@@ -228,7 +228,7 @@ export default function Hsk6MockPractice({
                   <p>{item.reference}</p>
                   <aside>
               <strong>{text("缩写思路", "Summary Approach", "요약 방법")}</strong>
-                    <p>{locale === "en" ? (item.analysisEn ?? item.analysis) : item.analysis}</p>
+                    <p>{locale === "en" ? (item.analysisEn ?? item.analysis) : ko ? (item.analysisKo ?? "원문과 예시 답안을 비교하여 인물, 사건의 전개와 결과가 빠짐없이 담겼는지 확인하세요.") : item.analysis}</p>
                   </aside>
                   {status === "submitted" && (
                     <AiFeedbackPanel
