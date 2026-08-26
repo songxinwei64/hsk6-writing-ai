@@ -219,8 +219,8 @@ export default function AuthEntry({
         }}>
           <section className="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-title">
             <button className="auth-close" type="button" onClick={() => setIsOpen(false)} aria-label={text("关闭", "Close", "닫기")}>×</button>
-            <div className="auth-brand" aria-hidden="true">W</div>
-            <h2 id="auth-title">{mode === "sign-in" ? text("登录 Write HSK", "Sign in to Write HSK", "Write HSK 로그인") : text("创建账户", "Create your account", "계정 만들기")}</h2>
+            <div className="auth-brand" aria-hidden="true"><img src="/cabbage-mascot.png" alt="" /></div>
+            <h2 id="auth-title">{mode === "sign-in" ? text("登录 白菜 HSK 写作", "Sign in to Cabbage HSK Writing", "배추 HSK 쓰기 로그인") : text("创建账户", "Create your account", "계정 만들기")}</h2>
             <p className="auth-subtitle">
               {mode === "sign-in"
                 ? text("欢迎回来，请登录后继续。", "Welcome back! Please sign in to continue.", "다시 오신 것을 환영합니다. 계속하려면 로그인하세요.")

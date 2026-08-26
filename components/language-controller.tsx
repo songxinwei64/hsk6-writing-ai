@@ -7,6 +7,8 @@ import { SITE_LOCALE_EVENT, SITE_LOCALE_KEY } from "../lib/use-site-locale";
 type Locale = "en" | "zh" | "ko";
 
 const zhTranslations: Record<string, string> = {
+  "Cabbage HSK Writing": "白菜 HSK 写作",
+  "© 2026 Cabbage HSK Writing": "© 2026 白菜 HSK 写作",
   "Home": "首页",
   "Writing Practice": "缩写练习",
   "Sentence Summarization": "句子缩写",
@@ -271,6 +273,8 @@ const zhTranslations: Record<string, string> = {
 };
 
 const koTranslations: Record<string, string> = {
+  "Cabbage HSK Writing": "배추 HSK 쓰기",
+  "© 2026 Cabbage HSK Writing": "© 2026 배추 HSK 쓰기",
   "Home": "홈",
   "Writing Practice": "요약 쓰기 연습",
   "Sentence Summarization": "문장 요약",

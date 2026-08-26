@@ -73,7 +73,7 @@ export default function SiteSidebar() {
       {(panel || mobileOpen) && <button className="site-flyout-backdrop" type="button" onClick={() => { setPanel(null); setMobileOpen(false); }} aria-label="Close menu" />}
 
       <aside className={`site-icon-rail${panel ? " panel-open" : ""}${mobileOpen ? " mobile-open" : ""}`}>
-        <Link className="site-rail-brand" href="/" aria-label="Write HSK home"><span>W</span><b>Write HSK</b></Link>
+        <Link className="site-rail-brand" href="/" aria-label="Cabbage HSK Writing home"><img src="/cabbage-mascot.png" alt="" /><b>Cabbage HSK Writing</b></Link>
         <nav aria-label="Main menu">
           <Link className={active("/", true) || pathname === "/ko" ? "active" : ""} href={pathname === "/ko" ? "/ko" : "/"} title="Home"><MenuIcon name="home" /><span>Home</span></Link>
           <button className={active("/practice") && !active("/practice/mock") ? "active" : ""} type="button" onClick={() => togglePanel("practice")} title="Writing Practice" aria-expanded={panel === "practice"}><MenuIcon name="practice" /><span>Writing Practice</span><i>›</i></button>

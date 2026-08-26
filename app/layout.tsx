@@ -18,8 +18,8 @@ export const metadata: Metadata = {
     },
   },
   title: {
-    default: "Write HSK | HSK 6 Writing Practice",
-    template: "%s｜Write HSK",
+    default: "Cabbage HSK Writing | HSK 6 Writing Practice",
+    template: "%s｜Cabbage HSK Writing",
   },
   description: "Practice HSK 6 summarization and writing with personalized AI feedback.",
   keywords: [
@@ -32,14 +32,18 @@ export const metadata: Metadata = {
     "HSK 6 작문 연습",
     "HSK 6 요약 연습",
   ],
-  applicationName: "Write HSK",
+  applicationName: "Cabbage HSK Writing",
+  icons: {
+    icon: "/cabbage-mascot.png",
+    apple: "/cabbage-mascot.png",
+  },
   category: "education",
   manifest: "/manifest.webmanifest",
   openGraph: {
-    title: "Write HSK | HSK 6 Writing Practice",
+    title: "Cabbage HSK Writing | HSK 6 Writing Practice",
     description: "Summarization training, HSK 6 writing practice, and personalized AI feedback.",
     url: "/",
-    siteName: "Write HSK",
+    siteName: "Cabbage HSK Writing",
     locale: "en_US",
     alternateLocale: ["zh_CN", "ko_KR"],
     type: "website",
@@ -54,7 +58,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Write HSK | HSK 6 Writing Practice",
+    title: "Cabbage HSK Writing | HSK 6 Writing Practice",
     description: "Summarization training, HSK 6 writing practice, and personalized AI feedback.",
     images: ["/write-hsk-product-preview.png"],
   },
@@ -66,7 +70,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Suspense fallback={<div className="site-sidebar-loading" aria-hidden="true"><span>W</span></div>}>
+        <Suspense fallback={<div className="site-sidebar-loading" aria-hidden="true"><img src="/cabbage-mascot.png" alt="" /></div>}>
           <SiteSidebar />
         </Suspense>
         <div className="site-shell-main">

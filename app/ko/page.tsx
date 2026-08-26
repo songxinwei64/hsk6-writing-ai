@@ -41,39 +41,39 @@ const structuredData = {
 
 const entries = [
   {
-    number: "01",
     icon: "practice",
     title: "요약 쓰기 연습",
     description: "문장과 짧은 글에서 핵심 정보를 찾고, 불필요한 내용을 덜어 내 정확하고 간결한 중국어 요약문을 작성합니다.",
     details: ["문장 요약", "단락 요약"],
     tone: "sage",
+    mascot: "/cabbage-writing.png",
     href: "/practice",
   },
   {
-    number: "02",
     icon: "library",
     title: "HSK 6 쓰기 모의고사",
     description: "실제 HSK 6 방식처럼 원문을 읽은 뒤 글이 가려지면 약 400자의 중국어 요약문을 작성합니다.",
     details: ["10분 읽기", "35분 쓰기", "AI 피드백"],
     tone: "sand",
+    mascot: "/cabbage-mock-test.png",
     href: "/practice/mock",
   },
   {
-    number: "03",
     icon: "mine",
     title: "나의 연습",
     description: "완료한 문제, 저장한 답안, 수정 기록을 한곳에서 확인하며 학습 진도를 이어 갈 수 있습니다.",
     details: ["저장한 문제", "연습 기록"],
     tone: "blue",
+    mascot: "/cabbage-my-practice.png",
     href: "/my-library",
   },
   {
-    number: "04",
     icon: "community",
     title: "학습 커뮤니티",
     description: "같은 문제에 대한 다양한 요약 방식을 비교하고 HSK 쓰기와 시험 준비 방법을 함께 나눕니다.",
     details: ["문제별 토론", "응원 메시지"],
     tone: "rose",
+    mascot: "/cabbage-community.png",
     href: "/community",
   },
 ];
@@ -144,7 +144,7 @@ export default function KoreanHomePage() {
             </div>
             <div className="ai-feedback-card">
               <div className="ai-feedback-head">
-                <span className="ai-avatar">W</span>
+                <span className="ai-avatar"><img src="/cabbage-mascot.png" alt="" /></span>
                 <span className="ai-identity">
                   <b>Write HSK AI 튜터</b>
                   <small>내용 정확성</small>
@@ -165,11 +165,11 @@ export default function KoreanHomePage() {
 
       <section className="entry-grid" aria-label="주요 기능">
         {entries.map((entry) => (
-          <Link className={`entry-card ${entry.tone}`} key={entry.number} href={entry.href}>
+          <Link className={`entry-card ${entry.tone}`} key={entry.href} href={entry.href}>
             <div className="entry-top">
               <span className="entry-icon"><EntryIcon name={entry.icon} /></span>
-              <span className="entry-number">{entry.number}</span>
             </div>
+            <img className={`entry-mascot entry-mascot-${entry.icon}`} src={entry.mascot} alt="" aria-hidden="true" />
             <h3>{entry.title}</h3>
             <p>{entry.description}</p>
             <div className="entry-links">

@@ -5,8 +5,8 @@ export default function SiteFooter() {
     <footer className="site-footer">
       <div className="site-footer-inner">
         <Link className="site-footer-brand" href="/">
-          <span>W</span>
-          <b>Write HSK</b>
+          <img src="/cabbage-mascot.png" alt="" />
+          <b>Cabbage HSK Writing</b>
         </Link>
         <nav aria-label="Legal and support">
           <Link href="/privacy">Privacy Policy</Link>
@@ -14,7 +14,7 @@ export default function SiteFooter() {
           <Link href="/refunds">Refunds & Cancellation</Link>
           <Link href="/contact">Contact</Link>
         </nav>
-        <p>© 2026 Write HSK</p>
+        <p>© 2026 Cabbage HSK Writing</p>
       </div>
     </footer>
   );

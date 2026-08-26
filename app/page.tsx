@@ -73,39 +73,39 @@ const structuredData = {
 
 const mainEntries = [
   {
-    number: "01",
     icon: "practice",
     title: "Writing Practice",
     description: "Start with sentences and short passages. Learn to identify key information and write accurate, concise summaries.",
     links: ["Sentence Summaries", "Passage Summaries"],
     tone: "sage",
+    mascot: "/cabbage-writing.png",
     href: "/practice",
   },
   {
-    number: "02",
     icon: "library",
     title: "HSK 6 Mock Tests",
     description: "Follow the HSK 6 exam format: read the passage, continue after it is hidden, and write a summary of about 400 Chinese characters.",
     links: ["10-Minute Reading", "35-Minute Writing", "AI Feedback"],
     tone: "sand",
+    mascot: "/cabbage-mock-test.png",
     href: "/practice/mock",
   },
   {
-    number: "03",
     icon: "mine",
     title: "My Practice",
     description: "Review completed exercises, saved answers, and revision history in one place.",
     links: ["Saved Exercises", "Practice History"],
     tone: "blue",
+    mascot: "/cabbage-my-practice.png",
     href: "/my-library",
   },
   {
-    number: "04",
     icon: "community",
     title: "Community",
     description: "Compare approaches to the same prompt and exchange writing and exam-preparation ideas.",
     links: ["Writing Discussions", "Study Discussions"],
     tone: "rose",
+    mascot: "/cabbage-community.png",
     href: "/community",
   },
 ];
@@ -178,7 +178,7 @@ export default function Home() {
             </div>
             <div className="ai-feedback-card">
               <div className="ai-feedback-head">
-                <span className="ai-avatar">W</span>
+                <span className="ai-avatar"><img src="/cabbage-mascot.png" alt="" /></span>
                 <span className="ai-identity">
                   <b>Write HSK AI Tutor</b>
                   <small>Content Accuracy</small>
@@ -204,7 +204,7 @@ export default function Home() {
           <Link
             className={`entry-card ${entry.tone}`}
             id={sectionIds[index]}
-            key={entry.number}
+            key={entry.href}
             href={entry.href}
             aria-label={`Open ${entry.title}`}
           >
@@ -212,8 +212,8 @@ export default function Home() {
               <span className="entry-icon">
                 <EntryIcon name={entry.icon} />
               </span>
-              <span className="entry-number">{entry.number}</span>
             </div>
+            <img className={`entry-mascot entry-mascot-${entry.icon}`} src={entry.mascot} alt="" aria-hidden="true" />
             <h3>{entry.title}</h3>
             <p>{entry.description}</p>
             <div className="entry-links">

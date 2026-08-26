@@ -4,9 +4,9 @@ import AuthEntry from "./auth-entry";
 export default function SiteHeader() {
   return (
     <header className="header">
-      <Link className="brand" href="/" aria-label="Write HSK home">
-        <span className="brand-mark">W</span>
-        <span>Write HSK</span>
+      <Link className="brand" href="/" aria-label="Cabbage HSK Writing home">
+        <img className="brand-mark" src="/cabbage-mascot.png" alt="" />
+        <span>Cabbage HSK Writing</span>
       </Link>
 
       <nav className="nav" aria-label="Main menu">

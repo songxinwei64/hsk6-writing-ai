@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Write HSK — HSK 6 Writing Practice",
-    short_name: "Write HSK",
+    name: "Cabbage HSK Writing — HSK 6 Writing Practice",
+    short_name: "Cabbage HSK",
     description: "HSK 6 Chinese summarization practice, mock writing tests, and personalized AI feedback.",
     start_url: "/",
     display: "standalone",
@@ -12,9 +12,9 @@ export default function manifest(): MetadataRoute.Manifest {
     lang: "en",
     icons: [
       {
-        src: "/icon.svg",
-        sizes: "any",
-        type: "image/svg+xml",
+        src: "/cabbage-mascot.png",
+        sizes: "1254x1254",
+        type: "image/png",
       },
     ],
   };
