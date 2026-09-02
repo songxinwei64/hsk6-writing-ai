@@ -54,7 +54,7 @@ export async function POST(request: Request) {
         attributes: {
           product_options: {
             redirect_url: `${siteUrl}/membership?checkout=success`,
-            receipt_button_text: "Return to Write HSK",
+            receipt_button_text: "Return to Cabbage HSK Writing",
             receipt_link_url: `${siteUrl}/membership`,
           },
           checkout_options: {

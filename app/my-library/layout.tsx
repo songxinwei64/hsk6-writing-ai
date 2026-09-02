@@ -3,7 +3,7 @@ import { createPageMetadata } from "@/lib/seo";
 
 export const metadata = createPageMetadata({
   title: "My Practice",
-  description: "Review your saved Write HSK answers and practice history.",
+  description: "Review your saved Cabbage HSK Writing answers and practice history.",
   path: "/my-library",
   index: false,
 });

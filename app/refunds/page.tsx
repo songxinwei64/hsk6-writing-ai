@@ -3,7 +3,7 @@ import { createPageMetadata } from "@/lib/seo";
 
 export const metadata = createPageMetadata({
   title: "Refunds & Cancellation",
-  description: "Renewal, cancellation, and refund rules for Write HSK memberships.",
+  description: "Renewal, cancellation, and refund rules for Cabbage HSK Writing memberships.",
   path: "/refunds",
 });
 

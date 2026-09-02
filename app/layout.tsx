@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { Suspense } from "react";
 import "./globals.css";
 import SiteSidebar from "../components/site-sidebar";
@@ -23,6 +24,10 @@ export const metadata: Metadata = {
   },
   description: "Practice HSK 6 summarization and writing with personalized AI feedback.",
   keywords: [
+    "Cabbage HSK Writing",
+    "Cabbage HSK",
+    "白菜 HSK 写作",
+    "배추 HSK 쓰기",
     "HSK",
     "HSK 6 writing practice",
     "HSK 6 summarization practice",
@@ -52,7 +57,7 @@ export const metadata: Metadata = {
         url: "/write-hsk-product-preview.png",
         width: 1200,
         height: 630,
-        alt: "Write HSK: HSK 6 writing practice with summarization training and personalized AI feedback",
+        alt: "Cabbage HSK Writing: HSK 6 writing practice with summarization training and personalized AI feedback",
       },
     ],
   },
@@ -77,6 +82,7 @@ export default function RootLayout({
           {children}
           <SiteFooter />
         </div>
+        <Analytics />
       </body>
     </html>
   );

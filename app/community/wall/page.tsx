@@ -5,7 +5,7 @@ import { createPageMetadata } from "@/lib/seo";
 
 export const metadata = createPageMetadata({
   title: "HSK Study Motivation Wall",
-  description: "Share short encouragement and study motivation with the Write HSK community while preparing for HSK 6 writing.",
+  description: "Share short encouragement and study motivation with the Cabbage HSK Writing community while preparing for HSK 6 writing.",
   path: "/community/wall",
   keywords: ["HSK study motivation", "HSK 6 community", "Chinese learners encouragement"],
 });

@@ -3,7 +3,7 @@ import { createPageMetadata } from "@/lib/seo";
 
 export const metadata = createPageMetadata({
   title: "Terms of Service",
-  description: "Terms that apply when using the Write HSK website and membership service.",
+  description: "Terms that apply when using the Cabbage HSK Writing website and membership service.",
   path: "/terms",
 });
 

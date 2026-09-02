@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 
 export const SITE_URL = "https://hsk6-writing-ai.vercel.app";
-export const SITE_NAME = "Write HSK";
+export const SITE_NAME = "Cabbage HSK Writing";
 export const SOCIAL_IMAGE = "/write-hsk-product-preview.png";
 
 const DEFAULT_KEYWORDS = [
+  "Cabbage HSK Writing",
+  "Cabbage HSK",
+  "白菜 HSK 写作",
+  "배추 HSK 쓰기",
   "HSK",
   "HSK 6",
   "HSK 6 writing practice",

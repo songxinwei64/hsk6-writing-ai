@@ -2,8 +2,8 @@ import LegalPage from "../../components/legal-page";
 import { createPageMetadata } from "@/lib/seo";
 
 export const metadata = createPageMetadata({
-  title: "Contact Write HSK",
-  description: "Contact Write HSK for account, membership, refund, and privacy support.",
+  title: "Contact Cabbage HSK Writing",
+  description: "Contact Cabbage HSK Writing for account, membership, refund, and privacy support.",
   path: "/contact",
 });
 

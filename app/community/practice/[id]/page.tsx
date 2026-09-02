@@ -9,7 +9,7 @@ import { createPageMetadata } from "@/lib/seo";
 
 export const metadata = createPageMetadata({
   title: "Exercise Discussion",
-  description: "Discuss approaches to a Write HSK practice exercise.",
+  description: "Discuss approaches to a Cabbage HSK Writing practice exercise.",
   path: "/community/practice",
   index: false,
 });

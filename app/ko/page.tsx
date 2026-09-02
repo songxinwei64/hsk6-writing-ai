@@ -4,11 +4,13 @@ import { createPageMetadata, SITE_URL } from "@/lib/seo";
 
 export const metadata: Metadata = {
   ...createPageMetadata({
-    title: "HSK 6 쓰기 연습과 AI 피드백",
+    title: "배추 HSK 쓰기 | HSK 6 쓰기 연습과 AI 피드백",
     description: "문장·단락 요약부터 실제 HSK 6 방식의 쓰기 모의고사까지 연습하고, 작성한 중국어 요약문에 맞춤형 AI 피드백을 받아 보세요.",
     path: "/ko",
     keywords: [
       "HSK",
+      "배추 HSK 쓰기",
+      "Cabbage HSK Writing",
       "HSK 6 쓰기",
       "HSK 6 쓰기 연습",
       "HSK 6 작문 연습",
@@ -32,11 +34,12 @@ export const metadata: Metadata = {
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "WebPage",
-  name: "HSK 6 쓰기 연습과 AI 피드백",
+  name: "배추 HSK 쓰기 | HSK 6 쓰기 연습과 AI 피드백",
   url: `${SITE_URL}/ko`,
   description: "한국어 안내와 해설로 이용하는 HSK 6 중국어 요약 쓰기 연습 플랫폼",
   inLanguage: "ko-KR",
   isPartOf: { "@id": `${SITE_URL}/#website` },
+  primaryImageOfPage: `${SITE_URL}/write-hsk-product-preview.png`,
 };
 
 const entries = [

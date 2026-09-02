@@ -3,7 +3,7 @@ import { createPageMetadata } from "@/lib/seo";
 
 export const metadata = createPageMetadata({
   title: "Privacy Policy",
-  description: "How Write HSK collects, uses, and protects user information.",
+  description: "How Cabbage HSK Writing collects, uses, and protects user information.",
   path: "/privacy",
 });
 
